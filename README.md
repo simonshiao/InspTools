@@ -1,5 +1,13 @@
 # DIA 檢測執行環境｜目前正式主線
 
+> **2026-10-21 獨立軟體優先：** `BuildStandaloneR3.ps1 -Zip`
+> 會在 `output/standalone-r3/` 新建不覆蓋的 R3 獨立候選版，
+> 包含原版 InspTools GUI、真正八站 Recipe 載入、原版定位設定視窗與備份式儲存。
+> 可直接開 `InspToolsStandalone.exe`；不需啟動 ShuntVC／Chao8Side。
+> 同機異路徑搬移驗收 PASS；正式 `release/current` 未覆蓋。
+> 使用手冊：`docs/PORTABLE_R3_CURRENT.md`。
+> 完整 AI 模型推論、OK/NG 檢測與機台連線仍未完成，**不可當成正式機台版本**。
+
 > 路線校正：2026-09-16 00:05 +08:00
 
 > 正式專案名稱：**DIA 檢測執行環境**  

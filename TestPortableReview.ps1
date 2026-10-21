@@ -1,10 +1,17 @@
-param([switch]$FromZip)
+param(
+    [switch]$FromZip,
+    [string]$PackageDirectory = ''
+)
 
 # Portability acceptance: RELOCATE the whole package before launching it.
 # All test Recipe files are copied into the moved package through its own CLI.
 $ErrorActionPreference = 'Stop'
 $Root = [IO.Path]::GetFullPath($PSScriptRoot)
-$Source = Join-Path $Root 'output\portable-review'
+$Source = if ([string]::IsNullOrWhiteSpace($PackageDirectory)) {
+    Join-Path $Root 'output\portable-review'
+} else {
+    [IO.Path]::GetFullPath($PackageDirectory)
+}
 $Moved = Join-Path $Root 'output\portable-relocation-test\Moved'
 $TestRoot = Split-Path -Parent $Moved
 $Fixture = Join-Path $Root 'output\decoded-ui\Release\Recipe\R2PROBE-3923-R002'
@@ -62,6 +69,9 @@ if (Test-Path $TestRoot) {
 }
 [IO.Directory]::CreateDirectory($Moved) | Out-Null
 if ($FromZip) {
+    if (-not [string]::IsNullOrWhiteSpace($PackageDirectory)) {
+        throw 'FromZip uses the audited default review ZIP; use directory mode for a persistent candidate'
+    }
     $archive = Join-Path $Root 'output\InspTools-Portable-Review-R3.zip'
     Check (Test-Path -LiteralPath $archive) 'Distributable review ZIP exists'
     Expand-Archive -LiteralPath $archive -DestinationPath $Moved

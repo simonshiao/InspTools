@@ -1,5 +1,7 @@
 # DIA 檢測執行環境｜路線校正後交接
 
+> **2026-10-21 最新獨立候選版（以此為準）：** 使用 `BuildStandaloneR3.ps1 -Zip` 產生獨立的 `output/standalone-r3/InspTools-Portable-R3-YYYYMMDD-HHmmss/` 及同名 ZIP。與可清空的 `output/portable-review` 不同，**每次都新建、不覆蓋使用者 Recipe**。原版 GUI 零參數啟停 Exit 0，獨立 Recipe 匯入／檢查／S5 真實八站、R3 原版定位編輯選單 3 PASS，同機異路徑搬移／載入再次通過。套件內有 25 個 EXE/DLL、約 89.86 MiB、空白 Recipe/Model/PublicDB/TrainingImage，完全不附 Shunt 正式資料。新的打包與操作說明在 `docs/PORTABLE_R3_CURRENT.md`。完整 Inspect、AI Model、OK/NG 尚未驗收；`release/current` 不變，不能把候選版冒稱正式。
+
 > 更新：2026-09-16 00:05 +08:00
 
 > **2026-10-21 產品目標重申與 R3 Portable Gate：** 唯一產品是**獨立 InspToolsStandalone.exe**，ShuntVC 僅提供測試素材。新增 `BuildPortableReview.ps1` 輸出無 Shunt 資料的 89.86 MiB R3 攜帶版，`TestPortableReview.ps1` 已在另一 AppBase 完成 14 PASS、0 FAIL（原版 GUI、匯入 Recipe、真實八站載入與關閉）；詳 `docs/R3_PORTABLE_INSPTOOLS_GATE_20261021.md`。本輪只證明同機搬移，非跨機、AI 推論或 OK/NG 全驗收；正式 `release/current` 未覆蓋。

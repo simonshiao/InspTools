@@ -1,7 +1,8 @@
 param(
     [int]$ComponentTimeoutMs = 5000,
     [int]$ConstructorTimeoutMs = 15000,
-    [int]$GuiTimeoutMs = 15000
+    [int]$GuiTimeoutMs = 15000,
+    [switch]$StageOnly
 )
 
 # This script stages an isolated AppBase and runs bounded child processes.
@@ -37,6 +38,10 @@ Copy-Item -LiteralPath $RecipeSource -Destination $RecipeRoot -Recurse
 # Stage a tiny, read-only selection of the Shunt production Recipe + one
 # original CCD1 OK and NG image. Never duplicate the full production Runtime.
 & (Join-Path $Root 'StageShuntFixtures.ps1') -Sandbox $Sandbox | Out-Null
+if ($StageOnly) {
+    Write-Output 'R3_STAGE_ONLY=PASS (no native/UI regression executed)'
+    return
+}
 
 function Run-BoundedProbe([string]$Label, [string[]]$Arguments, [int]$LimitMs, [string]$ExpectedMarker) {
     $std = Join-Path $Sandbox ($Label + '.out')

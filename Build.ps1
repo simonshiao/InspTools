@@ -122,6 +122,7 @@ $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeCli.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\RecipeCliEntry.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\NativeRecipeProbe.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\CvDiagnosticProbe.cs')
+$cliArgs += (Join-Path $Root 'src\InspTools.Standalone\R3FacadeProbe.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\NativeRuntimeGate.cs')
 & $dotnet @cliArgs
 if ($LASTEXITCODE -ne 0) { throw 'InspToolsRecipeCli compile failed.' }

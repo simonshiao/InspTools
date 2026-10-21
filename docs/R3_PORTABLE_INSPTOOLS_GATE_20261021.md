@@ -1,5 +1,22 @@
 # R3｜InspTools 獨立軟體搬移驗收
 
+> **後續獨立產品候選版更新：** 新增 `BuildStandaloneR3.ps1 -Zip`，
+> 每次建立不同時間戳的乾淨版本，避免 `BuildPortableReview.ps1` 的一次性
+> 工程測試資料夾被清空後誤傷 Recipe。此版本已驗證 25 EXE/DLL、約 89.86 MiB，
+> 原版零參數啟動、CLI 獨立 Recipe 匯入和檢查、S5 真實 CVInspection
+> 原版 GUI、定位編輯選單 3/3、移動到其他 AppBase 再開啟，全 PASS。
+> `release/current` 不變。新的候選版使用指南見
+> `docs/PORTABLE_R3_CURRENT.md`；AI 與完整 Inspect 均未驗收。
+
+> **本次乾淨候選版實物：**
+> `output/standalone-r3/InspTools-Portable-R3-20261021-231504/`，
+> ZIP 為同名 `.zip`；ZIP SHA256 為
+> `73A47288AC2C21FE0978E0B96DC110067598FE5C665080B78F4D58A6C3013EB8`。
+> 使用 `TestPortableReview.ps1 -PackageDirectory <該候選版路徑>`
+> 移動到新的資料夾驗收 **14 PASS／0 FAIL**。
+> 此包的 `Recipe`、`Model`、`TrainingImage` 都是空白，
+> 未放 ShuntVC 正式資料，正式 release/current 亦未修改。
+
 日期：2026-10-21
 
 ## 唯一產品目標

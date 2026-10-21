@@ -9,6 +9,7 @@ namespace InspTools.Standalone
         private static int Main(string[] args)
         {
             int exitCode;
+            if (R3FacadeProbe.TryRun(args, out exitCode)) return exitCode;
             if (NativeRuntimeGate.TryPreflight(args, out exitCode)) return exitCode;
             if (CvDiagnosticProbe.TryRun(args, out exitCode)) return exitCode;
             if (args != null && args.Length == 6 &&
