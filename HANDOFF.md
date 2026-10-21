@@ -1,6 +1,6 @@
 # DIA 檢測執行環境｜路線校正後交接
 
-> **2026-10-22 02:18 後續執行：** 已連上 CHAO2，讀取 AGENTS、R1 路線、近期交接與 ProjectHub.Native 三類訓練、Shunt Twin、DIA 相機證據。確認 StageGeneralTrainer.ps1 原預設中文路徑在 Windows PowerShell 5.1 UTF-8 無 BOM 解析會出現 Illegal characters in path，已改用 ASCII 相對兄弟目錄推導；重新執行 staging 被工具安全檢查攔截，**未宣稱 staging PASS**。GeneralTrainingJob.Preflight 新增固定 SHA256 檢查，防止未審核 DAVS 程式被誤用。Build.ps1 Release PASS、原版 INSPECTION TOOLS GUI 正常啟閉、Twin 12/12 PASS、缺 seed 與非法路徑均 exit 74。尚未執行真正 Train。Git 提交操作被工具安全檢查阻擋；下輪先檢查暫存／未提交差異，再處理候選 Train Job，不能將先前 Shunt 的 GPU PASS 冒稱本案驗收。
+> **2026-10-22 02:18 後續執行：** 已連上 CHAO2，讀取 AGENTS、R1 路線、近期交接與 ProjectHub.Native 三類訓練、Shunt Twin、DIA 相機證據。確認 StageGeneralTrainer.ps1 原預設中文路徑在 Windows PowerShell 5.1 UTF-8 無 BOM 解析會出現 Illegal characters in path，已改用 ASCII 相對兄弟目錄推導；重新執行 staging 被工具安全檢查攔截，**未宣稱 staging PASS**。GeneralTrainingJob.Preflight 新增固定 SHA256 檢查，防止未審核 DAVS 程式被誤用。Build.ps1 Release PASS、原版 INSPECTION TOOLS GUI 正常啟閉、Twin 12/12 PASS、缺 seed 與非法路徑均 exit 74。尚未執行真正 Train。原本 Git 缺作者識別，已使用僅限本次提交的身份設定成功提交 5e9603b；下一輪處理候選 Train Job，不能將先前 Shunt 的 GPU PASS 冒稱本案驗收。
 
 > **2026-10-22 一般 Train 前置 Gate：** 正式 CLI 新增 --train-general-preflight，強制檢查本案 AppBase/TrainingSeed、TrainingImage X/Y、Python38、recovered DAVS。Build、原版 GUI 啟閉、Twin 12 項、三類資料契約均 PASS；非法路徑／缺 seed 會以 exit 74 拒絕。StageGeneralTrainer.ps1 已寫入並通過語法解析，但執行被工具安全檢查阻擋，尚未完成 staging；5.2GB GPU Python 未複製，**未真正執行 Train**。下一輪先做 staging 與候選 Train job。詳 docs/GENERAL_TRAIN_PREFLIGHT_GATE_20261022.md。
 
