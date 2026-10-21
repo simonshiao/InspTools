@@ -1,6 +1,7 @@
 param(
     [string]$Phase1SourceRoot = '',
-    [string]$Configuration = 'Release'
+    [string]$Configuration = 'Release',
+    [switch]$ModelPrecompiledExperiment
 )
 
 # Isolated build from read-only archived Phase-1 source. No production writes.
@@ -14,7 +15,11 @@ if ([string]::IsNullOrWhiteSpace($Phase1SourceRoot)) {
     }
     $Phase1SourceRoot = $candidate[0].FullName
 }
-$Root = Join-Path $ProjectRoot 'output\native-lazy'
+$Root = Join-Path $ProjectRoot $(if ($ModelPrecompiledExperiment) {
+    'output\delta-model-experiment'
+} else {
+    'output\native-lazy'
+})
 $Stage = Join-Path $Root 'generated-source'
 $Donor = Join-Path $ProjectRoot 'release\current'
 $OriginalDll = Join-Path $Donor 'InspTools.dll'
@@ -55,6 +60,31 @@ $patched = [regex]::Replace($source, $regex,
     '        // R3: native AI instance is created on demand by ReadModel().')
 [IO.File]::WriteAllText($PatchedLocate, $patched, (New-Object Text.UTF8Encoding($false)))
 
+if ($ModelPrecompiledExperiment) {
+    # Narrow *experimental* change to the vendor C# class only. The original
+    # R3 compiled DLL remains intact and hash pinned. For an already prepared
+    # .h5d + .pbd pair, no training/conversion executables should be needed.
+    $sourceFile = Join-Path $Stage 'InspTools\AOI\AIEnhanceTool.cs'
+    $aiSource = [IO.File]::ReadAllText($sourceFile, [Text.Encoding]::UTF8)
+    $old = 'if (!File.Exists(text) || !File.Exists(text2))'
+    $n = [regex]::Matches($aiSource, [regex]::Escape($old)).Count
+    if ($n -ne 1) {
+        throw ('AIEnhance old Trainer gate changed; expected 1, got ' + $n)
+    }
+    $new = @'
+string preparedStem = Path.GetFileNameWithoutExtension(param.AIEnhanceParam.ModelName_A);
+            string preparedSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model", preparedStem + ".h5d");
+            string preparedPbd = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model", preparedStem + ".pbd");
+            bool preparedModel = !param.AIEnhanceParam.UseTensorRT
+                && File.Exists(preparedSource) && new FileInfo(preparedSource).Length >= 4096
+                && File.Exists(preparedPbd) && new FileInfo(preparedPbd).Length >= 4096;
+            if ((!File.Exists(text) || !File.Exists(text2)) && !preparedModel)
+'@
+    $aiPatched = $aiSource.Replace($old, $new)
+    [IO.File]::WriteAllText($sourceFile, $aiPatched,
+        (New-Object Text.UTF8Encoding($false)))
+}
+
 # The archived sources omit the original packed WPF container.
 # Extract the container from hash-pinned R1 DLL into generated build staging.
 $assembly = [Reflection.Assembly]::LoadFrom($OriginalDll)
@@ -77,7 +107,8 @@ $compiledDll = Join-Path $Stage ('bin\' + $Configuration + '\net472\InspTools.dl
 if (-not (Test-Path -LiteralPath $compiledDll)) { throw 'Compiled InspTools.dll missing' }
 [pscustomobject]@{
     status = 'PASS'
-    kind = 'isolated-R3-lazy-init'
+    kind = $(if ($ModelPrecompiledExperiment) { 'isolated-delta-precompiled-model-experiment' }
+             else { 'isolated-R3-lazy-init' })
     donor_read_only = $Phase1SourceRoot
     generated_dll = $compiledDll
     generated_sha256 = (Get-FileHash -LiteralPath $compiledDll -Algorithm SHA256).Hash

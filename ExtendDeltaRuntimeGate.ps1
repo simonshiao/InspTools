@@ -1,5 +1,6 @@
 param(
-    [Parameter(Mandatory=$true)][string]$GateDirectory
+    [Parameter(Mandatory=$true)][string]$GateDirectory,
+    [switch]$IncludeCudnnInference
 )
 
 # Only adds OpenCV's directly imported, unmodified runtime DLL dependencies
@@ -34,6 +35,13 @@ $direct = @(
     'cudnn64_8.dll',
     'cufft64_10.dll'
 )
+if ($IncludeCudnnInference) {
+    # cuDNN loads these at runtime; they will not appear as static imports
+    # of DeltaAIProcessDll. Never include train-only libs in inference Gate.
+    $direct += @('cudnn_ops_infer64_8.dll',
+                 'cudnn_cnn_infer64_8.dll',
+                 'cudnn_adv_infer64_8.dll')
+}
 $status = @()
 foreach ($name in $direct) {
     $src = Join-Path $srcRoot $name

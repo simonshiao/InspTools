@@ -1,5 +1,7 @@
 # DIA 檢測執行環境｜路線校正後交接
 
+> **2026-10-22 台達 AI 實際 OK/NG Gate 突破：** 確認實際 R3 舊 AIEnhanceTool.ReadModel 在模型讀取前強制要求 train.exe/h5_to_pb.exe；隔離新建 Experiment DLL 僅允許預先已備妥的 .h5d+.pbd 跳過此無關訓練前置檢查。AppBase 原生 Runtime 加入 cuDNN 動態推論 DLL 與相對目錄預載後，真正 S1 Model Success=True/Loaded=True、真實 S1 OK Bin=Ok、S1 NG Bin=Ng2（BinaryTools5/AR溶融），定位皆成功；TestDeltaModelExperiment.ps1 測後已恢復固定 R3 SHA 與模型 bytes。仍只是一站兩張隔離資料，不是八站量產驗收，正式 release/current 與 Shunt 均未修改。完整證據 docs/DELTA_PRECOMPILED_MODEL_INSPECT_GATE_20261022.md。
+
 > **2026-10-21 最新 Delta App-local Gate：** 已在 `output/delta-native-gates/Gate-20261021-234640` 實際複製台達 DLL 和 PE 匯入表要求的 GPU Runtime 子集；補上 `cublasLt64_11.dll` 後 **InspTools 自身 C# CLI `DELTA_NATIVE_RUNTIME=READY`**。S1 真實 Recipe/模型已匯入隔離 Gate，`LoadConfiguredModel(1, Enhance)` 能返回，但 `Success=False Loaded=False`，顯示舊 `Training\Train\train.exe`/PB 轉換工具提示；反查 `.h5d/.pbd` 檔名和檔案都存在。**仍未達模型載入/Predict Gate**，不要反編 NVIDIA。測試與下一步詳 `docs/DELTA_APP_LOCAL_RUNTIME_GATE_20261021.md`；正式 release/current 與 Shunt 均未修改。
 
 > **2026-10-21 台達原生 AI 獨立化：** 使用者指定 `E:\0_軟體開發區\3.開發中專案區\1.進行中\ShuntVC_Chao\Runtime\Runtime`，已唯讀找到台達 DeltaAIProcessDll、OpenCV、CUDA11、TensorRT 及 ModelConverter，不必反編譯 NVIDIA。用自製純 PE 靜態稽核確認 x64/84 exports，以限時隔離程序對**同一份台達 DLL 真正執行載入 → CreateInstance → DisposeInstance，PASS**。InspTools 新增 `DeltaNativeRuntimeBootstrap`，僅使用本 EXE 的相對 Runtime，預設懶載入；重編譯與無 AI Runtime 的原版 GUI 啟閉 Exit 0。**C# 自帶 AI Runtime 的 READY Gate、模型 ReadModel/Inspect 尚未驗收**，沒有把大型 DLL 打進候選版。完整資料 `docs/DELTA_NATIVE_RUNTIME_INDEPENDENCE_20261021.md`；原 Shunt Runtime 與 release/current 均未修改。

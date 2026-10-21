@@ -17,6 +17,8 @@ namespace InspTools.Standalone
     {
         private const string ExpectedDllSha =
             "ACD6DBCF266705108021126B9E91C605D87500F21608DA70946F5CE25789C34B";
+        private const string ExperimentalModelDllSha =
+            "6A6E842F53D7C88674289CD85A2BD65C1A1D71870ED6A565127FE5DB7ACBEBC7";
         private const string ShuntName = "R2PROBE-SHUNT-3923-R002";
         private const string OkSha =
             "1A45DE213F72475AC42220B236E72B48913BEA728B44B5899588FB3BBA9C1D45";
@@ -47,19 +49,21 @@ namespace InspTools.Standalone
                     StringComparison.OrdinalIgnoreCase);
                 bool modeling = string.Equals(args[0], "--r3-facade-model",
                     StringComparison.OrdinalIgnoreCase);
-                if ((!loading && !inspecting && !modeling) ||
+                bool inspectingWithModel = string.Equals(args[0],
+                    "--r3-facade-inspect-enhance", StringComparison.OrdinalIgnoreCase);
+                if ((!loading && !inspecting && !modeling && !inspectingWithModel) ||
                     args.Length != (loading ? 2 : modeling ? 3 : 4))
                     throw new ArgumentException(
-                        "Usage: --r3-facade-load RECIPE | --r3-facade-inspect RECIPE STATION OK/NG/S1OK/S1NG | --r3-facade-model RECIPE STATION");
+                        "Usage: --r3-facade-load RECIPE | --r3-facade-inspect RECIPE STATION OK/NG/S1OK/S1NG | --r3-facade-model RECIPE STATION | --r3-facade-inspect-enhance RECIPE STATION S1OK/S1NG");
                 string recipeName = args[1];
-                VerifySandbox(recipeName);
+                VerifySandbox(recipeName, modeling || inspectingWithModel);
                 var watch = Stopwatch.StartNew();
                 string currentRoot = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory)
                     .TrimEnd(Path.DirectorySeparatorChar);
                 bool isDeltaGate = Path.GetFileName(currentRoot).StartsWith("Gate-",
                     StringComparison.OrdinalIgnoreCase) &&
                     File.Exists(Path.Combine(currentRoot, "delta-runtime-gate-manifest.json"));
-                if ((modeling || inspecting) && isDeltaGate)
+                if ((modeling || inspecting || inspectingWithModel) && isDeltaGate)
                 {
                     if (!DeltaNativeRuntimeBootstrap.InitializeIfPresent())
                         throw new InvalidOperationException("Delta gate has no private Runtime");
@@ -105,7 +109,7 @@ namespace InspTools.Standalone
                 int station = int.Parse(args[2]);
                 if (station != 1)
                     throw new ArgumentException("Initial focused Inspect/model gate allows only CCD1/S1");
-                if (modeling)
+                if (modeling || inspectingWithModel)
                 {
                     MethodInfo stationFactory = facadeType.GetMethod("GetOrCreateStation",
                         BindingFlags.Instance | BindingFlags.NonPublic);
@@ -159,12 +163,14 @@ namespace InspTools.Standalone
                         Console.WriteLine("FACADE_MODEL=UNAVAILABLE");
                         code = 66;
                     }
-                    return true;
+                    if (modeling || code != 0) return true;
                 }
                 string label = args[3].ToUpperInvariant();
                 if (label != "OK" && label != "NG" &&
                     label != "S1OK" && label != "S1NG")
                     throw new ArgumentException("Image label must be OK/NG/S1OK/S1NG");
+                if (inspectingWithModel && label != "S1OK" && label != "S1NG")
+                    throw new ArgumentException("Enhanced Inspect requires Recipe-matched S1OK/S1NG image");
                 string relative = Path.Combine("TrainingImage", "R3-Shunt-CCD1",
                     label + (label == "OK" ? ".jpg" : ".png"));
                 string image = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relative);
@@ -221,7 +227,7 @@ namespace InspTools.Standalone
             return true;
         }
 
-        private static void VerifySandbox(string recipeName)
+        private static void VerifySandbox(string recipeName, bool modelExperiment)
         {
             string root = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory)
                 .TrimEnd(Path.DirectorySeparatorChar);
@@ -238,7 +244,16 @@ namespace InspTools.Standalone
                 throw new InvalidOperationException("Facade test requires R3 isolated AppBase/Recipe");
             StandaloneRecipeStore.Validate(recipeName);
             string dll = Path.Combine(root, "InspTools.dll");
-            if (!string.Equals(Hash(dll), ExpectedDllSha, StringComparison.OrdinalIgnoreCase))
+            string actual = Hash(dll);
+            bool experimental = deltaGate && modelExperiment &&
+                File.Exists(Path.Combine(root, "delta-model-experiment.marker")) &&
+                string.Equals(File.ReadAllText(Path.Combine(root,
+                    "delta-model-experiment.marker")).Trim(),
+                    "MODEL_PRECOMPILED_EXPERIMENT_V1", StringComparison.Ordinal) &&
+                string.Equals(actual, ExperimentalModelDllSha,
+                    StringComparison.OrdinalIgnoreCase);
+            if (!string.Equals(actual, ExpectedDllSha, StringComparison.OrdinalIgnoreCase) &&
+                !experimental)
                 throw new InvalidDataException("Patched R3 DLL SHA mismatch");
         }
 

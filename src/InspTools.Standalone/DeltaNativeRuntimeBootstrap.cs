@@ -21,6 +21,10 @@ namespace InspTools.Standalone
         private const uint SearchDefaultDirs = 0x00001000;
         private static bool _initialized;
         private static readonly List<IntPtr> RegisteredDirs = new List<IntPtr>();
+        // cuDNN 8 dynamically LoadLibrary()s these by basename when inference
+        // starts. Windows AddDllDirectory is not guaranteed to be consulted by
+        // those internal calls, so preload exact app-local paths instead.
+        private static readonly List<IntPtr> InferenceLibraries = new List<IntPtr>();
         private static IntPtr _library;
 
         [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
@@ -63,6 +67,18 @@ namespace InspTools.Standalone
                     throw new Win32Exception(Marshal.GetLastWin32Error(),
                         "Failed to add private native DLL directory: " + path);
                 RegisteredDirs.Add(cookie);
+            }
+            foreach (string name in new[] { "cudnn_ops_infer64_8.dll",
+                "cudnn_cnn_infer64_8.dll", "cudnn_adv_infer64_8.dll" })
+            {
+                string file = Path.Combine(cudaDir, name);
+                if (!File.Exists(file)) continue; // UI/Recipe-only install.
+                IntPtr module = LoadLibraryEx(file, IntPtr.Zero,
+                    SearchDllLoadDir | SearchUserDirs | SearchDefaultDirs);
+                if (module == IntPtr.Zero)
+                    throw new Win32Exception(Marshal.GetLastWin32Error(),
+                        "App-local cuDNN inference library load failed: " + name);
+                InferenceLibraries.Add(module);
             }
             // Resolves the DLL and its imported OpenCV/CUDA/TensorRT libraries
             // only through the executable, system and scoped added directories.
