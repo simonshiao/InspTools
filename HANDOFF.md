@@ -1,5 +1,9 @@
 # DIA 檢測執行環境｜路線校正後交接
 
+> **2026-10-22 02:18 後續執行：** 已連上 CHAO2，讀取 AGENTS、R1 路線、近期交接與 ProjectHub.Native 三類訓練、Shunt Twin、DIA 相機證據。確認 StageGeneralTrainer.ps1 原預設中文路徑在 Windows PowerShell 5.1 UTF-8 無 BOM 解析會出現 Illegal characters in path，已改用 ASCII 相對兄弟目錄推導；重新執行 staging 被工具安全檢查攔截，**未宣稱 staging PASS**。GeneralTrainingJob.Preflight 新增固定 SHA256 檢查，防止未審核 DAVS 程式被誤用。Build.ps1 Release PASS、原版 INSPECTION TOOLS GUI 正常啟閉、Twin 12/12 PASS、缺 seed 與非法路徑均 exit 74。尚未執行真正 Train。Git 提交操作被工具安全檢查阻擋；下輪先檢查暫存／未提交差異，再處理候選 Train Job，不能將先前 Shunt 的 GPU PASS 冒稱本案驗收。
+
+> **2026-10-22 一般 Train 前置 Gate：** 正式 CLI 新增 --train-general-preflight，強制檢查本案 AppBase/TrainingSeed、TrainingImage X/Y、Python38、recovered DAVS。Build、原版 GUI 啟閉、Twin 12 項、三類資料契約均 PASS；非法路徑／缺 seed 會以 exit 74 拒絕。StageGeneralTrainer.ps1 已寫入並通過語法解析，但執行被工具安全檢查阻擋，尚未完成 staging；5.2GB GPU Python 未複製，**未真正執行 Train**。下一輪先做 staging 與候選 Train job。詳 docs/GENERAL_TRAIN_PREFLIGHT_GATE_20261022.md。
+
 > **2026-10-22 凌晨設備 Twin + Train 合約：** 使用者要求完整獨立 InspTools（包含 Train），已安排每小時自動接手。ProjectHub.Native 唯讀確認 Shunt PLC/Camera Twin、DIA 固定/循序相機與三套 Training。直接在唯一正式 src/InspTools.Standalone 新增 DeviceTwinPorts.cs 與 TrainingContracts.cs，設備 Twin 12 項離線自測 PASS，General/Locate/Prophet 訓練資料契約自測 PASS；尚未掛入原版 GUI 或實體 PLC/相機，亦尚未真正開始 Train。下一輪優先 product-owned General DAVS Trainer，禁用真 PLC 寫入與原廠生產檔覆寫。詳見 docs/INSPTOOLS_DEVICE_TWIN_AND_TRAIN_ROADMAP_20261022.md。
 
 > **2026-10-22 台達 AI 實際 OK/NG Gate 突破：** 確認實際 R3 舊 AIEnhanceTool.ReadModel 在模型讀取前強制要求 train.exe/h5_to_pb.exe；隔離新建 Experiment DLL 僅允許預先已備妥的 .h5d+.pbd 跳過此無關訓練前置檢查。AppBase 原生 Runtime 加入 cuDNN 動態推論 DLL 與相對目錄預載後，真正 S1 Model Success=True/Loaded=True、真實 S1 OK Bin=Ok、S1 NG Bin=Ng2（BinaryTools5/AR溶融），定位皆成功；TestDeltaModelExperiment.ps1 測後已恢復固定 R3 SHA 與模型 bytes。仍只是一站兩張隔離資料，不是八站量產驗收，正式 release/current 與 Shunt 均未修改。完整證據 docs/DELTA_PRECOMPILED_MODEL_INSPECT_GATE_20261022.md。
