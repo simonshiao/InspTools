@@ -53,6 +53,10 @@ namespace InspTools.Standalone
             R3ShuntImageSmoke shuntSmoke = null;
             if (!string.IsNullOrWhiteSpace(shuntSmokeRecipe))
                 shuntSmoke = R3ShuntImageSmoke.Attach(toolsWindow, shuntSmokeRecipe);
+            string shuntSaveRecipe = GetArg(args, "--r3-shunt-binary-save-smoke");
+            R3ShuntImageSmoke shuntSaveSmoke = null;
+            if (!string.IsNullOrWhiteSpace(shuntSaveRecipe))
+                shuntSaveSmoke = R3ShuntImageSmoke.Attach(toolsWindow, shuntSaveRecipe, true);
             bool uiSmoke = Array.Exists(args ?? new string[0],
                 a => string.Equals(a, "--ui-smoke", StringComparison.OrdinalIgnoreCase));
             StandaloneUiSmoke smoke = null;
@@ -165,6 +169,7 @@ namespace InspTools.Standalone
             if (dialogSmoke != null) return dialogSmoke.ExitCode;
             if (saveSmoke != null) return saveSmoke.ExitCode;
             if (shuntSmoke != null) return shuntSmoke.ExitCode;
+            if (shuntSaveSmoke != null) return shuntSaveSmoke.ExitCode;
             if (editorSmokeRequested) return editorSmokeResult;
             return smoke == null ? exitCode : smoke.ExitCode;
         }
