@@ -13,7 +13,7 @@ namespace InspTools.Standalone
             "4988283839A194DCF18E0B914060AC62D1A617D8923F4872DC729269FD09011E";
         private const string DavsSha =
             "8645361D666E06A80E0BD52C1C91A63F3D5AFE90414297F001ADAAAE44F27522";
-        private static string LocalName(string name)
+        internal static string LocalName(string name)
         {
             if (string.IsNullOrWhiteSpace(name) || name == "." || name == ".." ||
                 name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
@@ -28,7 +28,7 @@ namespace InspTools.Standalone
             using (var file = File.OpenRead(path))
                 return BitConverter.ToString(hash.ComputeHash(file)).Replace("-", "");
         }
-        private static string Preflight(string root, string dataset, string seedName)
+        internal static string Preflight(string root, string dataset, string seedName)
         {
             LocalName(dataset);
             LocalName(seedName);
@@ -65,11 +65,35 @@ namespace InspTools.Standalone
             try
             {
                 Console.OutputEncoding = Utf8;
-                if (args.Length != 3 || args[0] != "--train-general-preflight")
+                if (args.Length == 1 && args[0] == "--train-general-selftest")
+                {
+                    GeneralCandidateRunner.SelfTest();
+                    Console.WriteLine("TRAIN_GENERAL_CANDIDATE_SELFTEST=PASS GPU_RUN=False");
+                    return true;
+                }
+                if (args.Length == 2 && args[0] == "--train-general-status")
+                {
+                    Console.WriteLine(GeneralCandidateRunner.Status(
+                        AppDomain.CurrentDomain.BaseDirectory, args[1]));
+                    return true;
+                }
+                if (args.Length == 2 && args[0] == "--train-general-stop")
+                {
+                    Console.WriteLine(GeneralCandidateRunner.RequestStop(
+                        AppDomain.CurrentDomain.BaseDirectory, args[1]));
+                    return true;
+                }
+                if (args.Length != 3 ||
+                    (args[0] != "--train-general-preflight" &&
+                     args[0] != "--train-general-plan"))
                     throw new ArgumentException(
-                        "Usage: --train-general-preflight DATASET_NAME SEED.h5");
+                        "Usage: --train-general-preflight|--train-general-plan DATASET_NAME SEED.h5");
                 string result = Preflight(AppDomain.CurrentDomain.BaseDirectory,
                     args[1], args[2]);
+                if (args[0] == "--train-general-plan")
+                    Console.WriteLine("CANDIDATE_JOB=" + Path.GetFileName(
+                        GeneralCandidateRunner.Prepare(AppDomain.CurrentDomain.BaseDirectory,
+                            args[1], args[2])));
                 Console.WriteLine("TRAIN_GENERAL_PREFLIGHT=READY " + result +
                     " TRAIN_EXECUTED=False");
             }
