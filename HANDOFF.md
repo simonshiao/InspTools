@@ -2,6 +2,10 @@
 
 > 更新：2026-09-16 00:05 +08:00
 
+> **2026-10-21 R3 Shunt 真實資料 Gate：** 已讀取 ShuntVC 目前 Recipe/3923-R002 與 R002-CCD1 原始 OK/NG 圖各一張，隔離匯入 Recipe 21 檔，原版 OpenCvSharp、CVBuffer、BinaryWindow 顯示真圖及 ROI 原廠儲存防呆通過；原版 BinaryWindow 修改 TrackerName → SaveAllRecipe → 新 CVInspection 重新讀取 → byte-for-byte 還原 24 PASS／0 FAIL。詳細紀錄 docs/R3_SHUNT_REAL_IMAGE_BINARY_SAVE_20261021.md。**模型載入及 Inspect 未驗，正式 ShuntVC 與 InspTools release/current 都未覆蓋。**
+
+> **2026-10-21 R3 二值化存讀突破：** 在 Shunt CCD1 真實 NG 圖與有效 ROI 下，原版 `BinaryWindow.txt_TrackerName` 修改可進 S1 ParamFile，呼叫原版 `SaveAllRecipe` 後，全新 `CVInspection.SetRecipe` 讀回相同值；隔離 Recipe 和 PublicDB 逐位元組回復 PASS，無 Shunt/Chao8Side 寫回。見 `docs/R3_SHUNT_OFFLINE_IMAGE_GATE_20261021.md`。並不代表已執行 `Inspect()`。
+
 > **2026-10-21 R3 實際離線影像進度：** 已從 ShuntVC 唯讀取得 CCD1 OK/NG 兩張原始影像，於隔離 R3 使用 OpenCvSharp 解碼，原版 CVBuffer + BinaryWindow 均成功顯示、關閉，原版 ROI 的 DontSave1/2 與 DontSave 均 False，八站 Recipe 原始檔雜湊保持不變。尚未執行 Binary 編輯保存或 Inspect/分類。詳 `docs/R3_SHUNT_OFFLINE_IMAGE_GATE_20261021.md`。
 
 > **2026-10-21 R3 隔離編輯入口：** 新增明確啟用的原版 `LocateWindow` 八站編輯選單 `--enable-r3-editor`，透過原版 `SaveAllRecipe` 加本地完整 Recipe／PublicDB 備份、八站 FocusLimit／BinaryToolON 重讀及異常回復。選單自動化 3 PASS，底層真實定位參數 UI 修改與保存已 12 PASS。尚未驗新選單的人工完整儲存／撤回交互，不可升正式版。見 `docs/R3_OPT_IN_LOCATE_EDITOR_20261021.md`。

@@ -100,10 +100,13 @@ if ($results.Count -ge 3 -and $results[2].exit_code -eq 0) {
     }
 }
 function Run-BoundedGui([string]$Stage, [string]$Option, [string]$ResultFile,
-    [int]$ExpectedPasses) {
+    [int]$ExpectedPasses, [string]$FixtureRecipeName = '') {
     $app = Join-Path $Sandbox 'InspToolsStandalone.exe'
     $log = Join-Path $Sandbox $ResultFile
-    $proc = Start-Process -FilePath $app -ArgumentList @($Option, $RecipeName) -WorkingDirectory $Sandbox -PassThru
+    if ([string]::IsNullOrWhiteSpace($FixtureRecipeName)) {
+        $FixtureRecipeName = $RecipeName
+    }
+    $proc = Start-Process -FilePath $app -ArgumentList @($Option, $FixtureRecipeName) -WorkingDirectory $Sandbox -PassThru
     $finished = $proc.WaitForExit($GuiTimeoutMs)
     if (-not $finished) { $proc.Kill(); $proc.WaitForExit() }
     if ($finished) { $proc.Refresh() }
@@ -149,6 +152,9 @@ if ($results.Count -ge 6 -and $results[5].exit_code -eq 0) {
         stdout = $result
         stderr = ''
     }
+}
+if ($results.Count -ge 7 -and $results[6].exit_code -eq 0) {
+    $results += Run-BoundedGui 'r3-shunt-ccd1-binary-save-and-rollback' '--r3-shunt-binary-save-smoke' 'r3-shunt-binary-save-result.txt' 24 'R2PROBE-SHUNT-3923-R002'
 }
 $report = [pscustomobject]@{
     kind = 'isolated-native-lazy-init-probe'

@@ -1,7 +1,7 @@
 # R3｜Shunt 真實 CCD1 離線影像與原版二值化視窗
 
 日期：2026-10-21
-狀態：**影像載入與原版視窗可顯示 PASS；二值化參數完整編輯、Inspect、OK/NG 推論尚未驗。**
+狀態：**影像載入／原版視窗顯示 PASS；二值化 TrackerName 實際編輯、原版儲存／重讀／恢復 PASS；Inspect、OK/NG 推論尚未驗。**
 
 ## 目標
 
@@ -39,6 +39,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\StageShuntFixtures.ps1
 
 測試輸出：`r3-shunt-image-result.txt`。
 
+獨立檔案存讀閉環驗收（只在沙盒）：
+
+```powershell
+.\InspToolsStandalone.exe --r3-shunt-binary-save-smoke R2PROBE-SHUNT-3923-R002
+```
+
+輸出：`r3-shunt-binary-save-result.txt`。
+
 ## 通過證據
 
 - 8 個真實 `CVInspection` 綁定原版 `ToolsWindow`。
@@ -49,15 +57,30 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\StageShuntFixtures.ps1
 - Recipe S1～S8 全部 INI SHA256 前後一致。
 - 執行結束碼 `0`，無 `InspToolsStandalone.error.txt`。
 
+## 原版 BinaryWindow 真實編輯／存檔 Gate
+
+已在 OK、NG 離線影像完成原版 ImageBuffer／有效區域測試後，用 NG 圖做下面閉環：
+
+1. 確認原版 `DontSave1`、`DontSave2`、`DontSave` 皆為 False，**不繞過原版防呆**。
+2. 在原版 `BinaryWindow.txt_TrackerName` 填入 `R3-SHUNT-CCD1-VALID-ROI`。
+3. 關閉視窗，確認原版 `Window_Closed` 已將新值寫回 S1 `ParamFile.BinaryParam[0].TrackerName`。
+4. 呼叫原版 `ToolsWindow.SaveAllRecipe()`，用**全新的** `CVInspection.SetRecipe` 重新載入 S1。
+5. 確認重新讀到新 Tracker 名稱。
+6. 從預先保存的副本恢復隔離 Recipe／PublicDB，每一個檔案 bytes 回復一致。
+
+以上全部 PASS，測試程序 `Exit 0`、無錯誤檔。測試來源 ShuntVC 沒有寫回。
+
+這一條和先前 R3 原版 `LocateWindow.FocusLimit` 閉環相互獨立，證明**定位與二值化兩條 Tool 的基本編輯→保存→重讀**均有實測證據。
+
 ## 排除的問題
 
 第一版離線樣本測試使用反射載入 `System.Drawing.Bitmap`，此獨立執行環境無法解析該組件。已改為使用**現成 OpenCvSharp.dll** 解碼，不再引入額外 System.Drawing 依賴。
 
 ## 尚未完成
 
-- `BinaryWindow` 的真實控制項值修改 → ParamFile → SaveAllRecipe → 重開比較：**未測**。目前只是原版圖像與合法 ROI 進入成功。
+- `BinaryWindow` 目前只驗了 `TrackerName` 一個原版欄位，其他 Threshold、ROI 座標及 Tracker 進階參數尚待逐項驗證；仍不能稱整個 BinaryTool 編輯功能完成。
 - 未執行原版 `Inspect()`，也沒有實際計算檢測結果；這次的 OK／NG 只表示樣本原始資料夾標籤，不能當成獨立版分類結果。
 - AI 模型載入、預分類訓練與推論仍需各自獨立驗收。
 - 未覆蓋正式 `release/current`，也沒有修改 ShuntVC 成品。
 
-下一步：在這兩張已能打開的離線樣本上，測試原版 BinaryWindow 的有效 ROI 參數編輯、原廠 SaveAllRecipe 及可回復的磁碟重讀流程，再開始規劃原始 `Inspect()` 的離線測試。
+下一步：用真實影像測試 `BinaryWindow` 的 Threshold／ROI 座標，並開始規劃原始 `Inspect()` 的離線輸入、輸出與 OK／NG 判定驗收。
