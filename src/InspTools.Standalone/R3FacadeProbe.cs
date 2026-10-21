@@ -54,6 +54,17 @@ namespace InspTools.Standalone
                 string recipeName = args[1];
                 VerifySandbox(recipeName);
                 var watch = Stopwatch.StartNew();
+                string currentRoot = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory)
+                    .TrimEnd(Path.DirectorySeparatorChar);
+                bool isDeltaGate = Path.GetFileName(currentRoot).StartsWith("Gate-",
+                    StringComparison.OrdinalIgnoreCase) &&
+                    File.Exists(Path.Combine(currentRoot, "delta-runtime-gate-manifest.json"));
+                if ((modeling || inspecting) && isDeltaGate)
+                {
+                    if (!DeltaNativeRuntimeBootstrap.InitializeIfPresent())
+                        throw new InvalidOperationException("Delta gate has no private Runtime");
+                    Mark("APP_LOCAL_DELTA_RUNTIME=READY", watch);
+                }
                 Assembly asm = Assembly.LoadFrom(Path.Combine(
                     AppDomain.CurrentDomain.BaseDirectory, "InspTools.dll"));
                 Type facadeType = asm.GetType(
@@ -96,6 +107,23 @@ namespace InspTools.Standalone
                     throw new ArgumentException("Initial focused Inspect/model gate allows only CCD1/S1");
                 if (modeling)
                 {
+                    MethodInfo stationFactory = facadeType.GetMethod("GetOrCreateStation",
+                        BindingFlags.Instance | BindingFlags.NonPublic);
+                    if (stationFactory == null)
+                        throw new MissingMethodException(facadeType.FullName, "GetOrCreateStation");
+                    object actualStation = stationFactory.Invoke(facade, new object[] { station - 1 });
+                    FieldInfo nativeParam = actualStation.GetType().GetField("paramFile");
+                    object paramObject = nativeParam.GetValue(actualStation);
+                    FieldInfo enhanceParam = paramObject.GetType().GetField("AIEnhanceParam");
+                    object enhanceObject = enhanceParam.GetValue(paramObject);
+                    string configuredName = Convert.ToString(
+                        enhanceObject.GetType().GetField("ModelName_A").GetValue(enhanceObject));
+                    string candidateStem = Path.GetFileNameWithoutExtension(configuredName);
+                    string modelRoot = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model");
+                    Console.WriteLine("CONFIG_MODEL_NAME=" + configuredName +
+                        " EXPECTED_PBD=" + candidateStem + ".pbd" +
+                        " SOURCE_PRESENT=" + File.Exists(Path.Combine(modelRoot, candidateStem + ".h5d")) +
+                        " PBD_PRESENT=" + File.Exists(Path.Combine(modelRoot, candidateStem + ".pbd")));
                     string modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                         "Model", "VSMA8420AYM050JEW_A1.pbd");
                     string modelSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
@@ -197,8 +225,15 @@ namespace InspTools.Standalone
         {
             string root = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory)
                 .TrimEnd(Path.DirectorySeparatorChar);
-            if (!root.EndsWith(Path.Combine("output", "native-lazy", "runtime"),
-                    StringComparison.OrdinalIgnoreCase) ||
+            bool native = root.EndsWith(Path.Combine("output", "native-lazy", "runtime"),
+                StringComparison.OrdinalIgnoreCase);
+            string parent = Path.GetFullPath(Path.GetDirectoryName(root))
+                .TrimEnd(Path.DirectorySeparatorChar);
+            bool deltaGate = parent.EndsWith(Path.Combine("output", "delta-native-gates"),
+                StringComparison.OrdinalIgnoreCase) &&
+                Path.GetFileName(root).StartsWith("Gate-", StringComparison.OrdinalIgnoreCase) &&
+                File.Exists(Path.Combine(root, "delta-runtime-gate-manifest.json"));
+            if ((!native && !deltaGate) ||
                 !recipeName.StartsWith("R2PROBE-", StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("Facade test requires R3 isolated AppBase/Recipe");
             StandaloneRecipeStore.Validate(recipeName);

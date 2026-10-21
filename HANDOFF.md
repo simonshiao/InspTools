@@ -1,5 +1,7 @@
 # DIA 檢測執行環境｜路線校正後交接
 
+> **2026-10-21 最新 Delta App-local Gate：** 已在 `output/delta-native-gates/Gate-20261021-234640` 實際複製台達 DLL 和 PE 匯入表要求的 GPU Runtime 子集；補上 `cublasLt64_11.dll` 後 **InspTools 自身 C# CLI `DELTA_NATIVE_RUNTIME=READY`**。S1 真實 Recipe/模型已匯入隔離 Gate，`LoadConfiguredModel(1, Enhance)` 能返回，但 `Success=False Loaded=False`，顯示舊 `Training\Train\train.exe`/PB 轉換工具提示；反查 `.h5d/.pbd` 檔名和檔案都存在。**仍未達模型載入/Predict Gate**，不要反編 NVIDIA。測試與下一步詳 `docs/DELTA_APP_LOCAL_RUNTIME_GATE_20261021.md`；正式 release/current 與 Shunt 均未修改。
+
 > **2026-10-21 台達原生 AI 獨立化：** 使用者指定 `E:\0_軟體開發區\3.開發中專案區\1.進行中\ShuntVC_Chao\Runtime\Runtime`，已唯讀找到台達 DeltaAIProcessDll、OpenCV、CUDA11、TensorRT 及 ModelConverter，不必反編譯 NVIDIA。用自製純 PE 靜態稽核確認 x64/84 exports，以限時隔離程序對**同一份台達 DLL 真正執行載入 → CreateInstance → DisposeInstance，PASS**。InspTools 新增 `DeltaNativeRuntimeBootstrap`，僅使用本 EXE 的相對 Runtime，預設懶載入；重編譯與無 AI Runtime 的原版 GUI 啟閉 Exit 0。**C# 自帶 AI Runtime 的 READY Gate、模型 ReadModel/Inspect 尚未驗收**，沒有把大型 DLL 打進候選版。完整資料 `docs/DELTA_NATIVE_RUNTIME_INDEPENDENCE_20261021.md`；原 Shunt Runtime 與 release/current 均未修改。
 
 > **2026-10-21 最新獨立候選版（以此為準）：** 使用 `BuildStandaloneR3.ps1 -Zip` 產生獨立的 `output/standalone-r3/InspTools-Portable-R3-YYYYMMDD-HHmmss/` 及同名 ZIP。與可清空的 `output/portable-review` 不同，**每次都新建、不覆蓋使用者 Recipe**。原版 GUI 零參數啟停 Exit 0，獨立 Recipe 匯入／檢查／S5 真實八站、R3 原版定位編輯選單 3 PASS，同機異路徑搬移／載入再次通過。套件內有 25 個 EXE/DLL、約 89.86 MiB、空白 Recipe/Model/PublicDB/TrainingImage，完全不附 Shunt 正式資料。新的打包與操作說明在 `docs/PORTABLE_R3_CURRENT.md`。完整 Inspect、AI Model、OK/NG 尚未驗收；`release/current` 不變，不能把候選版冒稱正式。

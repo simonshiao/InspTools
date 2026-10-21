@@ -150,8 +150,10 @@ def diagnostic_strings(buf, limit=70):
 
 
 def main():
-    if len(sys.argv) != 2:
-        raise SystemExit("Usage: InspectNativePE.py PATH_TO_DLL")
+    imports_only = len(sys.argv) == 3 and sys.argv[2] == "--imports-only"
+    if (len(sys.argv) not in (2, 3) or
+            (len(sys.argv) == 3 and not imports_only)):
+        raise SystemExit("Usage: InspectNativePE.py PATH_TO_DLL [--imports-only]")
     pe = PE(sys.argv[1])
     out = {
         "kind": "static-native-PE-evidence",
@@ -163,9 +165,9 @@ def main():
         "image_base": f"0x{pe.image_base:X}",
         "entry_rva": f"0x{pe.entry:08X}",
         "sections": pe.sections,
-        "exports": pe.exports(),
+        "exports": [] if imports_only else pe.exports(),
         "imports": pe.imports(),
-        "relevant_strings_sample": diagnostic_strings(pe.data),
+        "relevant_strings_sample": [] if imports_only else diagnostic_strings(pe.data),
         "limitations": [
             "Static PE parsing only; no native code has been executed.",
             "Dynamically loaded DLLs and APIs may not appear in import table.",

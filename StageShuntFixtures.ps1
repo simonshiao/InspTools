@@ -8,7 +8,13 @@ if ([string]::IsNullOrWhiteSpace($Sandbox)) {
 }
 $Sandbox = [IO.Path]::GetFullPath($Sandbox)
 $allowed = [IO.Path]::GetFullPath((Join-Path $ProjectRoot 'output\native-lazy\runtime')).TrimEnd('\')
-if ($Sandbox.TrimEnd('\') -ne $allowed) { throw 'Fixture staging is permitted only in the R3 sandbox.' }
+$gateRoot = [IO.Path]::GetFullPath((Join-Path $ProjectRoot 'output\delta-native-gates')).TrimEnd('\') + '\'
+$isGate = $Sandbox.StartsWith($gateRoot, [StringComparison]::OrdinalIgnoreCase) -and
+    (Split-Path -Leaf $Sandbox).StartsWith('Gate-') -and
+    (Test-Path -LiteralPath (Join-Path $Sandbox 'delta-runtime-gate-manifest.json'))
+if ($Sandbox.TrimEnd('\') -ne $allowed -and -not $isGate) {
+    throw 'Fixture staging is permitted only in a disposable R3 or Delta Gate'
+}
 
 $roots = @(Get-Item -Path 'D:\0_*\1.*\Shunt*\Runtime\ShuntVC' -ErrorAction SilentlyContinue |
     Where-Object { $_.PSIsContainer })
