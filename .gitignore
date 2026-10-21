@@ -1,0 +1,51 @@
+# Generated packages, runtime binaries and machine-specific user data.
+# Neither production Recipes nor large AI models belong in source control.
+/output/
+/release/
+
+# Visual Studio / MSBuild
+.vs/
+**/bin/
+**/obj/
+**/TestResults/
+*.user
+*.suo
+*.rsuser
+*.cache
+
+# Machine-specific binaries and large AI payloads
+*.exe
+*.dll
+*.pdb
+*.zip
+*.7z
+*.onnx
+*.h5
+*.h5d
+*.pbd
+*.trt
+*.ltrt
+*.lpbd
+*.pb
+*.pt
+*.pth
+
+# Python test byproducts and diagnostics
+__pycache__/
+*.pyc
+*.pyo
+*.log
+*.tmp
+*.bak
+*.dmp
+*.out
+*.err
+
+# Do not track credentials, personal machine or private production settings.
+.env
+.env.*
+*.pfx
+*.key
+*.pem
+*.secret
+*.token

@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <OutputType>WinExe</OutputType>
+    <PlatformTarget>x64</PlatformTarget>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="StandaloneEntry.cs" />
+    <Compile Include="DecodedToolsWindowHost.cs" />
+    <Compile Include="StandaloneRecipeStore.cs" />
+    <Compile Include="StandaloneRecipeCli.cs" />
+    <Compile Include="StandaloneRecipeUi.cs" />
+    <Compile Include="BlankUiLifecycleGuard.cs" />
+    <Compile Include="NativeRecipeProbe.cs" />
+    <Compile Include="LightweightRecipePreview.cs" />
+    <Compile Include="StandaloneUiSmoke.cs" />
+    <Compile Include="NativeRuntimeGate.cs" />
+  </ItemGroup>
+</Project>

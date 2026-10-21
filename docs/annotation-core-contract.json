@@ -1,0 +1,241 @@
+{
+  "schema_version": 1,
+  "project": "InspTools-Rebuild2",
+  "subsystem": "AIAnnotation",
+  "status": "recovered_contract",
+  "legacy_owner": {
+    "host_entry": "InspTools.ToolsWindow.Btn_DrawMask_Click",
+    "gui": "InspTools.Other.AIMarkWindow",
+    "sam": "SAMViewer.SAM",
+    "store_method": "AIMarkWindow.SaveAIMarkedImage",
+    "suggestion_commit_method": "AIMarkWindow.SaveAITempDraw",
+    "binary_export_method": "AIMarkWindow.OutPutAIDrawMat"
+  },
+  "legacy_training_layout": {
+    "root": "TrainingImage/<ModelStem>",
+    "x_ok": "X/OK",
+    "x_ng": "X/NG",
+    "y_ok": "Y/OK",
+    "y_ng": "Y/NG",
+    "original": "Origional/<Station>/OK|NG",
+    "pair_identity": "same filename in X and Y",
+    "ng_filename": "NG-<Station>-yyyy-MM-dd-HH-mm-ss.png"
+  },
+  "classes": [
+    { "id": 1, "name": "Red", "legacy_rgb": [255, 0, 0], "maybe_rgb": [125, 0, 0] },
+    { "id": 2, "name": "Green", "legacy_rgb": [0, 255, 0], "maybe_rgb": [0, 125, 0] },
+    { "id": 3, "name": "Blue", "legacy_rgb": [0, 0, 255], "maybe_rgb": [0, 0, 125] },
+    { "id": 4, "name": "Yellow", "legacy_rgb": [255, 255, 0], "maybe_rgb": [125, 125, 0] },
+    { "id": 5, "name": "Magenta", "legacy_rgb": [255, 0, 255], "maybe_rgb": [125, 0, 125] },
+    { "id": 6, "name": "Cyan", "legacy_rgb": [0, 255, 255], "maybe_rgb": [0, 125, 125] }
+  ],
+  "special_label_values": {
+    "ignore_gray": [20, 20, 20],
+    "maybe_intensity": 125,
+    "normal_intensity": 255,
+    "warning": "Legacy Y is not a binary mask; preserve class and intensity semantics."
+  },
+  "training_runtime": {
+    "consumer": "DAVS via Training/train/train.exe",
+    "navs": {
+      "Threshold": 220,
+      "MaybeArea": 0.3,
+      "NGIgnore": 0,
+      "OKBlank": 1,
+      "ModelType": "US"
+    }
+  },
+  "sam": {
+    "legacy_encoder_path": "C:\\Temp\\encoder.onnx",
+    "legacy_decoder_path": "C:\\Temp\\decoder.onnx",
+    "encoder": {
+      "input_name": "x",
+      "input_shape": [1, 3, 1024, 1024],
+      "embedding_shape": [1, 256, 64, 64],
+      "lifecycle": "once per image"
+    },
+    "decoder": {
+      "inputs": {
+        "image_embeddings": [1, 256, 64, 64],
+        "point_coords": "[1,N,2]",
+        "point_labels": "[1,N]",
+        "mask_input": [1, 1, 256, 256],
+        "has_mask_input": [1],
+        "orig_im_size": [2]
+      },
+      "mask_input_value": 0,
+      "has_mask_input_value": 0,
+      "lifecycle": "repeat for prompt changes using cached embedding"
+    },
+    "prompt_labels": {
+      "positive_point": 1,
+      "negative_point": 0,
+      "box_first_corner": 2,
+      "box_second_corner": 3
+    },
+    "verified_model_assets": {
+      "encoder": {
+        "size_bytes": 99827815,
+        "sha256": "CF99A3B79EEA0AC4F7C9B06CDCE5B2763FF41A3F631213C748D497CBA233DF6A"
+      },
+      "decoder": {
+        "size_bytes": 8738967,
+        "sha256": "D2118487645C5F2B5808FB89A02BC29E13021A1DEE8332C68E371C5AD2BE5676"
+      }
+    },
+    "second_phase_backend": {
+      "assembly": "InspTools.SamOnnx.dll",
+      "contract": "IAnnotationSuggestionBackend",
+      "status": "cpu_parity_pass_cuda_optional_bundle_pending",
+      "default_mask_selection": "FirstMaskLegacy",
+      "optional_mask_selection": "BestIoU",
+      "embedding_cache": "keyed per source image; one Encode then repeated Decode",
+      "cpu_reference": {
+        "fixture": "Shunt R002-CCD1 NG-1-2025-06-27-16-55-12-H.png",
+        "box": [10, 16, 151, 684],
+        "positive_pixels": 11961,
+        "iou": 0.748689591884613,
+        "csharp_parity": "PASS"
+      },
+      "prompt_smoke": {
+        "box": "PASS",
+        "positive_point": "PASS",
+        "positive_plus_negative_point": "PASS"
+      },
+      "provider_policy": "PreferCuda may fall back to CPU; missing models fail closed",
+      "cuda_packaging_note": "ONNX Runtime 1.16 expects provider DLLs beside its native runtime. CPU-only optional bundle intentionally omits the ~337 MB CUDA provider."
+    }
+  },
+  "state_semantics": {
+    "current_suggestion": "mDataList; decoder float mask",
+    "committed_class_map": "mDataListSave; class ids 0..6",
+    "legacy_commit": "fill only pixels where suggestion > 0 and existing class <= 0",
+    "binary_export": "collapses class ids > 0 to 255, morphology open, clears committed map; destructive"
+  },
+  "source_truth_levels": {
+    "vendor_recovered": [
+      "hardcoded C:\\Temp encoder/decoder",
+      "direct CUDA provider when UseCuda=true",
+      "one Encode per image and repeated Decode per prompt set"
+    ],
+    "first_phase_patch": [
+      "IsModelReady and LastLoadError",
+      "load locking",
+      "CUDA failure cleanup",
+      "CPU fallback",
+      "missing-model optional skip",
+      "AIMarkWindow.SetSAM readiness guard"
+    ]
+  },
+  "empirical_dataset_evidence": {
+    "date": "2026-09-15",
+    "audit_tool": "test/audit_legacy_annotation_labels.py",
+    "evidence": "output/ANNOTATION_DATASET_AUDIT_20260915.md",
+    "pair_identity": "same model + same OK/NG + same filename; X/Y caption subfolders may differ",
+    "dia": {
+      "y_ok": 3514,
+      "y_ng": 1806,
+      "paired": 3526,
+      "legacy_y_only": 1794,
+      "ambiguous": 0,
+      "dimension_mismatch": 0,
+      "legacy_debt_breakdown": {
+        "0816T4F-TF-4_NO": 1251,
+        "0816T4F-TF-8_extra_Y_OK": 543
+      }
+    },
+    "shunt": {
+      "y_ok": 356,
+      "y_ng": 711,
+      "paired": 1067,
+      "legacy_y_only": 0,
+      "ambiguous": 0,
+      "dimension_mismatch": 0
+    },
+    "observed_semantics": [
+      "Y/OK sampled as pure black",
+      "ignore RGB 20/20/20",
+      "maybe intensity 125",
+      "full class intensity 255",
+      "Red/Green/Blue class families present in Shunt samples",
+      "interpolated edge colors are present because legacy writer resizes label mats"
+    ]
+  },
+  "recommended_agent_api": [
+    "annotation.open",
+    "annotation.image.set",
+    "annotation.sam.status",
+    "annotation.sam.point.add",
+    "annotation.sam.point.remove",
+    "annotation.sam.box",
+    "annotation.suggestion.get",
+    "annotation.suggestion.commit",
+    "annotation.erase",
+    "annotation.class_map.get",
+    "annotation.legacy.validate",
+    "annotation.legacy.save",
+    "annotation.cancel"
+  ],
+  "agent_adapter": {
+    "assembly": "InspTools.Agent.dll",
+    "type": "InspTools.Agent.AnnotationAgentController",
+    "status": "transport_neutral_end_to_end_pass",
+    "depends_on": ["InspTools.SDK.dll"],
+    "does_not_depend_on": ["WPF", "AIMarkWindow", "OpenCvSharp.Mat public API", "MCP", "Named Pipe", "CLI"],
+    "no_sam_behavior": "legacy annotation available; suggestion fail-closed",
+    "sam_injection": "Func<IAnnotationSuggestionBackend>",
+    "acceptance": "output/ANNOTATION_AGENT_ADAPTER_ACCEPTANCE_20260915.md",
+    "end_to_end_reference": {
+      "positive_pixels": 11961,
+      "iou": 0.748690,
+      "class1_before": 40059,
+      "class1_after_commit": 51902,
+      "class1_after_cancel": 40059,
+      "status": "PASS"
+    }
+  },
+  "wpf_annotation_adapter": {
+    "assembly": "InspTools.Wpf.dll",
+    "types": [
+      "InspTools.Wpf.AnnotationEditorControl",
+      "InspTools.Wpf.AnnotationEditor"
+    ],
+    "status": "real_shunt_gui_end_to_end_pass",
+    "standalone_entry": "InspToolsStandalone.exe -> 開啟 AI 標註",
+    "verified": [
+      "legacy class overlay",
+      "mouse Box prompt",
+      "SAM suggestion overlay",
+      "Commit",
+      "Cancel rollback"
+    ]
+  },
+  "json_dispatcher": {
+    "assembly": "InspTools.Agent.dll",
+    "type": "InspTools.Agent.AnnotationAgentJsonDispatcher",
+    "protocol": "InspTools.AnnotationAgent/1",
+    "status": "transport_neutral_json_end_to_end_pass",
+    "contract": "docs/AgentAnnotation.contract.json",
+    "acceptance": "output/ANNOTATION_JSON_TRANSPORT_ACCEPTANCE_20260915.md",
+    "raw_sam_mask_over_transport": false,
+    "class_map_transport": "summary",
+    "host_rule": "MCP/HTTP/Pipe wrappers forward JSON only; do not copy annotation business logic."
+  },
+  "agent_bridge": {
+    "exe": "InspTools.AgentBridge.exe",
+    "status": "named_pipe_cross_process_pass",
+    "role": "optional isolation bridge for non-.NET or MCP hosts",
+    "machine_integration_required": false,
+    "no_sam_smoke": "PASS",
+    "sam_smoke": "PASS",
+    "acceptance": "output/ANNOTATION_AGENT_BRIDGE_ACCEPTANCE_20260915.md"
+  },
+  "unresolved": [
+    "Exact DAVS loss semantics for 20/125/255 are outside recovered InspTools and require runtime parity evidence.",
+    "Whether six colors are independent semantic classes for every model or caption-level NG categories.",
+    "SAMAutoMask public API parity.",
+    "CUDA provider deployment parity is pending; CPU backend and CUDA-to-CPU fallback are verified.",
+    "MCP/HTTP/Chao8Side external tool registration and cutover remain host-platform work; JSON command binding is already implemented.",
+    "Chao8Side production Host must not be silently changed while its C8 cutover task is separate."
+  ]
+}

@@ -1,0 +1,186 @@
+{
+  "schema": 1,
+  "protocol": "InspTools.AnnotationAgent/1",
+  "date": "2026-09-15",
+  "assembly": "InspTools.Agent.dll",
+  "dispatcher": "InspTools.Agent.AnnotationAgentJsonDispatcher",
+  "transport": {
+    "required": false,
+    "model": "transport-neutral",
+    "supported_host_patterns": [
+      "in-process C#",
+      "MCP tool wrapper",
+      "HTTP JSON wrapper",
+      "Named Pipe JSON wrapper"
+    ],
+    "rule": "Transport only forwards one JSON request and one JSON response. Business logic remains in InspTools.Agent/SDK/Core.",
+    "reference_bridge": {
+      "exe": "InspTools.AgentBridge.exe",
+      "mode": "optional Named Pipe bridge for non-.NET/MCP hosts",
+      "protocol": "UTF-8 line-delimited JSON",
+      "acceptance": "output/ANNOTATION_AGENT_BRIDGE_ACCEPTANCE_20260915.md"
+    }
+  },
+  "session": {
+    "scope": "one AnnotationAgentJsonDispatcher instance owns at most one open annotation session",
+    "serialized": true,
+    "prompt_state": "held inside dispatcher until prompts.clear, image.set, cancel, close, or open",
+    "suggestion_state": "held inside IAnnotationSession; JSON does not return the raw float mask"
+  },
+  "response_envelope": {
+    "ok": "boolean",
+    "protocol": "InspTools.AnnotationAgent/1",
+    "action": "echo of normalized action",
+    "message": "human-readable diagnostic",
+    "value": "action-specific JSON object or null"
+  },
+  "commands": {
+    "annotation.capabilities": {
+      "arguments": [],
+      "returns": ["protocol", "capabilities"]
+    },
+    "annotation.open": {
+      "arguments": [
+        "trainingImageRoot:string|required",
+        "modelName:string|required",
+        "kind:Ok|Ng|required",
+        "imagePath:string|required",
+        "labelPath:string|optional",
+        "xSubfolder:string|optional",
+        "ySubfolder:string|optional",
+        "editable:boolean|default=true",
+        "allowOverwrite:boolean|default=false"
+      ],
+      "returns": "annotation status"
+    },
+    "annotation.status": {
+      "arguments": [],
+      "returns": "annotation status"
+    },
+    "annotation.close": {
+      "arguments": [],
+      "returns": "closed=true"
+    },
+    "annotation.image.set": {
+      "arguments": ["path:string|required"],
+      "returns": "annotation status",
+      "side_effect": "clears pending prompts; refuses image change when unsaved changes exist"
+    },
+    "annotation.sam.status": {
+      "arguments": [],
+      "returns": "annotation status including samReady/samState"
+    },
+    "annotation.sam.point.add": {
+      "arguments": ["x:int|required", "y:int|required"],
+      "returns": "prompt summary"
+    },
+    "annotation.sam.point.remove": {
+      "arguments": ["x:int|required", "y:int|required"],
+      "returns": "prompt summary"
+    },
+    "annotation.sam.box": {
+      "arguments": ["x:int|required", "y:int|required", "x2:int|required", "y2:int|required"],
+      "returns": "prompt summary"
+    },
+    "annotation.prompts.clear": {
+      "arguments": [],
+      "returns": "prompt summary"
+    },
+    "annotation.suggestion.get": {
+      "arguments": [],
+      "requires": "at least one pending point/box prompt and a ready suggestion backend",
+      "returns": ["success", "width", "height", "score", "positivePixels", "promptCount", "detail"],
+      "raw_mask_returned": false
+    },
+    "annotation.suggestion.commit": {
+      "arguments": [
+        "classId:int|required|1..6",
+        "mergeMode:FillEmptyOnly|Overwrite|UnionSameClass|ReplaceRegion|default=FillEmptyOnly"
+      ],
+      "returns": "annotation status",
+      "writes_disk": false
+    },
+    "annotation.auto.propose": {
+      "status": "experimental-read-only",
+      "arguments": [
+        "pointsPerSide:int|default=4|2..64",
+        "predIouThreshold:number|default=0.88|0..1",
+        "stabilityThreshold:number|default=0.95|0..1",
+        "stabilityOffset:number|default=1.0",
+        "maskThreshold:number|default=0.0",
+        "maxCoverageRatio:number|default=0.75|0..1"
+      ],
+      "returns": ["pointCount", "candidateCount", "recoveredAcceptedCount", "safeProposalCount", "proposals(score/stability/coverage/box/rejectedBySafety)"],
+      "raw_mask_returned": false,
+      "writes_memory_label": false,
+      "writes_disk": false,
+      "commit_supported": false,
+      "warning": "Recovered SAMAutoMask is instantiated in AIMarkWindow but no Generate consumer was recovered; vendor NMS/area-filter fields are unused. Treat as proposal research, not vendor UI parity."
+    },
+    "annotation.erase": {
+      "arguments": ["x:int|required", "y:int|required", "width:int|required", "height:int|required"],
+      "returns": "annotation status",
+      "writes_disk": false
+    },
+    "annotation.class_map.get": {
+      "arguments": [],
+      "returns": ["width", "height", "backgroundPixels", "classPixelCounts"],
+      "transport_representation": "summary only; full byte[] class map remains available from the in-process SDK/controller"
+    },
+    "annotation.legacy.validate": {
+      "arguments": [],
+      "returns": ["valid", "xExists", "yExists", "dimensionsMatch", "detail"]
+    },
+    "annotation.legacy.save": {
+      "arguments": [],
+      "returns": ["xPath", "yPath", "width", "height"],
+      "writes_disk": true,
+      "guard": "session must be editable; AllowOverwrite controls collisions; Y/OK must remain black; existing loaded X/Y below the model X|Y/OK|NG roots are saved back in place when no explicit XSubfolder/YSubfolder override is supplied"
+    },
+    "annotation.cancel": {
+      "arguments": [],
+      "returns": "annotation status",
+      "effect": "rollback working label to committed snapshot and clear pending prompts"
+    }
+  },
+  "sam": {
+    "backend_contract": "IAnnotationSuggestionBackend",
+    "optional_auto_proposal_contract": "IAnnotationAutoProposalBackend",
+    "optional_backend": "InspTools.SamOnnx.dll",
+    "legacy_mask_selection": "FirstMaskLegacy",
+    "embedding_cache": "one Encode per image; repeated Decode per prompt set",
+    "cpu_fallback": true,
+    "cuda_packaging_complete": false,
+    "auto_proposal": {
+      "status": "experimental-read-only",
+      "recovered_defaults": "4x4 points; predIoU>0.88; stability>0.95; offset=1; crop layers=0",
+      "agent_safety": "coverage > 0.75 is marked rejectedBySafety; no auto commit/save action exists"
+    }
+  },
+  "security_and_write_boundary": {
+    "default_transport_write": false,
+    "memory_only_actions": [
+      "annotation.suggestion.commit",
+      "annotation.erase",
+      "annotation.cancel"
+    ],
+    "disk_write_action": "annotation.legacy.save",
+    "production_write_authorization": "not granted by this contract"
+  },
+  "verified_fixture": {
+    "dataset": "Shunt R002-CCD1 NG-1-2025-06-27-16-55-12-H.png",
+    "legacy_class1_pixels": 40059,
+    "sam_box": [10, 16, 151, 684],
+    "legacy_first_mask_positive_pixels": 11961,
+    "legacy_first_mask_score": 0.748689591884613,
+    "auto_proposal_reference": {
+      "points": 16,
+      "decoder_candidates": 64,
+      "recovered_filter_accepted": 6,
+      "safe_after_max_coverage_0_75": 0,
+      "accepted_coverage_range": [0.9131452123482218, 0.9157503370286356]
+    },
+    "fill_empty_class1_after_commit": 51902,
+    "cancel_restores_class1": 40059
+  }
+}

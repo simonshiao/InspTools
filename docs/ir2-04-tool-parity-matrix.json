@@ -1,0 +1,105 @@
+{
+  "schema": "InspTools.Rebuild2.ToolParity.v1",
+  "task": "IR2-04",
+  "updated": "2026-09-15",
+  "production_recipe_sha256": "153650676BC2E1901620F1077D8AA0A00C654699B9443CB366F3555A9D539E4C",
+  "rules": {
+    "unknown_is_writable": false,
+    "complex_asset_default": "read_only",
+    "parameter_preview_is_aoi_test": false,
+    "inspect_state_until_recovered_execution_port": "NOT_RUN"
+  },
+  "slices": [
+    {
+      "id": "Locate",
+      "section_pattern": "Locate",
+      "recovered_ui": "locatewindow.xaml",
+      "confidence": "verified_runtime",
+      "write_policy": "allowlist_scalar_session_only",
+      "test_policy": "phase1_real_non_ai_inspection_verified_phase2_not_connected",
+      "editable_keys": [
+        "LocateAngleLimit",
+        "LocateWidthMin",
+        "LocateWidthMax",
+        "LocateHeightMin",
+        "LocateHeightMax",
+        "LocateErrorBin",
+        "LocateSizeErrorBin",
+        "ParetoIndex",
+        "LocateSpeedUp",
+        "doRotateMinAngle"
+      ]
+    },
+    {
+      "id": "Binary",
+      "section_pattern": "BinaryTools{index}",
+      "recovered_ui": "binarywindow.xaml",
+      "confidence": "verified_runtime",
+      "write_policy": "recovered_binder_scalar_allowlist_session_only",
+      "test_policy": "phase1_real_non_ai_inspection_with_tool_results_verified_phase2_not_connected",
+      "editable_groups": [
+        "tracker",
+        "error_bin_pareto_mask",
+        "tracker_alignment",
+        "threshold_1_to_4",
+        "blob_line",
+        "inspection_rules",
+        "multi_blob_rules"
+      ]
+    },
+    {
+      "id": "ROI",
+      "section_pattern": "embedded_complex_geometry",
+      "confidence": "insufficient_for_write",
+      "write_policy": "read_only",
+      "test_policy": "geometry_snapshot_only"
+    },
+    {
+      "id": "MaskScalar",
+      "section_pattern": "MaskTools{index}",
+      "recovered_ui": "maskwindow.xaml",
+      "confidence": "verified_runtime",
+      "write_policy": "allowlist_scalar_session_only",
+      "protected": ["bitmap", "complex_roi"]
+    },
+    {
+      "id": "MatchScalar",
+      "section_pattern": "MatchTools{index}",
+      "recovered_ui": "matchtoolwindow.xaml",
+      "confidence": "verified_runtime",
+      "write_policy": "safe_scalar_allowlist_session_only",
+      "protected": ["pattern_db_mutation", "public_pattern_db", "roi", "ocr_aliases"]
+    },
+    {
+      "id": "PatternDB",
+      "section_pattern": "PatternDB{index}",
+      "confidence": "read_preview_only",
+      "write_policy": "read_only"
+    },
+    {
+      "id": "FontOCR",
+      "section_pattern": "FontTool",
+      "recovered_ui": "fonttoolwindow.xaml",
+      "confidence": "read_only_test_verified",
+      "write_policy": "read_only",
+      "protected": ["font_db", "training", "pattern_lifecycle", "model_lifecycle"]
+    },
+    {
+      "id": "AdvancedLocatePreview",
+      "section_pattern": "VLocateTools2..19|HLocateTools2..19|AdvLocateTools1..19|AdvMeasure0..39",
+      "recovered_ui": "advlocatewindow.xaml",
+      "confidence": "verified_runtime",
+      "write_policy": "existing_verified_scalar_ranges_only",
+      "test_policy": "isolated_tool_preview_verified_phase1"
+    }
+  ],
+  "evidence": [
+    "D:\\delta\\專案進度\\SharedKnowledge\\InspToolsAPI\\tool-parameters.json",
+    "D:\\delta\\專案進度\\SharedKnowledge\\InspToolsAPI\\stable-api.json",
+    "D:\\delta\\專案進度\\SharedKnowledge\\InspToolsGUI\\NON_AI_DIALOG_CALLBACK_CAPABILITY_20260913.md",
+    "D:\\delta\\專案進度\\Projects\\InspToolsRebuild\\Replica\\InspToolsInspectionReplica\\LocateDialogBinder.cs",
+    "D:\\delta\\專案進度\\Projects\\InspToolsRebuild\\Replica\\InspToolsInspectionReplica\\BinaryDialogBinder.cs",
+    "D:\\delta\\專案進度\\Projects\\InspToolsRebuild\\Replica\\InspToolsInspectionReplica\\MaskDialogBinder.cs",
+    "D:\\delta\\專案進度\\Projects\\InspToolsRebuild\\Replica\\InspToolsInspectionReplica\\MatchDialogBinder.cs"
+  ]
+}

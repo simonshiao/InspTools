@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <Nullable>disable</Nullable>
+    <SamReferenceRoot Condition="'$(SamReferenceRoot)'==''">$(INSPTOOLS_SAM_REFERENCE_ROOT)</SamReferenceRoot>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\InspTools.SDK\InspTools.SDK.csproj" />
+    <Reference Include="Microsoft.ML.OnnxRuntime" HintPath="$(SamReferenceRoot)\Microsoft.ML.OnnxRuntime.dll" />
+    <Reference Include="OpenCvSharp" HintPath="$(SamReferenceRoot)\OpenCvSharp.dll" />
+    <Reference Include="System.Memory" HintPath="$(SamReferenceRoot)\System.Memory.dll" />
+    <Reference Include="System.Buffers" HintPath="$(SamReferenceRoot)\System.Buffers.dll" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe" HintPath="$(SamReferenceRoot)\System.Runtime.CompilerServices.Unsafe.dll" />
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies.net472" Version="1.0.3" PrivateAssets="All" />
+  </ItemGroup>
+</Project>
