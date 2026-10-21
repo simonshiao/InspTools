@@ -21,5 +21,7 @@
     <Compile Include="NativeR3RecipeSession.cs" />
     <Compile Include="R3OriginalDialogSmoke.cs" />
     <Compile Include="R3SaveAllSmoke.cs" />
+    <Compile Include="R3ShuntImageSmoke.cs" />
+    <Compile Include="R3IsolatedEditor.cs" />
   </ItemGroup>
 </Project>

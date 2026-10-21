@@ -49,6 +49,10 @@ namespace InspTools.Standalone
             R3SaveAllSmoke saveSmoke = null;
             if (!string.IsNullOrWhiteSpace(saveSmokeRecipe))
                 saveSmoke = R3SaveAllSmoke.Attach(toolsWindow, saveSmokeRecipe);
+            string shuntSmokeRecipe = GetArg(args, "--r3-shunt-image-smoke");
+            R3ShuntImageSmoke shuntSmoke = null;
+            if (!string.IsNullOrWhiteSpace(shuntSmokeRecipe))
+                shuntSmoke = R3ShuntImageSmoke.Attach(toolsWindow, shuntSmokeRecipe);
             bool uiSmoke = Array.Exists(args ?? new string[0],
                 a => string.Equals(a, "--ui-smoke", StringComparison.OrdinalIgnoreCase));
             StandaloneUiSmoke smoke = null;
@@ -66,10 +70,68 @@ namespace InspTools.Standalone
             string recipeName = GetArg(args, "--recipe");
             string previewName = GetArg(args, "--recipe-preview");
             string nativeR3Recipe = GetArg(args, "--recipe-native-r3");
+            bool editorSmokeRequested = Array.Exists(args ?? new string[0],
+                a => string.Equals(a, "--r3-editor-menu-smoke", StringComparison.OrdinalIgnoreCase));
+            int editorSmokeResult = 60;
             int station = ParseStation(GetArg(args, "--station"));
             if (!string.IsNullOrWhiteSpace(nativeR3Recipe))
             {
                 NativeR3RecipeSession.Open(toolsWindow, nativeR3Recipe, station);
+                bool editorEnabled = Array.Exists(args ?? new string[0],
+                    a => string.Equals(a, "--enable-r3-editor", StringComparison.OrdinalIgnoreCase));
+                if (editorEnabled)
+                {
+                    R3IsolatedEditor.Attach(toolsWindow, nativeR3Recipe);
+                    toolsWindow.Title = toolsWindow.Title.Replace("唯讀", "定位可編輯／隔離測試");
+                }
+                if (editorSmokeRequested)
+                {
+                    if (!editorEnabled)
+                        throw new ArgumentException("R3 editor smoke needs --enable-r3-editor");
+                    toolsWindow.Loaded += delegate
+                    {
+                        toolsWindow.Dispatcher.BeginInvoke(
+                            System.Windows.Threading.DispatcherPriority.ApplicationIdle,
+                            new Action(delegate
+                            {
+                                var log = new System.Text.StringBuilder();
+                                try
+                                {
+                                    ContextMenu ctx = toolsWindow.ContextMenu;
+                                    if (ctx == null || ctx.Items.Count < 4)
+                                        throw new InvalidDataException("R3 編輯選單不存在");
+                                    var edit = ctx.Items[0] as MenuItem;
+                                    var save = ctx.Items[1] as MenuItem;
+                                    var undo = ctx.Items[2] as MenuItem;
+                                    if (edit == null || edit.Items.Count != 8)
+                                        throw new InvalidDataException("原版八站編輯入口不完整");
+                                    log.AppendLine("PASS eight original LocateWindow edit entries");
+                                    if (save == null || save.IsEnabled)
+                                        throw new InvalidDataException("未修改前儲存不應啟用");
+                                    log.AppendLine("PASS save disabled until edited");
+                                    if (undo == null || undo.IsEnabled)
+                                        throw new InvalidDataException("未儲存前撤回不應啟用");
+                                    log.AppendLine("PASS undo disabled until saved");
+                                    editorSmokeResult = 0;
+                                }
+                                catch (Exception ex)
+                                {
+                                    log.AppendLine("FAIL " + ex.GetBaseException());
+                                }
+                                finally
+                                {
+                                    try
+                                    {
+                                        File.WriteAllText(Path.Combine(
+                                            AppDomain.CurrentDomain.BaseDirectory,
+                                            "r3-editor-menu-result.txt"), log.ToString());
+                                    }
+                                    catch { }
+                                    toolsWindow.Close();
+                                }
+                            }));
+                    };
+                }
                 toolsWindow.Loaded += delegate
                 {
                     // Original AOI tool dialogs are not yet verified with
@@ -102,6 +164,8 @@ namespace InspTools.Standalone
             if (nativeSmoke != null) return nativeSmoke.ExitCode;
             if (dialogSmoke != null) return dialogSmoke.ExitCode;
             if (saveSmoke != null) return saveSmoke.ExitCode;
+            if (shuntSmoke != null) return shuntSmoke.ExitCode;
+            if (editorSmokeRequested) return editorSmokeResult;
             return smoke == null ? exitCode : smoke.ExitCode;
         }
 

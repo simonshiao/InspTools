@@ -2,6 +2,8 @@
 
 > 更新：2026-09-16 00:05 +08:00
 
+> **2026-10-21 R3 隔離編輯入口：** 新增明確啟用的原版 `LocateWindow` 八站編輯選單 `--enable-r3-editor`，透過原版 `SaveAllRecipe` 加本地完整 Recipe／PublicDB 備份、八站 FocusLimit／BinaryToolON 重讀及異常回復。選單自動化 3 PASS，底層真實定位參數 UI 修改與保存已 12 PASS。尚未驗新選單的人工完整儲存／撤回交互，不可升正式版。見 `docs/R3_OPT_IN_LOCATE_EDITOR_20261021.md`。
+
 > **2026-10-21 R3 工具編輯／存檔 Gate：** 原版 `LocateWindow`、`BinaryWindow` 接真實 S1 CVInspection 的顯示／關閉 **18 PASS**；`LocateWindow.txt_FocusLimit` 真正編輯 → 原版 `SaveAllRecipe()` → 磁碟／新 CVInspection 重讀 → 原 bytes 回滾 **12 PASS**。二值化原版 `DontSave1=True`（缺有效 ROI）會阻止編輯，**未繞過**。測試報告：`docs/R3_ORIGINAL_DIALOG_SAVE_GATE_20261021.md`。未通過 AI Inspect/全部工具，也未開放正式版儲存。
 
 > **2026-10-21 R3 重大進展：** 一期可編輯原始碼已從歷史 ProjectHub 封存尋回。在唯讀供體的隔離編譯副本中將 AI Locate 原生 CreatInst 改為 ReadModel 按需建立，得到 R3 patched DLL；定位 SetBuffers、S1 SetRecipe、八站 CVInspection/SetRecipe 及真正原版 ToolsWindow 八站 GUI 均 PASS。未做模型與 Inspect，正式 release/current 不變。詳 docs/R3_SOURCE_RECOVERY_20261021.md；Git 已啟用，後續修正可追蹤。

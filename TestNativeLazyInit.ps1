@@ -34,6 +34,10 @@ $RecipeRoot = Join-Path $Sandbox 'Recipe'
 Copy-Item -LiteralPath $RecipeSource -Destination $RecipeRoot -Recurse
 [IO.Directory]::CreateDirectory((Join-Path $Sandbox 'Model')) | Out-Null
 
+# Stage a tiny, read-only selection of the Shunt production Recipe + one
+# original CCD1 OK and NG image. Never duplicate the full production Runtime.
+& (Join-Path $Root 'StageShuntFixtures.ps1') -Sandbox $Sandbox | Out-Null
+
 function Run-BoundedProbe([string]$Label, [string[]]$Arguments, [int]$LimitMs, [string]$ExpectedMarker) {
     $std = Join-Path $Sandbox ($Label + '.out')
     $err = Join-Path $Sandbox ($Label + '.err')
@@ -122,6 +126,29 @@ if ($results.Count -ge 4 -and $results[3].exit_code -eq 0) {
 }
 if ($results.Count -ge 5 -and $results[4].exit_code -eq 0) {
     $results += Run-BoundedGui 'r3-original-saveall-and-byte-rollback' '--r3-saveall-smoke' 'r3-saveall-result.txt' 12
+}
+if ($results.Count -ge 6 -and $results[5].exit_code -eq 0) {
+    $app = Join-Path $Sandbox 'InspToolsStandalone.exe'
+    $log = Join-Path $Sandbox 'r3-editor-menu-result.txt'
+    $args = @('--recipe-native-r3',$RecipeName,'--station','5',
+        '--enable-r3-editor','--r3-editor-menu-smoke')
+    $proc = Start-Process -FilePath $app -ArgumentList $args -WorkingDirectory $Sandbox -PassThru
+    $finished = $proc.WaitForExit($GuiTimeoutMs)
+    if (-not $finished) { $proc.Kill(); $proc.WaitForExit() }
+    if ($finished) { $proc.Refresh() }
+    $result = if (Test-Path -LiteralPath $log) { [IO.File]::ReadAllText($log) } else { '' }
+    $passes = @($result -split "\r?\n" | Where-Object { $_.StartsWith('PASS ') }).Count
+    $exit = if (-not $finished) { -1 }
+        elseif ($proc.ExitCode -eq 0 -and $passes -eq 3 -and
+                -not $result.Contains('FAIL ')) { 0 }
+        else { 60 }
+    $results += [pscustomobject]@{
+        stage = 'r3-opt-in-editor-menu'
+        exit_code = $exit
+        timed_out = (-not $finished)
+        stdout = $result
+        stderr = ''
+    }
 }
 $report = [pscustomobject]@{
     kind = 'isolated-native-lazy-init-probe'
