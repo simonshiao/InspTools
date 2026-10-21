@@ -7,7 +7,7 @@
 1. 讀 `docs/ROUTE_RESET_20260915.md`。
 2. 讀 `docs/PHASE1_BASELINE_AUDIT_20260915.md`。
 3. 讀本目錄 `README.md` / `HANDOFF.md`。
-4. 需要一期 source-level evidence 時才讀 `D:\delta\專案進度\Projects\InspToolsRebuild` 指定檔案。
+4. 需要一期 source-level evidence 時優先讀 `E:\0_軟體開發區\3.開發中專案區\1.進行中\ProjectHub.Native\ProjectData\Projects\InspToolsRebuild`（歷史第一期）與 `ProjectData\SharedKnowledge\InspToolsAPI`；既有 `D:\delta\專案進度\Projects\InspToolsRebuild` 是失效舊路徑。新一輪盤點見 `docs/PROJECTHUB_NATIVE_EVIDENCE_AUDIT_20261021.md`。
 
 ## 唯一目標
 
