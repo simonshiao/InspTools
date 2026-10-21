@@ -1,5 +1,7 @@
 # DIA 檢測執行環境｜路線校正後交接
 
+> **2026-10-22 凌晨設備 Twin + Train 合約：** 使用者要求完整獨立 InspTools（包含 Train），已安排每小時自動接手。ProjectHub.Native 唯讀確認 Shunt PLC/Camera Twin、DIA 固定/循序相機與三套 Training。直接在唯一正式 src/InspTools.Standalone 新增 DeviceTwinPorts.cs 與 TrainingContracts.cs，設備 Twin 12 項離線自測 PASS，General/Locate/Prophet 訓練資料契約自測 PASS；尚未掛入原版 GUI 或實體 PLC/相機，亦尚未真正開始 Train。下一輪優先 product-owned General DAVS Trainer，禁用真 PLC 寫入與原廠生產檔覆寫。詳見 docs/INSPTOOLS_DEVICE_TWIN_AND_TRAIN_ROADMAP_20261022.md。
+
 > **2026-10-22 台達 AI 實際 OK/NG Gate 突破：** 確認實際 R3 舊 AIEnhanceTool.ReadModel 在模型讀取前強制要求 train.exe/h5_to_pb.exe；隔離新建 Experiment DLL 僅允許預先已備妥的 .h5d+.pbd 跳過此無關訓練前置檢查。AppBase 原生 Runtime 加入 cuDNN 動態推論 DLL 與相對目錄預載後，真正 S1 Model Success=True/Loaded=True、真實 S1 OK Bin=Ok、S1 NG Bin=Ng2（BinaryTools5/AR溶融），定位皆成功；TestDeltaModelExperiment.ps1 測後已恢復固定 R3 SHA 與模型 bytes。仍只是一站兩張隔離資料，不是八站量產驗收，正式 release/current 與 Shunt 均未修改。完整證據 docs/DELTA_PRECOMPILED_MODEL_INSPECT_GATE_20261022.md。
 
 > **2026-10-21 最新 Delta App-local Gate：** 已在 `output/delta-native-gates/Gate-20261021-234640` 實際複製台達 DLL 和 PE 匯入表要求的 GPU Runtime 子集；補上 `cublasLt64_11.dll` 後 **InspTools 自身 C# CLI `DELTA_NATIVE_RUNTIME=READY`**。S1 真實 Recipe/模型已匯入隔離 Gate，`LoadConfiguredModel(1, Enhance)` 能返回，但 `Success=False Loaded=False`，顯示舊 `Training\Train\train.exe`/PB 轉換工具提示；反查 `.h5d/.pbd` 檔名和檔案都存在。**仍未達模型載入/Predict Gate**，不要反編 NVIDIA。測試與下一步詳 `docs/DELTA_APP_LOCAL_RUNTIME_GATE_20261021.md`；正式 release/current 與 Shunt 均未修改。

@@ -84,6 +84,8 @@ foreach ($name in @(
     $compileArgs += ('/reference:' + (Join-Path $RefRoot $name))
 }
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneEntry.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\DeviceTwinPorts.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\TrainingContracts.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\DeltaNativeRuntimeBootstrap.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\DecodedToolsWindowHost.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeStore.cs')
@@ -121,6 +123,8 @@ foreach ($name in @('mscorlib.dll','System.dll','System.Core.dll',
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeStore.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeCli.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\RecipeCliEntry.cs')
+$cliArgs += (Join-Path $Root 'src\InspTools.Standalone\DeviceTwinPorts.cs')
+$cliArgs += (Join-Path $Root 'src\InspTools.Standalone\TrainingContracts.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\DeltaNativeRuntimeBootstrap.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\NativeRecipeProbe.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\CvDiagnosticProbe.cs')

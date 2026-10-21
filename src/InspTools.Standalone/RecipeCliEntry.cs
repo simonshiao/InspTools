@@ -9,6 +9,8 @@ namespace InspTools.Standalone
         private static int Main(string[] args)
         {
             int exitCode;
+            if (DeviceTwinSelfTest.TryRun(args, out exitCode)) return exitCode;
+            if (TrainingContracts.TryRun(args, out exitCode)) return exitCode;
             if (args != null && args.Length == 1 &&
                 string.Equals(args[0], "--delta-runtime-probe", StringComparison.OrdinalIgnoreCase))
             {
