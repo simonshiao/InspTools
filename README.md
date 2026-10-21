@@ -11,6 +11,11 @@
 
 **本案現在只做一件事：把一期已解譯重建完成的原版 `InspTools.ToolsWindow` 做成可獨立直接啟動的 `InspToolsStandalone.exe`。**
 
+> **2026-10-21 更新：** 現已另有 R3 攜帶測試包 `output/portable-review/`，
+> 可在同機另一資料夾執行原版 GUI、匯入與真實載入八站 Recipe，搬移測試 14 PASS。
+> 正式 `release/current` 尚未提升至 R3，AI 模型與完整 Inspect 仍待驗證。
+> `docs/R3_PORTABLE_INSPTOOLS_GATE_20261021.md` 為最新攜帶版驗收記錄。
+
 不是重畫 InspTools，不是重新做 Tool Editor，也不是 Annotation / Agent 專案。
 
 ## 正式入口

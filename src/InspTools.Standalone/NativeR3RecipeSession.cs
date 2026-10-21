@@ -9,12 +9,38 @@ namespace InspTools.Standalone
     /// <summary>
     /// R3 experimental GUI session with actual CVInspection objects.
     /// Model load, native AI prediction, Inspect and vendor auto-save remain OFF.
-    /// Only run in the dedicated native-lazy sandbox with pinned test DLL.
+    /// Only run with a pinned R3 DLL in an audited engineering sandbox
+    /// or a separately packaged portable review directory.
     /// </summary>
     internal static class NativeR3RecipeSession
     {
         private const string PinnedLazyDllSha =
             "ACD6DBCF266705108021126B9E91C605D87500F21608DA70946F5CE25789C34B";
+        private const string PortableMarker = "INSPTOOLS_PORTABLE_REVIEW_R3_V1";
+
+        internal static bool IsPortableReview()
+        {
+            string marker = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                "portable-review.marker");
+            if (!File.Exists(marker)) return false;
+            try
+            {
+                string dll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    "InspTools.dll");
+                return string.Equals(File.ReadAllText(marker).Trim(),
+                    PortableMarker, StringComparison.Ordinal) &&
+                    File.Exists(dll) && string.Equals(DllSha(dll),
+                    PinnedLazyDllSha, StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
+        }
+
+        private static string DllSha(string dll)
+        {
+            using (SHA256 sha = SHA256.Create())
+            using (FileStream file = File.OpenRead(dll))
+                return BitConverter.ToString(sha.ComputeHash(file)).Replace("-", "");
+        }
 
         internal static void Open(Window window, string recipeName, int stationNumber)
         {
@@ -49,7 +75,7 @@ namespace InspTools.Standalone
             }
             setStations.Invoke(window, new object[] { stations });
             selectStation.Invoke(window, new object[] { stationNumber - 1 });
-            window.Title = "INSPECTION TOOLS - [R3 真實八站／模型未載入／唯讀] " +
+            window.Title = "INSPECTION TOOLS - [R3 獨立版／真實八站／AI 未載入] " +
                 recipeName + " / S" + stationNumber;
         }
 
@@ -58,17 +84,15 @@ namespace InspTools.Standalone
             string appBase = Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory)
                 .TrimEnd(Path.DirectorySeparatorChar);
             string suffix = Path.Combine("output", "native-lazy", "runtime");
-            if (!appBase.EndsWith(suffix, StringComparison.OrdinalIgnoreCase) ||
-                !recipeName.StartsWith("R2PROBE-", StringComparison.OrdinalIgnoreCase))
+            bool sandbox = appBase.EndsWith(suffix, StringComparison.OrdinalIgnoreCase)
+                && recipeName.StartsWith("R2PROBE-", StringComparison.OrdinalIgnoreCase);
+            if (!sandbox && !IsPortableReview())
                 throw new InvalidOperationException(
-                    "R3 真實檢測物件只允許在 output/native-lazy/runtime 的 R2PROBE Recipe 執行");
+                    "R3 真實檢測物件只允許在隔離測試區或獨立攜帶版載入");
 
             string dll = Path.Combine(appBase, "InspTools.dll");
             if (!File.Exists(dll)) throw new FileNotFoundException("InspTools.dll", dll);
-            string hash;
-            using (SHA256 sha = SHA256.Create())
-            using (FileStream file = File.OpenRead(dll))
-                hash = BitConverter.ToString(sha.ComputeHash(file)).Replace("-", "");
+            string hash = DllSha(dll);
             if (!string.Equals(hash, PinnedLazyDllSha, StringComparison.OrdinalIgnoreCase))
                 throw new InvalidOperationException("R3 DLL Hash 不符，拒絕使用原版或未知 DLL");
         }

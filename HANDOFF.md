@@ -2,6 +2,8 @@
 
 > 更新：2026-09-16 00:05 +08:00
 
+> **2026-10-21 產品目標重申與 R3 Portable Gate：** 唯一產品是**獨立 InspToolsStandalone.exe**，ShuntVC 僅提供測試素材。新增 `BuildPortableReview.ps1` 輸出無 Shunt 資料的 89.86 MiB R3 攜帶版，`TestPortableReview.ps1` 已在另一 AppBase 完成 14 PASS、0 FAIL（原版 GUI、匯入 Recipe、真實八站載入與關閉）；詳 `docs/R3_PORTABLE_INSPTOOLS_GATE_20261021.md`。本輪只證明同機搬移，非跨機、AI 推論或 OK/NG 全驗收；正式 `release/current` 未覆蓋。
+
 > **2026-10-21 ProjectHub.Native 歷史成果接入：** 已唯讀核對 `ProjectHub.Native/ProjectData` 的現役 `InspTools-Rebuild2` 與第一期已退役 `InspToolsRebuild`，確認第一期 Stable API（InspectFile/InspectToolPreview/Recipe transaction）與 29 份解譯 XAML、15-dialog 舊驗收等珍貴證據。ProjectHub.Native 中 LocateTool.cs SHA 與 R3 pinned source 一致；**R3 patched DLL 實際含 InspToolsFacade 與九項核心方法**，但只完成 API 存在核查，尚未以此 facade 執行 R3 Inspect。請先讀 `docs/PROJECTHUB_NATIVE_EVIDENCE_AUDIT_20261021.md`，勿複製整包、勿將第一期 ACCEPTED 冒稱新版已通過。ProjectHub.Native 本身未修改。
 
 > **2026-10-21 R3 Shunt 真實資料 Gate：** 已讀取 ShuntVC 目前 Recipe/3923-R002 與 R002-CCD1 原始 OK/NG 圖各一張，隔離匯入 Recipe 21 檔，原版 OpenCvSharp、CVBuffer、BinaryWindow 顯示真圖及 ROI 原廠儲存防呆通過；原版 BinaryWindow 修改 TrackerName → SaveAllRecipe → 新 CVInspection 重新讀取 → byte-for-byte 還原 24 PASS／0 FAIL。詳細紀錄 docs/R3_SHUNT_REAL_IMAGE_BINARY_SAVE_20261021.md。**模型載入及 Inspect 未驗，正式 ShuntVC 與 InspTools release/current 都未覆蓋。**

@@ -37,6 +37,8 @@ namespace InspTools.Standalone
             InitializeBlankStations(toolsWindow);
             var closeGuard = BlankUiLifecycleGuard.Attach(toolsWindow);
             AttachOptionalRecipeMenu(toolsWindow, closeGuard.Restore);
+            if (NativeR3RecipeSession.IsPortableReview())
+                AttachPortableReviewRecipeMenu(toolsWindow);
             string nativeSmokeRecipe = GetArg(args, "--r3-native-gui-smoke");
             R3NativeGuiSmoke nativeSmoke = null;
             if (!string.IsNullOrWhiteSpace(nativeSmokeRecipe))
@@ -81,12 +83,13 @@ namespace InspTools.Standalone
             if (!string.IsNullOrWhiteSpace(nativeR3Recipe))
             {
                 NativeR3RecipeSession.Open(toolsWindow, nativeR3Recipe, station);
-                bool editorEnabled = Array.Exists(args ?? new string[0],
+                bool editorEnabled = NativeR3RecipeSession.IsPortableReview() ||
+                    Array.Exists(args ?? new string[0],
                     a => string.Equals(a, "--enable-r3-editor", StringComparison.OrdinalIgnoreCase));
                 if (editorEnabled)
                 {
                     R3IsolatedEditor.Attach(toolsWindow, nativeR3Recipe);
-                    toolsWindow.Title = toolsWindow.Title.Replace("唯讀", "定位可編輯／隔離測試");
+                    toolsWindow.Title += " / 定位可編輯";
                 }
                 if (editorSmokeRequested)
                 {
@@ -262,6 +265,67 @@ namespace InspTools.Standalone
                     e.Handled = true;
                 }
             };
+        }
+
+        private static void AttachPortableReviewRecipeMenu(Window window)
+        {
+            ContextMenu menu = window.ContextMenu;
+            if (menu == null) throw new InvalidOperationException("Recipe Menu 不存在");
+            var nativeMenu = new MenuItem { Header = "載入 Recipe（真實八站／離線設定）" };
+            bool loaded = false;
+            nativeMenu.SubmenuOpened += delegate
+            {
+                nativeMenu.Items.Clear();
+                foreach (string name in StandaloneRecipeStore.List())
+                {
+                    string recipe = name;
+                    var item = new MenuItem { Header = recipe };
+                    item.Click += delegate
+                    {
+                        try
+                        {
+                            if (loaded)
+                                throw new InvalidOperationException(
+                                    "已載入 Recipe。要切換 Recipe，請先重啟獨立軟體。");
+                            NativeR3RecipeSession.Open(window, recipe, 1);
+                            R3IsolatedEditor.Attach(window, recipe);
+                            loaded = true;
+                            nativeMenu.IsEnabled = false;
+                            // Do not allow a second lightweight holder to replace
+                            // real stations while the editor refers to them.
+                            foreach (object menuObject in menu.Items)
+                            {
+                                var other = menuObject as MenuItem;
+                                string header = other == null ? "" : Convert.ToString(other.Header);
+                                if (header != null && (header.StartsWith("原版 GUI 預覽 Recipe") ||
+                                    header.StartsWith("編輯八站 Recipe 基本開關")))
+                                    other.IsEnabled = false;
+                            }
+                            LightweightRecipePreview.RestrictOriginalEditing(window);
+                            MessageBox.Show(window,
+                                "已載入真實八站檢測物件。右鍵可開啟原版定位設定視窗，" +
+                                "確認後以備份＋驗證方式儲存 Recipe。" +
+                                "目前 AI 模型與 Inspect 尚未完全驗收，完整檢測按鈕暫不開放。",
+                                "InspTools 獨立版", MessageBoxButton.OK,
+                                MessageBoxImage.Information);
+                        }
+                        catch (Exception error)
+                        {
+                            MessageBox.Show(window, error.GetBaseException().Message,
+                                "Recipe 載入失敗", MessageBoxButton.OK,
+                                MessageBoxImage.Warning);
+                        }
+                    };
+                    nativeMenu.Items.Add(item);
+                }
+                if (nativeMenu.Items.Count == 0)
+                    nativeMenu.Items.Add(new MenuItem
+                    {
+                        Header = "請先匯入 Recipe",
+                        IsEnabled = false
+                    });
+            };
+            menu.Items.Insert(0, nativeMenu);
         }
 
         private static void PopulateRecipeMenu(MenuItem recipeMenu, Window window, Action onRecipeLoaded)
