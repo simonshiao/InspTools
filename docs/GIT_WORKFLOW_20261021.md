@@ -10,6 +10,8 @@
 - **不追蹤**：`output/`（約 883 MB）、`release/`（約 122 MB）、Recipe / Model / Training 執行副本、DLL/EXE/ZIP 和測試記錄。
 - `release/current` 是既有正式 R1 套件，不屬於本次 Git 轉換範圍，不可用 Git 操作覆蓋。
 - 目前僅建立 **本機 Git 版本庫**；尚未建立或推送 GitHub / GitLab 遠端。遠端位置需另行決定。
+- 首次基準提交是 bc26e73；提交人以 CHAO AI Assistant 標示，**不是使用者本人身份**。
+- 本次 R3 修補採用受控腳本 BuildNativeLazyInit.ps1、TestNativeLazyInit.ps1，原廠一期封存 source 仍放在原路徑；被 Git 忽略的 output/native-lazy 僅存放隔離生成物。
 - Git 不包含已解碼 InspTools DLL 的全部 C# 來源；建置仍依賴本機既有、Hash pinned 的 R1 交付包。不可聲稱僅靠此 repository 就能從零重建所有 proprietary dependencies。
 
 ## 日常指令

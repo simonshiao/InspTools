@@ -2,6 +2,10 @@
 
 > 更新：2026-09-16 00:05 +08:00
 
+> **2026-10-21 R3 重大進展：** 一期可編輯原始碼已從歷史 ProjectHub 封存尋回。在唯讀供體的隔離編譯副本中將 AI Locate 原生 CreatInst 改為 ReadModel 按需建立，得到 R3 patched DLL；定位 SetBuffers、S1 SetRecipe、八站 CVInspection/SetRecipe 及真正原版 ToolsWindow 八站 GUI 均 PASS。未做模型與 Inspect，正式 release/current 不變。詳 docs/R3_SOURCE_RECOVERY_20261021.md；Git 已啟用，後續修正可追蹤。
+
+> **2026-10-21 R3 最新：** 本案已建立本地 Git main（基準 bc26e73），一期可編輯原始碼已在 D 槽舊 ProjectHub 封存找到。新增隔離 BuildNativeLazyInit.ps1：將 LocateTool.SetBuffers 的原生 AI 定位實例改為按需建立，隔離 DLL 重新編譯 0 errors；真實 CVInspection 八站 SetRecipe **8/8 PASS**，原版 GUI 使用真實八站物件亦能開啟／關閉（Exit 0）。正式 R1 及所有生產 Recipe 未改。見 docs/R3_NATIVE_LAZY_INIT_GATE_20261021.md；**AI ReadModel/Inspect/原版全工具儲存均仍待驗收**。
+
 > **2026-10-21 最新 R2 Gate：** 真實 WPF UI smoke **22 PASS／0 FAIL**，八站站別及基本編輯 modal 均已進行程式內互動測試；最主要阻塞已追至原版 `LocateTool.SetBuffers() -> LocateAIEnhanceTool.CreatInst() -> DeltaAIProcessDll.CreateInstance [-> SetGPU]` 路徑（LocateTool.SetBuffers 4 秒逾時）。新的 `--runtime-preflight` 及 `--recipe` 全功能載入均 fail-closed(exit 46)，不讓未驗的 native 初始化卡住 UI；原版 Recipe 預覽、原生參數讀寫仍可用。完整證據見 `docs/R2_UI_SMOKE_AND_AI_LOCATE_ROOT_CAUSE_20261021.md`。**下一步應找回可重建 source 再做 AI Locate lazy-init 隔離修正，不可覆蓋正式 release。**
 
 > **2026-10-21 R2 最新：** 原版 `ToolsWindow` 的輕量八站 Recipe 參數預覽（零 `CVInspection()` 建構）已完成 S1/S5 GUI 啟停實驗；底層 `ParamFile.WriteAllParam` 真正修改／重讀／恢復、備份／拒絕無效欄位 PASS。GUI 基本開關編輯選單已編譯、滑鼠互動尚待驗。詳 `docs/R2_ORIGINAL_UI_PARAMETER_PREVIEW_AND_SAVE_20261021.md`。完整 AOI `CVInspection / Inspect / AI` 尚未獨立；正式 `release/current` 未動。

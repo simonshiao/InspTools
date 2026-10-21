@@ -37,6 +37,10 @@ namespace InspTools.Standalone
             InitializeBlankStations(toolsWindow);
             var closeGuard = BlankUiLifecycleGuard.Attach(toolsWindow);
             AttachOptionalRecipeMenu(toolsWindow, closeGuard.Restore);
+            string nativeSmokeRecipe = GetArg(args, "--r3-native-gui-smoke");
+            R3NativeGuiSmoke nativeSmoke = null;
+            if (!string.IsNullOrWhiteSpace(nativeSmokeRecipe))
+                nativeSmoke = R3NativeGuiSmoke.Attach(toolsWindow, nativeSmokeRecipe);
             bool uiSmoke = Array.Exists(args ?? new string[0],
                 a => string.Equals(a, "--ui-smoke", StringComparison.OrdinalIgnoreCase));
             StandaloneUiSmoke smoke = null;
@@ -53,8 +57,21 @@ namespace InspTools.Standalone
 
             string recipeName = GetArg(args, "--recipe");
             string previewName = GetArg(args, "--recipe-preview");
+            string nativeR3Recipe = GetArg(args, "--recipe-native-r3");
             int station = ParseStation(GetArg(args, "--station"));
-            if (!string.IsNullOrWhiteSpace(previewName))
+            if (!string.IsNullOrWhiteSpace(nativeR3Recipe))
+            {
+                NativeR3RecipeSession.Open(toolsWindow, nativeR3Recipe, station);
+                toolsWindow.Loaded += delegate
+                {
+                    // Original AOI tool dialogs are not yet verified with
+                    // model-less R3. Do not trigger their native execution.
+                    LightweightRecipePreview.RestrictOriginalEditing(toolsWindow);
+                };
+                // Do not restore compiled Closing callbacks until SaveAllRecipe
+                // has a separate isolated write/rollback acceptance.
+            }
+            else if (!string.IsNullOrWhiteSpace(previewName))
             {
                 LightweightRecipePreview preview =
                     LightweightRecipePreview.Load(toolsWindow, previewName, station);
@@ -74,6 +91,7 @@ namespace InspTools.Standalone
 
             app.MainWindow = toolsWindow;
             int exitCode = app.Run(toolsWindow);
+            if (nativeSmoke != null) return nativeSmoke.ExitCode;
             return smoke == null ? exitCode : smoke.ExitCode;
         }
 

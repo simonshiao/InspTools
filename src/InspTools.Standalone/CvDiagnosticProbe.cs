@@ -26,28 +26,40 @@ namespace InspTools.Standalone
                 return false;
             try
             {
-                if (args.Length != 2 || !args[1].StartsWith("R2PROBE-", StringComparison.OrdinalIgnoreCase))
-                    throw new ArgumentException("只允許 --cv-native-diagnostic R2PROBE-<隔離 Recipe>");
+                if (args.Length < 2 || args.Length > 3 ||
+                    !args[1].StartsWith("R2PROBE-", StringComparison.OrdinalIgnoreCase))
+                    throw new ArgumentException("只允許 --cv-native-diagnostic R2PROBE-<隔離 Recipe> [--all-stations]");
+                bool allStations = args.Length == 3 &&
+                    string.Equals(args[2], "--all-stations", StringComparison.OrdinalIgnoreCase);
+                if (args.Length == 3 && !allStations)
+                    throw new ArgumentException("未知診斷參數：" + args[2]);
                 string name = args[1];
                 StandaloneRecipeStore.Validate(name);
                 string dll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "InspTools.dll");
                 Assembly asm = Assembly.LoadFrom(dll);
                 Type cvType = asm.GetType("InspTools.Station.CVInspection", true);
                 var watch = Stopwatch.StartNew();
-                Mark("CONSTRUCT_BEGIN", watch);
-                object station = Activator.CreateInstance(cvType);
-                Mark("CONSTRUCT_END", watch);
                 FieldInfo param = cvType.GetField("paramFile",
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                Mark("PARAMFILE_IS_NULL=" + (param == null || param.GetValue(station) == null), watch);
                 MethodInfo setRecipe = cvType.GetMethod("SetRecipe",
                     BindingFlags.Public | BindingFlags.Instance);
                 if (setRecipe == null) throw new MissingMethodException("CVInspection.SetRecipe");
-                object[] call = { name, 0, "" };
-                Mark("SETRECIPE_BEGIN", watch);
-                setRecipe.Invoke(station, call);
-                Mark("SETRECIPE_END", watch);
-                Mark("S1_WARNING=" + Convert.ToString(call[2]), watch);
+                int count = allStations ? 8 : 1;
+                for (int index = 0; index < count; index++)
+                {
+                    int number = index + 1;
+                    Mark("S" + number + "_CONSTRUCT_BEGIN", watch);
+                    object station = Activator.CreateInstance(cvType);
+                    Mark("S" + number + "_CONSTRUCT_END", watch);
+                    if (param == null || param.GetValue(station) == null)
+                        throw new InvalidDataException("S" + number + " paramFile 為空");
+                    object[] call = { name, index, "" };
+                    Mark("S" + number + "_SETRECIPE_BEGIN", watch);
+                    setRecipe.Invoke(station, call);
+                    Mark("S" + number + "_SETRECIPE_END", watch);
+                    Mark("S" + number + "_WARNING=" + Convert.ToString(call[2]), watch);
+                }
+                Mark("STATIONS_LOADED=" + count, watch);
                 Mark("CV_DIAGNOSTIC=PASS", watch);
             }
             catch (Exception ex)

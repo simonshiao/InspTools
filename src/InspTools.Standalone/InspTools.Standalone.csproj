@@ -17,5 +17,7 @@
     <Compile Include="LightweightRecipePreview.cs" />
     <Compile Include="StandaloneUiSmoke.cs" />
     <Compile Include="NativeRuntimeGate.cs" />
+    <Compile Include="R3NativeGuiSmoke.cs" />
+    <Compile Include="NativeR3RecipeSession.cs" />
   </ItemGroup>
 </Project>
