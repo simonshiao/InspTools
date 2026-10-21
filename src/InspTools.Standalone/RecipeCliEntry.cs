@@ -9,6 +9,23 @@ namespace InspTools.Standalone
         private static int Main(string[] args)
         {
             int exitCode;
+            if (args != null && args.Length == 1 &&
+                string.Equals(args[0], "--delta-runtime-probe", StringComparison.OrdinalIgnoreCase))
+            {
+                try
+                {
+                    bool loaded = DeltaNativeRuntimeBootstrap.InitializeIfPresent();
+                    Console.WriteLine(loaded ? "DELTA_NATIVE_RUNTIME=READY" :
+                        "DELTA_NATIVE_RUNTIME=NOT_BUNDLED");
+                    return loaded ? 0 : 65;
+                }
+                catch (Exception error)
+                {
+                    Console.Error.WriteLine("DELTA_NATIVE_RUNTIME=FAIL " +
+                        error.GetBaseException().Message);
+                    return 66;
+                }
+            }
             if (R3FacadeProbe.TryRun(args, out exitCode)) return exitCode;
             if (NativeRuntimeGate.TryPreflight(args, out exitCode)) return exitCode;
             if (CvDiagnosticProbe.TryRun(args, out exitCode)) return exitCode;

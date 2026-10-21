@@ -15,6 +15,8 @@ namespace InspTools.Standalone
                 int recipeExitCode;
                 if (StandaloneRecipeCli.TryRun(args, out recipeExitCode))
                     return recipeExitCode;
+                // AI Runtime is intentionally lazy. Merely opening InspTools
+                // must never load CUDA/TensorRT or require GPU dependencies.
                 int result = DecodedToolsWindowHost.Run(args);
                 // Compiled InspTools starts non-background worker threads. WPF
                 // Application.Run has already ended; do not leave a headless
