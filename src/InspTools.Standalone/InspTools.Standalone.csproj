@@ -19,5 +19,7 @@
     <Compile Include="NativeRuntimeGate.cs" />
     <Compile Include="R3NativeGuiSmoke.cs" />
     <Compile Include="NativeR3RecipeSession.cs" />
+    <Compile Include="R3OriginalDialogSmoke.cs" />
+    <Compile Include="R3SaveAllSmoke.cs" />
   </ItemGroup>
 </Project>

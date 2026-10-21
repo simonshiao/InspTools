@@ -2,6 +2,8 @@
 
 > 更新：2026-09-16 00:05 +08:00
 
+> **2026-10-21 R3 工具編輯／存檔 Gate：** 原版 `LocateWindow`、`BinaryWindow` 接真實 S1 CVInspection 的顯示／關閉 **18 PASS**；`LocateWindow.txt_FocusLimit` 真正編輯 → 原版 `SaveAllRecipe()` → 磁碟／新 CVInspection 重讀 → 原 bytes 回滾 **12 PASS**。二值化原版 `DontSave1=True`（缺有效 ROI）會阻止編輯，**未繞過**。測試報告：`docs/R3_ORIGINAL_DIALOG_SAVE_GATE_20261021.md`。未通過 AI Inspect/全部工具，也未開放正式版儲存。
+
 > **2026-10-21 R3 重大進展：** 一期可編輯原始碼已從歷史 ProjectHub 封存尋回。在唯讀供體的隔離編譯副本中將 AI Locate 原生 CreatInst 改為 ReadModel 按需建立，得到 R3 patched DLL；定位 SetBuffers、S1 SetRecipe、八站 CVInspection/SetRecipe 及真正原版 ToolsWindow 八站 GUI 均 PASS。未做模型與 Inspect，正式 release/current 不變。詳 docs/R3_SOURCE_RECOVERY_20261021.md；Git 已啟用，後續修正可追蹤。
 
 > **2026-10-21 R3 最新：** 本案已建立本地 Git main（基準 bc26e73），一期可編輯原始碼已在 D 槽舊 ProjectHub 封存找到。新增隔離 BuildNativeLazyInit.ps1：將 LocateTool.SetBuffers 的原生 AI 定位實例改為按需建立，隔離 DLL 重新編譯 0 errors；真實 CVInspection 八站 SetRecipe **8/8 PASS**，原版 GUI 使用真實八站物件亦能開啟／關閉（Exit 0）。正式 R1 及所有生產 Recipe 未改。見 docs/R3_NATIVE_LAZY_INIT_GATE_20261021.md；**AI ReadModel/Inspect/原版全工具儲存均仍待驗收**。

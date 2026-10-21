@@ -95,6 +95,34 @@ if ($results.Count -ge 3 -and $results[2].exit_code -eq 0) {
         stderr = ''
     }
 }
+function Run-BoundedGui([string]$Stage, [string]$Option, [string]$ResultFile,
+    [int]$ExpectedPasses) {
+    $app = Join-Path $Sandbox 'InspToolsStandalone.exe'
+    $log = Join-Path $Sandbox $ResultFile
+    $proc = Start-Process -FilePath $app -ArgumentList @($Option, $RecipeName) -WorkingDirectory $Sandbox -PassThru
+    $finished = $proc.WaitForExit($GuiTimeoutMs)
+    if (-not $finished) { $proc.Kill(); $proc.WaitForExit() }
+    if ($finished) { $proc.Refresh() }
+    $result = if (Test-Path -LiteralPath $log) { [IO.File]::ReadAllText($log) } else { '' }
+    $passes = @($result -split "\r?\n" | Where-Object { $_.StartsWith('PASS ') }).Count
+    $exit = if (-not $finished) { -1 }
+        elseif ($proc.ExitCode -eq 0 -and $passes -eq $ExpectedPasses -and
+                -not $result.Contains('FAIL ')) { 0 }
+        else { 59 }
+    return [pscustomobject]@{
+        stage = $Stage
+        exit_code = $exit
+        timed_out = (-not $finished)
+        stdout = $result
+        stderr = ''
+    }
+}
+if ($results.Count -ge 4 -and $results[3].exit_code -eq 0) {
+    $results += Run-BoundedGui 'r3-original-dialog-open-close' '--r3-original-dialog-smoke' 'r3-dialog-smoke-result.txt' 18
+}
+if ($results.Count -ge 5 -and $results[4].exit_code -eq 0) {
+    $results += Run-BoundedGui 'r3-original-saveall-and-byte-rollback' '--r3-saveall-smoke' 'r3-saveall-result.txt' 12
+}
 $report = [pscustomobject]@{
     kind = 'isolated-native-lazy-init-probe'
     sandbox = $Sandbox

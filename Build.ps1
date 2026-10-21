@@ -95,6 +95,8 @@ $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneUiSmoke.cs'
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\NativeRuntimeGate.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\R3NativeGuiSmoke.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\NativeR3RecipeSession.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\R3OriginalDialogSmoke.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\R3SaveAllSmoke.cs')
 
 & $dotnet @compileArgs
 if ($LASTEXITCODE -ne 0) { throw 'InspToolsStandalone compile failed.' }

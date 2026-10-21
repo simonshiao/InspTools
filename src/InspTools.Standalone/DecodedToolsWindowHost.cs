@@ -41,6 +41,14 @@ namespace InspTools.Standalone
             R3NativeGuiSmoke nativeSmoke = null;
             if (!string.IsNullOrWhiteSpace(nativeSmokeRecipe))
                 nativeSmoke = R3NativeGuiSmoke.Attach(toolsWindow, nativeSmokeRecipe);
+            string dialogSmokeRecipe = GetArg(args, "--r3-original-dialog-smoke");
+            R3OriginalDialogSmoke dialogSmoke = null;
+            if (!string.IsNullOrWhiteSpace(dialogSmokeRecipe))
+                dialogSmoke = R3OriginalDialogSmoke.Attach(toolsWindow, dialogSmokeRecipe);
+            string saveSmokeRecipe = GetArg(args, "--r3-saveall-smoke");
+            R3SaveAllSmoke saveSmoke = null;
+            if (!string.IsNullOrWhiteSpace(saveSmokeRecipe))
+                saveSmoke = R3SaveAllSmoke.Attach(toolsWindow, saveSmokeRecipe);
             bool uiSmoke = Array.Exists(args ?? new string[0],
                 a => string.Equals(a, "--ui-smoke", StringComparison.OrdinalIgnoreCase));
             StandaloneUiSmoke smoke = null;
@@ -92,6 +100,8 @@ namespace InspTools.Standalone
             app.MainWindow = toolsWindow;
             int exitCode = app.Run(toolsWindow);
             if (nativeSmoke != null) return nativeSmoke.ExitCode;
+            if (dialogSmoke != null) return dialogSmoke.ExitCode;
+            if (saveSmoke != null) return saveSmoke.ExitCode;
             return smoke == null ? exitCode : smoke.ExitCode;
         }
 
