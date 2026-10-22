@@ -17,7 +17,7 @@ namespace InspTools.Standalone
             using (var stream = File.OpenRead(file))
                 return BitConverter.ToString(sha.ComputeHash(stream)).Replace("-", "");
         }
-        private static void State(string job, string value)
+        internal static void State(string job, string value)
         {
             File.WriteAllText(Path.Combine(job, "state.txt"),
                 "STATE=" + value + "\r\nUTC=" + DateTime.UtcNow.ToString("o"), Utf8);
@@ -57,7 +57,7 @@ namespace InspTools.Standalone
             return job;
         }
 
-        private static string ExistingJob(string root, string id)
+        internal static string ExistingJob(string root, string id)
         {
             GeneralTrainingJob.LocalName(id);
             if (!Regex.IsMatch(id, @"^\d{8}T\d{6}Z-[0-9a-f]{8}$"))

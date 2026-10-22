@@ -1,5 +1,7 @@
 # DIA 檢測執行環境｜路線校正後交接
 
+> **2026-10-22 上午 Train Executor Gate：** 新增 GeneralTrainerExecutor.cs、--train-general-run JOB_ID，僅在 PREPARED 候選工作執行 AppBase DAVS，支援 900 秒限時、stop.request、stdout/stderr、嚴格校驗 training_result.json、候選模型 SHA 與成功標記；不覆蓋 active 模型。已實測 Build Release、子程序逾時／停止／假結果拒絕、三條訓練資料契約、Twin 12/12、原版 GUI 啟閉皆 PASS。此機 AppBase TensorFlow 2.7.0/GPU=1 實測 PASS，但 TrainingSeed 缺失，**GPU 真正 Train NOT_RUN**。詳 docs/GENERAL_TRAIN_EXECUTOR_GATE_20261022.md。較早 StageGeneralTrainer.ps1 的大型 staging 未驗證變更仍保留。
+
 > **2026-10-22 04:18 候選 Train 規劃：** CHAO2 連線正常；已將 GeneralCandidateRunner.cs 草稿納入唯一正式 Build/CLI。新增前置驗證後的候選工作 plan、工作狀態查詢、停止請求及無 GPU 自測。Release PASS、原版 GUI 啟閉 PASS、Candidate selftest PASS、Twin 12/12 PASS、三類資料契約 PASS；非法 plan 路徑 exit 74。**仍沒有 GPU 訓練執行器、實際停止／逾時與模型產物驗收**，原始正式版未修改。詳 docs/GENERAL_TRAIN_CANDIDATE_PLAN_20261022.md。
 
 > **2026-10-22 03:15 後續檢查：** CHAO2 可連線；已核對 donor 的 train_compat.py SHA 49882838...、DAVSTrain_v3.pyc SHA 8645361D... 與既有 pinned 值一致。AppBase 仍沒有 Runtime/TrainingPython、Runtime/TrainingRebuild、TrainingSeed，無法宣稱真正 GPU Train。StageGeneralTrainer.ps1 再次遭工具安全檢查阻擋，沒有繞過。Release 編譯 PASS，原版 INSPECTION TOOLS 正常啟閉，設備 Twin 12/12 PASS；--train-general-plan 非法路徑被 exit 74 拒絕。尚未完成候選訓練執行器，請勿宣稱 Train PASS。另有未納入 Build 的 GeneralCandidateRunner.cs 草稿（未追蹤），不得當作已完成；本輪 Git commit 呼叫亦遭安全檢查阻擋，須下一輪先清理草稿、核對 git diff 再提交。

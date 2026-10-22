@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace InspTools.Standalone
 {
@@ -56,6 +57,36 @@ namespace InspTools.Standalone
             return "DATASET=" + dataset + " IMAGES=" + data.SourceImages +
                 " MASKS=" + data.Labels + " SEED_SHA=" + Sha256(seed);
         }
+        internal static string GpuProbe(string root)
+        {
+            string runtime = Path.Combine(root, "Runtime", "TrainingPython");
+            string python = Path.Combine(runtime, "Python38", "python.exe");
+            string gpu = Path.Combine(runtime, "GpuRuntime");
+            if (!File.Exists(python) || !Directory.Exists(gpu))
+                throw new FileNotFoundException("App-local Python/GpuRuntime missing", python);
+            var start = new ProcessStartInfo(python,
+                "-c \"import tensorflow as tf; print('TF=' + tf.__version__); print('GPU=' + str(len(tf.config.list_physical_devices('GPU'))))\"");
+            start.UseShellExecute = false;
+            start.CreateNoWindow = true;
+            start.RedirectStandardOutput = true;
+            start.WorkingDirectory = root;
+            start.EnvironmentVariables["PATH"] = gpu + ";" + Path.Combine(runtime, "Python38") +
+                ";" + Path.Combine(runtime, "Python38", "Scripts") + ";" +
+                start.EnvironmentVariables["PATH"];
+            start.EnvironmentVariables["TF_FORCE_GPU_ALLOW_GROWTH"] = "true";
+            using (var process = Process.Start(start))
+            {
+                if (!process.WaitForExit(60000))
+                {
+                    process.Kill();
+                    throw new TimeoutException("GPU probe exceeded 60 seconds");
+                }
+                string output = process.StandardOutput.ReadToEnd().Trim();
+                if (process.ExitCode != 0 || !output.Contains("GPU=1"))
+                    throw new InvalidOperationException("GPU probe failed: " + output);
+                return output.Replace("\r", " ").Replace("\n", " ");
+            }
+        }
         internal static bool TryRun(string[] args, out int exit)
         {
             exit = 0;
@@ -69,6 +100,26 @@ namespace InspTools.Standalone
                 {
                     GeneralCandidateRunner.SelfTest();
                     Console.WriteLine("TRAIN_GENERAL_CANDIDATE_SELFTEST=PASS GPU_RUN=False");
+                    return true;
+                }
+                if (args.Length == 1 && args[0] == "--train-general-executor-selftest")
+                {
+                    GeneralTrainerExecutor.SelfTest();
+                    Console.WriteLine("TRAIN_EXECUTOR=PASS PROCESS_TIMEOUT=PASS STOP_REQUEST=PASS GPU_RUN=False");
+                    return true;
+                }
+                if (args.Length == 2 && args[0] == "--train-general-run")
+                {
+                    string report = GeneralTrainerExecutor.Run(
+                        AppDomain.CurrentDomain.BaseDirectory, args[1]);
+                    Console.WriteLine(report);
+                    exit = report.Contains("TRAIN_RESULT=PASS") ? 0 : 75;
+                    return true;
+                }
+                if (args.Length == 1 && args[0] == "--train-general-gpu-probe")
+                {
+                    Console.WriteLine("TRAIN_GENERAL_GPU_PROBE=PASS " +
+                        GpuProbe(AppDomain.CurrentDomain.BaseDirectory));
                     return true;
                 }
                 if (args.Length == 2 && args[0] == "--train-general-status")

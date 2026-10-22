@@ -7,11 +7,16 @@
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="StandaloneEntry.cs" />
     <Compile Include="DeviceTwinPorts.cs" />
     <Compile Include="TrainingContracts.cs" />
     <Compile Include="GeneralTrainingJob.cs" />
     <Compile Include="GeneralCandidateRunner.cs" />
+    <Compile Include="GeneralTrainerExecutor.cs" />
+    <Compile Include="TrainingRuntimePaths.cs" />
     <Compile Include="DecodedToolsWindowHost.cs" />
     <Compile Include="StandaloneRecipeStore.cs" />
     <Compile Include="StandaloneRecipeCli.cs" />

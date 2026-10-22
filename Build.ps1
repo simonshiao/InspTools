@@ -78,7 +78,7 @@ $compileArgs = @(
     ('/out:' + $exe)
 )
 foreach ($name in @(
-    'mscorlib.dll','System.dll','System.Core.dll',
+    'mscorlib.dll','System.dll','System.Core.dll','System.Web.Extensions.dll',
     'WindowsBase.dll','PresentationCore.dll','PresentationFramework.dll','System.Xaml.dll'
 )) {
     $compileArgs += ('/reference:' + (Join-Path $RefRoot $name))
@@ -88,6 +88,8 @@ $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\DeviceTwinPorts.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\TrainingContracts.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\GeneralTrainingJob.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\GeneralCandidateRunner.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\GeneralTrainerExecutor.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\TrainingRuntimePaths.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\DeltaNativeRuntimeBootstrap.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\DecodedToolsWindowHost.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeStore.cs')
@@ -118,7 +120,7 @@ $cliArgs = @(
     '/target:exe',
     ('/out:' + (Join-Path $Out 'InspToolsRecipeCli.exe'))
 )
-foreach ($name in @('mscorlib.dll','System.dll','System.Core.dll',
+foreach ($name in @('mscorlib.dll','System.dll','System.Core.dll','System.Web.Extensions.dll',
                     'WindowsBase.dll','PresentationCore.dll','PresentationFramework.dll','System.Xaml.dll')) {
     $cliArgs += ('/reference:' + (Join-Path $RefRoot $name))
 }
@@ -129,6 +131,8 @@ $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\DeviceTwinPorts.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\TrainingContracts.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\GeneralTrainingJob.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\GeneralCandidateRunner.cs')
+$cliArgs += (Join-Path $Root 'src\InspTools.Standalone\GeneralTrainerExecutor.cs')
+$cliArgs += (Join-Path $Root 'src\InspTools.Standalone\TrainingRuntimePaths.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\DeltaNativeRuntimeBootstrap.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\NativeRecipeProbe.cs')
 $cliArgs += (Join-Path $Root 'src\InspTools.Standalone\CvDiagnosticProbe.cs')
@@ -172,6 +176,22 @@ foreach ($name in $dependencies) {
         throw "Decoded UI dependency missing from donor: $source"
     }
     Copy-Item -LiteralPath $source -Destination (Join-Path $Out $name) -Force
+}
+
+# App-owned OpenCV snapshot.  Keep root DLLs for legacy .NET/native loading.
+$opencvRuntime = Join-Path $Out 'Runtime\OpenCV'
+[IO.Directory]::CreateDirectory($opencvRuntime) | Out-Null
+foreach ($name in @('OpenCvSharp.dll', 'OpenCvSharp.Extensions.dll', 'OpenCvSharpExtern.dll')) {
+    $source = Join-Path $Out $name
+    $target = Join-Path $opencvRuntime $name
+    if (Test-Path -LiteralPath $target) {
+        if ((Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash -ne
+            (Get-FileHash -LiteralPath $source -Algorithm SHA256).Hash) {
+            throw "App-local OpenCV runtime differs: $name"
+        }
+    } else {
+        Copy-Item -LiteralPath $source -Destination $target
+    }
 }
 
 foreach ($folder in @('Recipe','Model','PublicDB','TrainingImage')) {
