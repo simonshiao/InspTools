@@ -2,6 +2,7 @@
 # Neither production Recipes nor large AI models belong in source control.
 /output/
 /release/
+/portable/
 
 # Visual Studio / MSBuild
 .vs/

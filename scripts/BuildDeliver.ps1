@@ -1,11 +1,11 @@
-param(
+﻿param(
     [string]$Configuration = 'Release',
     [switch]$Rebuild,
     [switch]$Zip
 )
 
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $BuildRoot = Join-Path $Root ("output\decoded-ui\" + $Configuration)
 $ReleaseRoot = Join-Path $Root 'release'
 $Current = Join-Path $ReleaseRoot 'current'
@@ -14,7 +14,7 @@ $OldDecodedZip = Join-Path $ReleaseRoot 'InspTools-Rebuild2-DecodedUI.zip'
 $OldIr206Zip = Join-Path $ReleaseRoot 'InspTools-Rebuild2-IR2-06.zip'
 
 if ($Rebuild -or -not (Test-Path -LiteralPath (Join-Path $BuildRoot 'InspToolsStandalone.exe'))) {
-    & (Join-Path $Root 'Build.ps1') -Configuration $Configuration
+    & (Join-Path $Root 'scripts\Build.ps1') -Configuration $Configuration
     if ($LASTEXITCODE -ne 0) { throw 'Decoded UI build failed.' }
 }
 

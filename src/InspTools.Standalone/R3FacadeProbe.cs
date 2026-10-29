@@ -32,6 +32,25 @@ namespace InspTools.Standalone
             "B5B8759891FA93CED197347C95F038724F620F10E0969AD7D7F6278D8651AEA5";
         private const string S1H5dSha =
             "BB36AAA4017D154F161895E63CFB2B97C3CBF1F549676F0D3CB12A138D3C6476";
+        // Fixed engineering witness for a single candidate in a disposable Gate.
+        // Never use these hashes to authorize production deployment.
+        private const string DiaCandidateRecipe = "R2PROBE-DIA-3923-R002";
+        private const string DiaCandidateH5dSha =
+            "7460AC816B12E6E58A647E92F9CCEB56787BFDD87A26FE9E5D6D3A7F28A7FF89";
+        private const string DiaCandidatePbdSha =
+            "F88D6F19A67C535A739490A6CC65BEC76383A7179498B7803C2427CBF81D207F";
+        private const string DiaBalancedH5dSha =
+            "9405C60991EFA3D6D08A688F7D946DF2276C9C3AA0200F08A31196483DFBEAF0";
+        private const string DiaBalancedPbdSha =
+            "F734108ECCA953715F6CFCE56402556DA9AF1983643D9584A58D42CC20E71ADF";
+        private const string DiaSecondHoldoutOkSha =
+            "33C880CBA893658E4CCF1B8141EEBC340352281ECF59BE4640557B337B0421AD";
+        private const string DiaSecondHoldoutNgSha =
+            "93EE6DC20F726AE57BE288E71D95B51A382FF3B2EE690DDAF3C0453B44AD49BC";
+        private const string DiaVendorH5dSha =
+            "99286716F6A1AD9EB28F70CFE0FA122521DC71B99C13800CF391C2AB890AEF73";
+        private const string DiaVendorPbdSha =
+            "47533BA5CDAFBA4ADC1961F417BD64CFBC572EEF59125293893900F5C831F48B";
 
         internal static bool TryRun(string[] args, out int code)
         {
@@ -49,8 +68,20 @@ namespace InspTools.Standalone
                     StringComparison.OrdinalIgnoreCase);
                 bool modeling = string.Equals(args[0], "--r3-facade-model",
                     StringComparison.OrdinalIgnoreCase);
+                bool candidateModel = string.Equals(args[0], "--r3-facade-model-candidate",
+                    StringComparison.OrdinalIgnoreCase);
+                bool candidateInspect = string.Equals(args[0], "--r3-facade-inspect-candidate",
+                    StringComparison.OrdinalIgnoreCase);
+                bool vendorInspect = string.Equals(args[0], "--r3-facade-inspect-vendor",
+                    StringComparison.OrdinalIgnoreCase);
+                bool balancedInspect = string.Equals(args[0], "--r3-facade-inspect-balanced",
+                    StringComparison.OrdinalIgnoreCase);
+                bool candidateMode = candidateModel || candidateInspect || vendorInspect ||
+                    balancedInspect;
+                modeling = modeling || candidateModel;
                 bool inspectingWithModel = string.Equals(args[0],
-                    "--r3-facade-inspect-enhance", StringComparison.OrdinalIgnoreCase);
+                    "--r3-facade-inspect-enhance", StringComparison.OrdinalIgnoreCase) ||
+                    candidateInspect || vendorInspect || balancedInspect;
                 if ((!loading && !inspecting && !modeling && !inspectingWithModel) ||
                     args.Length != (loading ? 2 : modeling ? 3 : 4))
                     throw new ArgumentException(
@@ -104,8 +135,10 @@ namespace InspTools.Standalone
                     return true;
                 }
 
-                if (!string.Equals(recipeName, ShuntName, StringComparison.Ordinal))
-                    throw new ArgumentException("Inspect/model accepts only isolated Shunt 3923-R002");
+                if (!(candidateMode ?
+                    string.Equals(recipeName, DiaCandidateRecipe, StringComparison.Ordinal) :
+                    string.Equals(recipeName, ShuntName, StringComparison.Ordinal)))
+                    throw new ArgumentException("Inspect/model requires its pinned isolated Recipe");
                 int station = int.Parse(args[2]);
                 if (station != 1)
                     throw new ArgumentException("Initial focused Inspect/model gate allows only CCD1/S1");
@@ -129,14 +162,24 @@ namespace InspTools.Standalone
                         " SOURCE_PRESENT=" + File.Exists(Path.Combine(modelRoot, candidateStem + ".h5d")) +
                         " PBD_PRESENT=" + File.Exists(Path.Combine(modelRoot, candidateStem + ".pbd")));
                     string modelPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        "Model", "VSMA8420AYM050JEW_A1.pbd");
+                        "Model", candidateMode ? "R002-CCD1.pbd" : "VSMA8420AYM050JEW_A1.pbd");
                     string modelSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
-                        "Model", "VSMA8420AYM050JEW_A1.h5d");
+                        "Model", candidateMode ? "R002-CCD1.h5d" : "VSMA8420AYM050JEW_A1.h5d");
+                    if (candidateMode && configuredName != "R002-CCD1.h5d")
+                        throw new InvalidDataException("Candidate Recipe model filename differs");
+                    string expectedPbdSha = balancedInspect ? DiaBalancedPbdSha :
+                        vendorInspect ? DiaVendorPbdSha :
+                        candidateMode ? DiaCandidatePbdSha : S1PbdSha;
+                    string expectedH5dSha = balancedInspect ? DiaBalancedH5dSha :
+                        vendorInspect ? DiaVendorH5dSha :
+                        candidateMode ? DiaCandidateH5dSha : S1H5dSha;
                     if (!File.Exists(modelPath) ||
-                        !string.Equals(Hash(modelPath), S1PbdSha, StringComparison.OrdinalIgnoreCase))
+                        !string.Equals(Hash(modelPath), expectedPbdSha,
+                            StringComparison.OrdinalIgnoreCase))
                         throw new InvalidDataException("Pinned S1 model missing or hash mismatch");
                     if (!File.Exists(modelSource) ||
-                        !string.Equals(Hash(modelSource), S1H5dSha, StringComparison.OrdinalIgnoreCase))
+                        !string.Equals(Hash(modelSource), expectedH5dSha,
+                            StringComparison.OrdinalIgnoreCase))
                         throw new InvalidDataException("Pinned S1 .h5d source missing or hash mismatch");
                     Type family = asm.GetType(
                         "InspTools.SecondaryDevelopment.ModelFamily", true);
@@ -167,19 +210,28 @@ namespace InspTools.Standalone
                 }
                 string label = args[3].ToUpperInvariant();
                 if (label != "OK" && label != "NG" &&
-                    label != "S1OK" && label != "S1NG")
-                    throw new ArgumentException("Image label must be OK/NG/S1OK/S1NG");
-                if (inspectingWithModel && label != "S1OK" && label != "S1NG")
+                    label != "S1OK" && label != "S1NG" &&
+                    !(candidateMode && (label == "S1OK2" || label == "S1NG2")))
+                    throw new ArgumentException("Unrecognized pinned image label");
+                if (inspectingWithModel && label != "S1OK" && label != "S1NG" &&
+                    !(candidateMode && (label == "S1OK2" || label == "S1NG2")))
                     throw new ArgumentException("Enhanced Inspect requires Recipe-matched S1OK/S1NG image");
-                string relative = Path.Combine("TrainingImage", "R3-Shunt-CCD1",
-                    label + (label == "OK" ? ".jpg" : ".png"));
+                string relative = (candidateInspect || vendorInspect || balancedInspect)
+                    ? Path.Combine("TrainingImage", "DIA-Candidate-S1",
+                        label + (label == "S1OK" || label == "S1OK2" ? ".jpg" : ".png"))
+                    : Path.Combine("TrainingImage", "R3-Shunt-CCD1",
+                        label + (label == "OK" ? ".jpg" : ".png"));
                 string image = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, relative);
                 if (!File.Exists(image)) throw new FileNotFoundException("Test image missing", image);
                 string sha = Hash(image);
-                string expected = label == "OK" ? OkSha :
+                string expected = (candidateInspect || vendorInspect || balancedInspect) ?
+                    label == "S1OK2" ? DiaSecondHoldoutOkSha :
+                    label == "S1NG2" ? DiaSecondHoldoutNgSha :
+                    label == "S1OK" ? OkSha : NgSha :
+                    label == "OK" ? OkSha :
                     label == "NG" ? NgSha : label == "S1OK" ? S1OkSha : S1NgSha;
                 if (!string.Equals(sha, expected, StringComparison.OrdinalIgnoreCase))
-                    throw new InvalidDataException("Shunt test image SHA changed");
+                    throw new InvalidDataException("Pinned test image SHA changed");
                 Console.WriteLine("SOURCE_LABEL=" + label + " IMAGE_SHA=" + sha);
                 Type optionsType = asm.GetType(
                     "InspTools.SecondaryDevelopment.InspectionOptions", true);
@@ -195,6 +247,13 @@ namespace InspTools.Standalone
                     throw new MissingMethodException(facadeType.FullName, "InspectFile");
                 object result = inspect.Invoke(facade, new[] { (object)station, image, options });
                 Mark("FACADE_INSPECT_RETURNED", watch);
+                if (candidateInspect || vendorInspect || balancedInspect)
+                {
+                    MethodInfo factory = facadeType.GetMethod("GetOrCreateStation",
+                        BindingFlags.Instance | BindingFlags.NonPublic);
+                    object actualStation = factory.Invoke(facade, new object[] { station - 1 });
+                    ReportEnhanceImages(actualStation);
+                }
                 Console.WriteLine("ACTUAL_BIN=" + Get(result, "Bin") +
                     " LOCATE_SUCCEEDED=" + Get(result, "LocateSucceeded") +
                     " PARETO=" + Get(result, "ParetoIndex") +
@@ -225,6 +284,57 @@ namespace InspTools.Standalone
                 code = 64;
             }
             return true;
+        }
+
+        private static void ReportEnhanceImages(object station)
+        {
+            FieldInfo enhancerField = station.GetType().GetField("aiEnhanceTools");
+            object enhancer = enhancerField == null ? null : enhancerField.GetValue(station);
+            if (enhancer == null)
+            {
+                Console.WriteLine("AI_ENHANCE_OUTPUT=UNAVAILABLE");
+                return;
+            }
+            int populatedChannels = 0;
+            foreach (string channel in new[] { "R", "G", "B" })
+            {
+                FieldInfo field = enhancer.GetType().GetField("AIMat" + channel,
+                    BindingFlags.Instance | BindingFlags.Public);
+                object channelValue = field == null ? null : field.GetValue(enhancer);
+                if (channelValue == null) continue;
+                // Recovered AIEnhanceTool exposes one Mat; AIEnhanceCenter has
+                // an array. Support both without depending on the native ABI.
+                var mats = new System.Collections.Generic.List<object>();
+                if (channelValue is Array)
+                    foreach (object item in (Array)channelValue) mats.Add(item);
+                else
+                    mats.Add(channelValue);
+                int filled = 0;
+                string firstSha = "NONE";
+                foreach (object mat in mats)
+                {
+                    if (mat == null) continue;
+                    Type matType = mat.GetType();
+                    if (Convert.ToBoolean(matType.GetMethod("Empty").Invoke(mat, null)))
+                        continue;
+                    filled++;
+                    if (firstSha == "NONE")
+                    {
+                        MethodInfo png = matType.GetMethod("ToBytes",
+                            new[] { typeof(string), typeof(int[]) });
+                        if (png == null) throw new MissingMethodException("Mat.ToBytes PNG");
+                        byte[] bytes = (byte[])png.Invoke(mat, new object[] { ".png", new int[0] });
+                        using (var sha = SHA256.Create())
+                            firstSha = BitConverter.ToString(sha.ComputeHash(bytes)).Replace("-", "");
+                    }
+                }
+                if (filled > 0) populatedChannels++;
+                Console.WriteLine("AI_ENHANCE_OUTPUT_" + channel + "=" +
+                    (filled > 0 ? "READY" : "EMPTY") + " MATS=" + filled +
+                    " PNG_SHA256=" + firstSha);
+            }
+            Console.WriteLine("AI_ENHANCE_OUTPUT=" +
+                (populatedChannels == 3 ? "READY" : "INCOMPLETE"));
         }
 
         private static void VerifySandbox(string recipeName, bool modelExperiment)

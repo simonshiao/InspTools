@@ -20,9 +20,20 @@ namespace InspTools.Standalone
 
         internal static string[] List()
         {
-            if (!Directory.Exists(Root)) return new string[0];
-            return Directory.GetDirectories(Root)
-                .Where(path => !IsLink(path))
+            return ListFromRoot(Root);
+        }
+
+        // Browsing a source Recipe root must never create or write files there.
+        internal static string[] ListFromRoot(string directory)
+        {
+            if (string.IsNullOrWhiteSpace(directory)) return new string[0];
+            string root = Path.GetFullPath(directory);
+            if (!Directory.Exists(root) || IsLink(root)) return new string[0];
+            return Directory.GetDirectories(root)
+                .Where(path => !IsLink(path) &&
+                    File.Exists(Path.Combine(path, "Setting.ini")) &&
+                    Enumerable.Range(1, 8).All(i =>
+                        File.Exists(Path.Combine(path, "station" + i + ".ini"))))
                 .Select(Path.GetFileName)
                 .Where(name => name.IndexOf("_TempRecipe", StringComparison.OrdinalIgnoreCase) < 0
                     && name.IndexOf("_BackupRecipe", StringComparison.OrdinalIgnoreCase) < 0)

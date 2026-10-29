@@ -1,4 +1,4 @@
-param(
+﻿param(
     [int]$ComponentTimeoutMs = 5000,
     [int]$ConstructorTimeoutMs = 15000,
     [int]$GuiTimeoutMs = 15000,
@@ -8,7 +8,7 @@ param(
 # This script stages an isolated AppBase and runs bounded child processes.
 # It does NOT update release/current, Phase-1 source or production Recipe.
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $Dev = Join-Path $Root 'output\decoded-ui\Release'
 $Native = Join-Path $Root 'output\native-lazy\generated-source\bin\Release\net472\InspTools.dll'
 $Sandbox = Join-Path $Root 'output\native-lazy\runtime'
@@ -37,7 +37,7 @@ Copy-Item -LiteralPath $RecipeSource -Destination $RecipeRoot -Recurse
 
 # Stage a tiny, read-only selection of the Shunt production Recipe + one
 # original CCD1 OK and NG image. Never duplicate the full production Runtime.
-& (Join-Path $Root 'StageShuntFixtures.ps1') -Sandbox $Sandbox | Out-Null
+& (Join-Path $Root 'scripts\StageShuntFixtures.ps1') -Sandbox $Sandbox | Out-Null
 if ($StageOnly) {
     Write-Output 'R3_STAGE_ONLY=PASS (no native/UI regression executed)'
     return

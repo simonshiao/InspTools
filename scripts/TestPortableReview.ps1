@@ -1,4 +1,4 @@
-param(
+﻿param(
     [switch]$FromZip,
     [string]$PackageDirectory = ''
 )
@@ -6,7 +6,7 @@ param(
 # Portability acceptance: RELOCATE the whole package before launching it.
 # All test Recipe files are copied into the moved package through its own CLI.
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $Source = if ([string]::IsNullOrWhiteSpace($PackageDirectory)) {
     Join-Path $Root 'output\portable-review'
 } else {

@@ -28,7 +28,7 @@ def main() -> int:
         root / "src" / "DIALikeHost" / "Program.cs",
         root / "src" / "ShuntLikeHost" / "Program.cs",
     ]
-    build = (root / "Build.ps1").read_text(encoding="utf-8")
+    build = (root / "scripts" / "Build.ps1").read_text(encoding="utf-8")
     results = []
     ok = True
 

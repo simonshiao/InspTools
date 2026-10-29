@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)][string]$GateDirectory,
     [int]$ModelTimeoutMs = 16000
 )
@@ -6,7 +6,7 @@ param(
 # Runtime + model acceptance in disposable independent AppBase only.
 # Original Shunt and current official release are read-only.
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $base = [IO.Path]::GetFullPath($GateDirectory).TrimEnd('\')
 $parent = [IO.Path]::GetFullPath((Join-Path $Root 'output\delta-native-gates')).TrimEnd('\')
 if (-not $base.StartsWith($parent + '\', [StringComparison]::OrdinalIgnoreCase) -or
@@ -20,7 +20,7 @@ if ((Get-FileHash -LiteralPath $native -Algorithm SHA256).Hash -ne
     throw 'R3 native DLL mismatch'
 }
 Copy-Item -LiteralPath (Join-Path $Root 'output\decoded-ui\Release\InspToolsRecipeCli.exe') -Destination $base -Force
-& (Join-Path $Root 'StageShuntFixtures.ps1') -Sandbox $base -IncludeS1Model | Out-Null
+& (Join-Path $Root 'scripts\StageShuntFixtures.ps1') -Sandbox $base -IncludeS1Model | Out-Null
 
 function Probe([string]$label, [string[]]$argv, [int]$timeout) {
     $outFile = Join-Path $base ($label + '.out')

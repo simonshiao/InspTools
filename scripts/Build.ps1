@@ -1,10 +1,16 @@
-param(
-    [string]$Configuration = 'Release'
+﻿param(
+    [string]$Configuration = 'Release',
+    [string]$OutputSubdir = ''
 )
 
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
-$Out = Join-Path $Root ("output\decoded-ui\" + $Configuration)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
+if ($OutputSubdir -and $OutputSubdir -notmatch '^[A-Za-z0-9_-]+$') {
+    throw 'OutputSubdir must be a single safe directory name'
+}
+$Out = if ($OutputSubdir) { Join-Path $Root ("output\" + $OutputSubdir) } else {
+    Join-Path $Root ("output\decoded-ui\" + $Configuration)
+}
 $Phase1Parent = Get-ChildItem -LiteralPath 'D:\delta' -Directory | Where-Object {
     Test-Path -LiteralPath (Join-Path $_.FullName 'Projects\InspToolsRebuild')
 } | Select-Object -First 1 -ExpandProperty FullName
@@ -78,7 +84,7 @@ $compileArgs = @(
     ('/out:' + $exe)
 )
 foreach ($name in @(
-    'mscorlib.dll','System.dll','System.Core.dll','System.Web.Extensions.dll',
+    'mscorlib.dll','System.dll','System.Core.dll','System.Web.Extensions.dll','System.Windows.Forms.dll',
     'WindowsBase.dll','PresentationCore.dll','PresentationFramework.dll','System.Xaml.dll'
 )) {
     $compileArgs += ('/reference:' + (Join-Path $RefRoot $name))
@@ -95,6 +101,9 @@ $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\DecodedToolsWindowHos
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeStore.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeCli.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\StandaloneRecipeUi.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\Chao8SideRecipePicker.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\ChaoSelfAiBridge.cs')
+$compileArgs += (Join-Path $Root 'src\InspTools.Standalone\ChaoLocatePreviewUi.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\BlankUiLifecycleGuard.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\NativeRecipeProbe.cs')
 $compileArgs += (Join-Path $Root 'src\InspTools.Standalone\LightweightRecipePreview.cs')

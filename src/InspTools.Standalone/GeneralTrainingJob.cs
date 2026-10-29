@@ -3,6 +3,9 @@ using System.IO;
 using System.Text;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using System.Collections;
+using System.Collections.Generic;
+using System.Web.Script.Serialization;
 
 namespace InspTools.Standalone
 {
@@ -28,6 +31,76 @@ namespace InspTools.Standalone
             using (var hash = SHA256.Create())
             using (var file = File.OpenRead(path))
                 return BitConverter.ToString(hash.ComputeHash(file)).Replace("-", "");
+        }
+        internal static string VerifyLongDataset(string root)
+        {
+            const string name = "DIA_CCD1_S1_Train300";
+            string file = Path.Combine(root, "TrainingPlans", name + ".json");
+            if (!File.Exists(file)) throw new FileNotFoundException("CCD1 300-epoch manifest missing", file);
+            var doc = new JavaScriptSerializer().Deserialize<Dictionary<string, object>>(
+                File.ReadAllText(file, Encoding.UTF8));
+            if ((string)doc["dataset"] != name ||
+                Convert.ToInt32(doc["training_pairs"]) != 43 ||
+                Convert.ToInt32(doc["training_ok_pairs"]) != 19 ||
+                Convert.ToInt32(doc["training_ng_pairs"]) != 24 ||
+                Convert.ToInt32(doc["unique_training_families"]) != 25 ||
+                Convert.ToInt32(doc["epoch_target"]) != 300 ||
+                !Convert.ToBoolean(doc["training_only"]) ||
+                Convert.ToBoolean(doc["deployed"]))
+                throw new InvalidDataException("300-epoch manifest parameters changed");
+            var holdout = new HashSet<string>(StringComparer.OrdinalIgnoreCase) {
+                "OK-1-2025-06-27-16-54-46",
+                "OK-1-2025-06-27-16-58-19",
+                "NG-1-2025-06-27-16-55-12",
+                "NG-1-2025-06-27-16-55-24"
+            };
+            var declared = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (object value in (IEnumerable)doc["heldout_families"])
+                declared.Add((string)value);
+            if (declared.Count != 4 || !declared.SetEquals(holdout))
+                throw new InvalidDataException("CCD1 holdout families changed");
+            string dataset = Path.Combine(root, "TrainingImage", name);
+            TrainingDatasetReport contract = TrainingContracts.Check(root, name, TrainingFamily.General);
+            if (contract.SourceImages != 43 || contract.OkPairs != 19 ||
+                contract.NgPairs != 24)
+                throw new InvalidDataException("CCD1 300-epoch X/Y contract differs");
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var families = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (object value in (IEnumerable)doc["entries"])
+            {
+                var item = (Dictionary<string, object>)value;
+                string label = (string)item["label"];
+                string relative = (string)item["relative"];
+                string family = (string)item["family"];
+                if (label != "OK" && label != "NG")
+                    throw new InvalidDataException("Unexpected CCD1 class");
+                if (string.IsNullOrEmpty(relative) || relative.StartsWith(".", StringComparison.Ordinal) ||
+                    relative.IndexOf(':') >= 0 || relative.Contains("..") ||
+                    Path.IsPathRooted(relative))
+                    throw new InvalidDataException("Unsafe CCD1 relative path");
+                string computed = Path.GetFileNameWithoutExtension(relative);
+                if (computed.EndsWith("-VH", StringComparison.OrdinalIgnoreCase))
+                    computed = computed.Substring(0, computed.Length - 3);
+                else if (computed.EndsWith("-H", StringComparison.OrdinalIgnoreCase) ||
+                    computed.EndsWith("-V", StringComparison.OrdinalIgnoreCase))
+                    computed = computed.Substring(0, computed.Length - 2);
+                if (!string.Equals(family, computed, StringComparison.OrdinalIgnoreCase) ||
+                    holdout.Contains(family) || !seen.Add(label + "/" + relative))
+                    throw new InvalidDataException("CCD1 source-family leakage or duplicate");
+                families.Add(label + "/" + family);
+                foreach (string axis in new[] { "X", "Y" })
+                {
+                    string path = Path.Combine(dataset, axis, label, relative);
+                    if (!File.Exists(path) ||
+                        !string.Equals(Sha256(path),
+                            (string)item[axis == "X" ? "x_sha256" : "y_sha256"],
+                            StringComparison.OrdinalIgnoreCase))
+                        throw new InvalidDataException("CCD1 paired training file SHA mismatch: " + axis);
+                }
+            }
+            if (seen.Count != 43 || families.Count != 25)
+                throw new InvalidDataException("CCD1 300-epoch families incomplete");
+            return Sha256(file);
         }
         internal static string Preflight(string root, string dataset, string seedName)
         {
@@ -116,6 +189,14 @@ namespace InspTools.Standalone
                     exit = report.Contains("TRAIN_RESULT=PASS") ? 0 : 75;
                     return true;
                 }
+                if (args.Length == 2 && args[0] == "--train-general-convert")
+                {
+                    string report = GeneralTrainerExecutor.ConvertCandidate(
+                        AppDomain.CurrentDomain.BaseDirectory, args[1]);
+                    Console.WriteLine(report);
+                    exit = report.Contains("TRAIN_CONVERT=PASS") ? 0 : 76;
+                    return true;
+                }
                 if (args.Length == 1 && args[0] == "--train-general-gpu-probe")
                 {
                     Console.WriteLine("TRAIN_GENERAL_GPU_PROBE=PASS " +
@@ -134,11 +215,34 @@ namespace InspTools.Standalone
                         AppDomain.CurrentDomain.BaseDirectory, args[1]));
                     return true;
                 }
+                if (args.Length == 4 && args[0] == "--train-general-plan-profile")
+                {
+                    string root = AppDomain.CurrentDomain.BaseDirectory;
+                    string check = Preflight(root, args[1], args[2]);
+                    string job = GeneralCandidateRunner.Prepare(root,
+                        args[1], args[2], args[3]);
+                    Console.WriteLine("CANDIDATE_JOB=" + Path.GetFileName(job));
+                    Console.WriteLine("TRAIN_GENERAL_PROFILE=READY " + check +
+                        " PROFILE=" + args[3] + " TRAIN_EXECUTED=False");
+                    return true;
+                }
+                if (args.Length == 4 && args[0] == "--train-general-plan-long300")
+                {
+                    // The 2026-09-14 recovered DAVS route is superseded.
+                    // It demonstrated severe holdout IoU regression even at
+                    // 300 epochs. Do not quietly create another legacy job.
+                    throw new InvalidOperationException(
+                        "Legacy CCD1 300-epoch trainer is disabled. " +
+                        "Use product-local RunShuntCcd1Loss6.ps1 and the " +
+                        "2026-09-30 AgentVisionLab per-channel quality gate.");
+                }
                 if (args.Length != 3 ||
                     (args[0] != "--train-general-preflight" &&
                      args[0] != "--train-general-plan"))
                     throw new ArgumentException(
-                        "Usage: --train-general-preflight|--train-general-plan DATASET_NAME SEED.h5");
+                        "Usage: --train-general-preflight|--train-general-plan DATASET_NAME SEED.h5" +
+                        " or --train-general-plan-profile DATASET_NAME SEED.h5 PROFILE.ini" +
+                        " or --train-general-plan-long300 DIA_CCD1_S1_Train300 DIA_R002_vendor.h5 DIA_R002_vendor.ini");
                 string result = Preflight(AppDomain.CurrentDomain.BaseDirectory,
                     args[1], args[2]);
                 if (args[0] == "--train-general-plan")

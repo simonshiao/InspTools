@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)][string]$GateDirectory,
     [switch]$IncludeCudnnInference
 )
@@ -6,7 +6,7 @@ param(
 # Only adds OpenCV's directly imported, unmodified runtime DLL dependencies
 # to an existing disposable gate. Never writes ShuntVC, source, user Recipe.
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $allowed = [IO.Path]::GetFullPath((Join-Path $Root 'output\delta-native-gates')).
     TrimEnd('\') + '\'
 $target = [IO.Path]::GetFullPath($GateDirectory).TrimEnd('\')

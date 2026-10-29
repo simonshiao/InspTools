@@ -12,9 +12,14 @@ namespace InspTools.Standalone
         {
             try
             {
+                int aiHealthExitCode;
+                if (ChaoSelfAiBridge.TryRunHealth(args, out aiHealthExitCode))
+                    return aiHealthExitCode;
                 int recipeExitCode;
                 if (StandaloneRecipeCli.TryRun(args, out recipeExitCode))
                     return recipeExitCode;
+                // CheckAuth must not run before the native Station[] exists.
+                NativeR3RecipeSession.PrepareAiParityStartup();
                 // AI Runtime is intentionally lazy. Merely opening InspTools
                 // must never load CUDA/TensorRT or require GPU dependencies.
                 int result = DecodedToolsWindowHost.Run(args);

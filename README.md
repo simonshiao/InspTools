@@ -1,4 +1,10 @@
+> **2026-10-28 腳本整理：** 開發腳本已集中於 `scripts/`，功能與新命令見 `scripts/README.md`；歷史文件中的根目錄腳本路徑請改為 `scripts/`。
+
 # DIA 檢測執行環境｜目前正式主線
+
+> **2026-10-22 Recipe GUI 修復候選：** 已參考 Chao8Side 原始 RecipeWindow 回收選擇、搜尋及來源匯入流程，並在主視窗設獨立操作列。最新**未驗收**候選：
+> output/standalone-r3/InspTools-Portable-R3-20261022-153927/InspToolsStandalone.exe。
+> 實際已可開啟 Recipe 選擇視窗；原版工具區因空白站別可能當機，暫時封鎖互動，**不代表工具按鈕或完整 Inspect 修好**。詳 docs/CHAO8SIDE_RECIPE_PICKER_R3_20261022.md。release/current 仍保留歷史版本。
 
 > **2026-10-21 獨立軟體優先：** `BuildStandaloneR3.ps1 -Zip`
 > 會在 `output/standalone-r3/` 新建不覆蓋的 R3 獨立候選版，

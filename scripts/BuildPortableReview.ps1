@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$Configuration = 'Release',
     [switch]$Zip
 )
@@ -6,7 +6,7 @@ param(
 # A separate, relocatable Windows x64 .NET Framework 4.7.2 WPF review build.
 # Does not touch release/current and never embeds ShuntVC or DIA machine data.
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $Build = Join-Path $Root ("output\decoded-ui\" + $Configuration)
 $Patched = Join-Path $Root 'output\native-lazy\generated-source\bin\Release\net472\InspTools.dll'
 $Review = Join-Path $Root 'output\portable-review'

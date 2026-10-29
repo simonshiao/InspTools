@@ -1,8 +1,8 @@
-param([string]$Sandbox = '', [switch]$IncludeS1Model)
+﻿param([string]$Sandbox = '', [switch]$IncludeS1Model)
 
 # Offline data only. ShuntVC is never launched or modified.
 $ErrorActionPreference = 'Stop'
-$ProjectRoot = [IO.Path]::GetFullPath($PSScriptRoot)
+$ProjectRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 if ([string]::IsNullOrWhiteSpace($Sandbox)) {
     $Sandbox = Join-Path $ProjectRoot 'output\native-lazy\runtime'
 }

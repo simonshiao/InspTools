@@ -30,7 +30,7 @@ namespace InspTools.Standalone
             _undo = new MenuItem { Header = "R3｜撤回上次儲存", IsEnabled = false };
         }
 
-        internal static void Attach(Window main, string recipe)
+        internal static R3IsolatedEditor Attach(Window main, string recipe)
         {
             // The caller must first succeed in NativeR3RecipeSession.Open(),
             // which verifies AppBase, recipe prefix and exact patched DLL SHA.
@@ -50,7 +50,16 @@ namespace InspTools.Standalone
             menu.Items.Insert(2, editor._undo);
             editor._save.Click += delegate { editor.SafeInvoke(editor.Save); };
             editor._undo.Click += delegate { editor.SafeInvoke(editor.Undo); };
+            return editor;
         }
+
+        internal void OpenStation(int station) { SafeInvoke(() => Edit(station)); }
+        internal void SaveChanges() { SafeInvoke(Save); }
+        // Original dialogs commit their changes into ParamFile when closed.
+        // Ctrl+S on the native host persists those edits without requiring
+        // the alternative context-menu editor to mark its own _dirty bit.
+        internal void SaveNativeChanges() { SafeInvoke(() => Save(true)); }
+        internal bool CanSave { get { return _save.IsEnabled; } }
 
         private void SafeInvoke(Action action)
         {
@@ -162,7 +171,12 @@ namespace InspTools.Standalone
 
         private void Save()
         {
-            if (!_dirty) return;
+            Save(false);
+        }
+
+        private void Save(bool explicitlyRequested)
+        {
+            if (!_dirty && !explicitlyRequested) return;
             if (MessageBox.Show(_main,
                 "確定寫回 R3 隔離 Recipe？將先備份，使用原版 SaveAllRecipe，再重新讀取驗證。",
                 "確認隔離存檔", MessageBoxButton.YesNo, MessageBoxImage.Question)

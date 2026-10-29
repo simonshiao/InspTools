@@ -1,4 +1,4 @@
-param(
+﻿param(
     [switch]$IncludeModelPair
 )
 
@@ -6,7 +6,7 @@ param(
 # Does not edit source Runtime, current release, or existing user Recipe.
 # Copies NVIDIA libraries as unmodified dependencies, never decompiles them.
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $SourceApp = Join-Path $Root 'output\decoded-ui\Release'
 $SourceNative = Join-Path $Root 'output\native-lazy\generated-source\bin\Release\net472\InspTools.dll'
 $Donor = @(Get-Item -Path 'E:\0_*\3.*\1.*\ShuntVC_Chao\Runtime\Runtime' -ErrorAction SilentlyContinue)

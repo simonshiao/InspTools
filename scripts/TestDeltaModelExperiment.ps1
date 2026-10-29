@@ -1,4 +1,4 @@
-param(
+﻿param(
     [Parameter(Mandatory=$true)][string]$GateDirectory,
     [int]$TimeoutMs = 16000,
     [switch]$InspectSamples,
@@ -8,7 +8,7 @@ param(
 # Disposable and reversible A/B test of a single vendor C# trainer precheck.
 # No source Runtime, official release/current or ProjectHub files are written.
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $Gate = [IO.Path]::GetFullPath($GateDirectory).TrimEnd('\')
 $allowed = [IO.Path]::GetFullPath((Join-Path $Root 'output\delta-native-gates')).TrimEnd('\') + '\'
 if (-not $Gate.StartsWith($allowed, [StringComparison]::OrdinalIgnoreCase) -or

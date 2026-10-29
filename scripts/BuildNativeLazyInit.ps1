@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$Phase1SourceRoot = '',
     [string]$Configuration = 'Release',
     [switch]$ModelPrecompiledExperiment
@@ -6,7 +6,7 @@ param(
 
 # Isolated build from read-only archived Phase-1 source. No production writes.
 $ErrorActionPreference = 'Stop'
-$ProjectRoot = [IO.Path]::GetFullPath($PSScriptRoot)
+$ProjectRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 if ([string]::IsNullOrWhiteSpace($Phase1SourceRoot)) {
     # Wildcard discovery keeps the script ASCII-only for Windows PowerShell 5.1.
     $candidate = @(Get-Item -Path 'D:\0_*\9.*\*\ChaoMCPHub_Python_Full_20260916\ProjectHUB\Projects\InspToolsRebuild\Source\InspTools-1.3.16.28-Editable' -ErrorAction SilentlyContinue)

@@ -1,3 +1,5 @@
+> **2026-10-28 腳本整理：** PowerShell 已由專案根目錄移到 `scripts/`；功能與新命令見 `scripts/README.md`。歷史文件中的舊路徑需換成 `scripts/`。`EvaluateDiaCcd1Iou.py` 移至 `Tools/`。
+
 # Agent 規則
 
 本案正式名稱是 **DIA 檢測執行環境**；內部 ProjectHub ID 暫保留 `InspTools-Rebuild2`。它是 DIA 主線的檢測執行層重大分歧，技術基底為一期 `InspToolsRebuild`。2026-09-15 已做正式路線校正；舊的 machine-first / SDK / Agent / Annotation 路線全部降為歷史證據，不得再當目前主線。

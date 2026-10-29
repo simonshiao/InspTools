@@ -15,6 +15,8 @@ namespace InspTools.Standalone
         internal TrainingFamily Family;
         internal int SourceImages;
         internal int Labels;
+        internal int OkPairs;
+        internal int NgPairs;
         internal bool StructureValid;
         internal string Message;
     }
@@ -48,24 +50,30 @@ namespace InspTools.Standalone
             }
             else
             {
+                int populatedGroups = 0;
                 foreach (string group in new[] { "OK", "NG" })
                 {
-                    var x = Images(Path.Combine(dataRoot, "X", group));
-                    var y = Images(Path.Combine(dataRoot, "Y", group));
+                    var x = IndexedImages(Path.Combine(dataRoot, "X", group));
+                    var y = IndexedImages(Path.Combine(dataRoot, "Y", group));
+                    // Recovered DAVS pairs files under X/Y recursively and does
+                    // not require both OK and NG categories to be populated.
+                    if (x.Count == 0 && y.Count == 0) continue;
                     if (x.Count == 0 || y.Count == 0)
                         throw new InvalidDataException("X/Y training pair missing for " + group);
-                    // Name-based pairing; training cannot silently reuse the
-                    // wrong mask just because the image counts happen to match.
-                    var xs = new HashSet<string>(x.Select(Path.GetFileNameWithoutExtension),
-                        StringComparer.OrdinalIgnoreCase);
-                    var ys = new HashSet<string>(y.Select(Path.GetFileNameWithoutExtension),
-                        StringComparer.OrdinalIgnoreCase);
-                    if (x.Count != y.Count || !xs.SetEquals(ys) ||
-                        xs.Count != x.Count || ys.Count != y.Count)
-                        throw new InvalidDataException("X/Y image-mask filenames mismatch: " + group);
+                    // Recovered DAVS recursively pairs X/Y by exact relative
+                    // image paths, including ALL/ and the file extension.
+                    if (x.Count != y.Count ||
+                        x.Keys.Except(y.Keys, StringComparer.OrdinalIgnoreCase).Any() ||
+                        y.Keys.Except(x.Keys, StringComparer.OrdinalIgnoreCase).Any())
+                        throw new InvalidDataException("X/Y relative image-mask paths mismatch: " + group);
                     result.SourceImages += x.Count;
                     result.Labels += y.Count;
+                    if (group == "OK") result.OkPairs += x.Count;
+                    else result.NgPairs += x.Count;
+                    populatedGroups++;
                 }
+                if (populatedGroups == 0)
+                    throw new InvalidDataException("No X/Y training pairs found");
             }
             result.StructureValid = true;
             result.Message = "DATASET_STRUCTURE=PASS; TRAIN_NOT_STARTED";
@@ -78,6 +86,37 @@ namespace InspTools.Standalone
             return Directory.EnumerateFiles(directory, "*", SearchOption.TopDirectoryOnly)
                 .Where(f => new[] { ".png", ".jpg", ".jpeg", ".bmp" }
                     .Contains(Path.GetExtension(f).ToLowerInvariant())).ToList();
+        }
+
+        private static Dictionary<string, string> IndexedImages(string directory)
+        {
+            var images = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            if (!Directory.Exists(directory)) return images;
+            string root = Path.GetFullPath(directory).TrimEnd(Path.DirectorySeparatorChar);
+            var stack = new Stack<string>();
+            stack.Push(root);
+            while (stack.Count > 0)
+            {
+                foreach (string entry in Directory.EnumerateFileSystemEntries(stack.Pop()))
+                {
+                    FileAttributes attributes = File.GetAttributes(entry);
+                    if ((attributes & FileAttributes.ReparsePoint) != 0)
+                        throw new InvalidDataException("Dataset reparse points forbidden: " + entry);
+                    if ((attributes & FileAttributes.Directory) != 0)
+                    {
+                        stack.Push(entry);
+                        continue;
+                    }
+                    string extension = Path.GetExtension(entry).ToLowerInvariant();
+                    if (extension != ".png" && extension != ".jpg" &&
+                        extension != ".jpeg" && extension != ".bmp") continue;
+                    string rel = entry.Substring(root.Length + 1).Replace('/', '\\');
+                    if (images.ContainsKey(rel))
+                        throw new InvalidDataException("Duplicate relative image name: " + rel);
+                    images.Add(rel, entry);
+                }
+            }
+            return images;
         }
 
         internal static bool TryRun(string[] args, out int exit)
@@ -118,11 +157,31 @@ namespace InspTools.Standalone
                     try { Check(testRoot, "general", TrainingFamily.General); }
                     catch (InvalidDataException) { rejected = true; }
                     if (!rejected) throw new InvalidOperationException("Missing mask not rejected");
+                    File.WriteAllBytes(Path.Combine(testRoot, "TrainingImage", "general",
+                        "Y", "NG", "item.png"),
+                        new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
+                    // The recovered trainer looks into NG/ALL recursively.
+                    foreach (string branch in new[] { "X", "Y" })
+                    {
+                        string all = Path.Combine(testRoot, "TrainingImage", "general", branch, "NG", "ALL");
+                        Directory.CreateDirectory(all);
+                        File.WriteAllBytes(Path.Combine(all, "aug.png"),
+                            new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 });
+                    }
+                    if (Check(testRoot, "general", TrainingFamily.General).NgPairs != 2)
+                        throw new InvalidOperationException("Nested NG/ALL pairs not recognized");
+                    string yAll = Path.Combine(testRoot, "TrainingImage", "general", "Y", "NG", "ALL");
+                    File.Move(Path.Combine(yAll, "aug.png"), Path.Combine(yAll, "other.png"));
+                    rejected = false;
+                    try { Check(testRoot, "general", TrainingFamily.General); }
+                    catch (InvalidDataException) { rejected = true; }
+                    if (!rejected) throw new InvalidOperationException("Mismatched ALL path accepted");
                     rejected = false;
                     try { Check(testRoot, "..", TrainingFamily.General); }
                     catch (ArgumentException) { rejected = true; }
                     if (!rejected) throw new InvalidOperationException("Dataset traversal not rejected");
                     Console.WriteLine("TRAIN_CONTRACT=PASS FAMILIES=3 MASK_GUARD=PASS" +
+                        " NESTED_ALL=PASS RELATIVE_PATH_GUARD=PASS" +
                         " LOCAL_PATH_GUARD=PASS TRAIN_EXECUTED=False");
                 }
                 else if (args.Length == 3 && args[0] == "--train-contract-check")
@@ -135,6 +194,7 @@ namespace InspTools.Standalone
                         AppDomain.CurrentDomain.BaseDirectory, args[2], family);
                     Console.WriteLine("TRAIN_CONTRACT=PASS FAMILY=" + family +
                         " IMAGES=" + result.SourceImages + " MASKS=" + result.Labels +
+                        " OK_PAIRS=" + result.OkPairs + " NG_PAIRS=" + result.NgPairs +
                         " TRAIN_EXECUTED=False");
                 }
                 else throw new ArgumentException(

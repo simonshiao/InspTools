@@ -39,6 +39,10 @@ namespace InspTools.Standalone
             AttachOptionalRecipeMenu(toolsWindow, closeGuard.Restore);
             if (NativeR3RecipeSession.IsPortableReview())
                 AttachPortableReviewRecipeMenu(toolsWindow);
+            // A visible Recipe selector belongs inside the independent station
+            // product. Preserve test-mode entrypoints and the original decoded UI.
+            if (args == null || args.Length == 0)
+                Chao8SideRecipePicker.Attach(toolsWindow);
             string nativeSmokeRecipe = GetArg(args, "--r3-native-gui-smoke");
             R3NativeGuiSmoke nativeSmoke = null;
             if (!string.IsNullOrWhiteSpace(nativeSmokeRecipe))

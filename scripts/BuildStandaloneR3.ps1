@@ -1,15 +1,22 @@
-param(
+﻿param(
     [switch]$Rebuild,
     [switch]$Zip,
-    [string]$Configuration = 'Release'
+    [string]$Configuration = 'Release',
+    [string]$LauncherDirectory = ''
 )
 
 # Create a SELF-CONTAINED CANDIDATE from the audited R3 DLL and our standalone
 # launcher. Do not change release/current or any machine Shunt/DIA Runtime.
 # Never overwrite a previous candidate (which may contain user Recipe edits).
 $ErrorActionPreference = 'Stop'
-$Root = [IO.Path]::GetFullPath($PSScriptRoot)
-$App = Join-Path $Root ('output\decoded-ui\' + $Configuration)
+$Root = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
+$App = if ($LauncherDirectory) { [IO.Path]::GetFullPath($LauncherDirectory) } else {
+    Join-Path $Root ('output\decoded-ui\' + $Configuration)
+}
+if (-not $App.StartsWith((Join-Path $Root 'output') + [IO.Path]::DirectorySeparatorChar,
+    [StringComparison]::OrdinalIgnoreCase)) {
+    throw 'LauncherDirectory must stay under this project output directory'
+}
 $Native = Join-Path $Root ('output\native-lazy\generated-source\bin\' +
     $Configuration + '\net472\InspTools.dll')
 $NativeSha = 'ACD6DBCF266705108021126B9E91C605D87500F21608DA70946F5CE25789C34B'
@@ -17,9 +24,9 @@ $OriginalSha = '85C4D87E59FB42520DE89B8C2AC04351E4701B809F21F8302F6266F4D96071D1
 $Marker = 'INSPTOOLS_PORTABLE_REVIEW_R3_V1'
 
 if ($Rebuild) {
-    & (Join-Path $Root 'Build.ps1') -Configuration $Configuration
+    & (Join-Path $Root 'scripts\Build.ps1') -Configuration $Configuration
     if ($LASTEXITCODE -ne 0) { throw 'Standalone launcher build failed' }
-    & (Join-Path $Root 'BuildNativeLazyInit.ps1') -Configuration $Configuration
+    & (Join-Path $Root 'scripts\BuildNativeLazyInit.ps1') -Configuration $Configuration
     if ($LASTEXITCODE -ne 0) { throw 'R3 native DLL build failed' }
 }
 if (-not (Test-Path -LiteralPath (Join-Path $App 'InspToolsStandalone.exe')) -or

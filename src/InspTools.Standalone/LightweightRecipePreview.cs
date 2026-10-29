@@ -121,7 +121,7 @@ namespace InspTools.Standalone
             menu.Items.Insert(0, stations);
         }
 
-        internal static void RestrictOriginalEditing(Window window)
+        internal static void RestrictOriginalEditing(DependencyObject window)
         {
             // Original child dialogs call into CVInspection tool objects that
             // are deliberately absent in preview mode. Leave read-only native

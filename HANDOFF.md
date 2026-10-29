@@ -1,4 +1,34 @@
+## 2026-10-29 Codex 進度：P0 修正待完整 GUI 驗證
+
+新的隔離測試候選：`output/standalone-r3/InspTools-Portable-R3-20261028-233327`；承接 `215835`，不代表正式 release。Build.ps1 與 BuildStandaloneR3.ps1 編譯成功，已分別 staging 300E／先知 e1，並只在隔離候選匯入 3923-R002。
+
+已修改：`ChaoLocatePreviewUi.RunAsync` 分開傳入原版 ToolsWindow host 和對話框 owner，讀取原版 StationIndex；定位預覽僅允許 S1，選圖後及推論前再次檢查。`ChaoSelfAiBridge` 依原版站別顯示面板與啟用按鈕；`Chao8SideRecipePicker` 在原版站別按鈕事件後同步標題。主程式原版 WPF 介面保留。
+
+GUI 初步證據：載入隔離 Recipe 3923-R002 後，原版標題 S1、原版按鈕 1 與 AI 面板目前 S1 一致；按「定位 300E｜選圖預覽」已開啟 S1 離線選圖視窗，未在這一步顯示「未選定有效站別」。尚未成功完成選圖、推論、定位框及 Mask 切換；S1→S2→S8→S1 實際回歸及 S2／S8 停用檢查也未完成，**不得標記 GUI 驗收 PASS**。本輪 GUI 自動化遇到其他桌面視窗取得焦點，須重新確認視窗焦點後繼續，避免操作其他應用。
+
+使用者提供唯讀測試圖片：`D:\0_軟體開發區\6.模板與共用資源區\原廠母本\DIAChip8Side_Welding\TrainingImage\R002-CCD1\Origional\1\NG\NG-1-2025-06-27-16-55-12.png`。僅 S1／CCD1 可使用既有定位模型；不能將該模型用於其他站。完整 Inspect／CVBuffer 整合仍未完成，兩條 AI 既有 smoke 不能代表完整檢測驗收。請保留原有所有 dirty worktree 與正式 Recipe／Model／release/current。
+
 # DIA 檢測執行環境｜路線校正後交接
+
+> **2026-10-28 Codex 正式交接：** 根目錄 `CODEX_HANDOFF.md` → `docs/CODEX_HANDOFF_CHAO_AI_20261028.md` 為最新權威交接；候選 `output/standalone-r3/InspTools-Portable-R3-20261028-215835`。300E 自研定位 checkpoint 已找回、SHA 核對且 CPU 離線真圖 Mask/ROI PASS；先知 e1 ONNX 離線 smoke PASS。原版 WPF 主視窗／Recipe 與機器人開窗可用，但 AI 面板站別 S1/S4 不一致、定位 GUI 預覽傳錯 Window 而報「未選定有效站別」；Codex 須先修 P0。下方為歷史研究紀錄，不要反過來誤認模型仍遺失或已完成量產 Inspect。
+
+> **2026-10-22 ProjectHub DIA/Shunt 複用盤點：** docs/PROJECTHUB_DIA_SHUNT_REUSE_AUDIT_20261022.md。停止重複 Trainer/Runtime/Quality/Converter 開發，先重用現有能力；IoU v1 **已有 1 epoch GPU smoke 與原版 Shunt quality_gate parity PASS**，不必重測相同功能，下一步收斂最小 checkpoint callback。未執行新的 300 epoch IoU 選模長訓練，禁止部署。
+
+> **2026-10-22 接手更新：IoU checkpoint 選模 v1 已實作並完成 1 epoch GPU smoke，尚未執行新的 300 epoch 長訓練。** 新研究入口 RunCcd1IoUSelection.ps1（預設僅稽核）、Tools/ccd1_iou_runner_v1.py；CPU 單元測試 2/2 PASS、43/4 組資料稽核 PASS、拒絕覆寫舊工作 PASS。新 smoke R IoU=0.444620、原版 Shunt quality_gate.py 二次比對 PASS（功能驗證，不代表品質改善），smoke job=CCD1_IoU_V1_Smoke_20261022。詳 docs/CCD1_IOU_CHECKPOINT_V1_20261022.md。原 300/500 候選的品質結論不變，仍禁止部署。原工作樹未提交變更和 output 內模型禁止清理。
+
+> **新對話正式交接入口：`NEXT_CHAT_HANDOFF.md`（2026-10-22 14 時驗證）。** 新 Agent 先讀此檔，再讀下方歷史累積交接；若標示衝突，採新交接中的**實際品質 Gate／禁止部署**狀態。程式及報告仍有未提交 Git 變更，請先核對，切勿直接清理。
+
+> **2026-10-22 最新 500 Epoch：** 依需求已沿用 ShuntVC AgentVisionLab Loss6，自 300-epoch candidate 的最佳權重接續 200 輪，總共 500 epochs；新 job `ShuntLoss6_CCD1_500E_20261022_R1` GPU PASS，最佳 Train Loss（499 epoch）**2.1182e-6 <= 1e-5**。使用同一份 4 家族 holdout、原版 Shunt R channel IoU：原廠 **0.9406**、Loss6 300 epoch **0.7771**、Loss6 500 epoch **0.5769**，**500 明顯退步**。500 train IoU 0.9741，對照 300 train IoU 0.9742。品質 Gate=`HOLDOUT_IOU_REGRESSED_KEEP_300`，`production_qualified=false`，沒有替換正式模型。詳見 `docs/SHUNTVC_TRAINING_20260930_RECOVERY_20261022.md` 第六節，工作目錄 `TrainingCandidates/ShuntLoss6_CCD1_500E_20261022_R1`。切忌再用「低於 1e-5 就通過驗證」判定模型品質。
+
+> **2026-10-22 最新／ShuntVC 後期訓練修正已回收：** 前輪 IoU 回歸主因之一是 InspTools 將 9/14 `train_compat.py` 當最新版本，漏了 Shunt 9/30 的 `AgentVisionLab`、Loss 6 稀少瑕疵加權與正規 RGB/per-channel quality_gate；舊自編 IoU 的 resize/channel 也和 Shunt 原版不同。已從 `D:\delta\ShuntSensor\外觀機\Runtime\ShuntVC` 唯讀 SHA-pinned 複製六份最新版腳本到 InspTools 自有 Runtime，獨立執行 CCD1 **Loss 6 / 原廠 seed 真續訓 / 43組 / 300 epochs**，工作 `ShuntLoss6_CCD1_300E_20261022` GPU PASS、Best train epoch 298。實際 Shunt 原版品質工具在 4 個獨立 holdout（2 NG + 2 OK）上：原廠 R IoU **0.9406**、舊 Loss1 300 Epoch **0.2495**、新 Loss6 300 Epoch **0.7771**；新版訓練集 IoU **0.9742**。**改進明顯但仍未達原廠，禁止部署**。新版本 `AuditShuntLoss6Recovery.ps1` 已 PASS，結果 `IMPROVED_LOSS6_STILL_NOT_QUALIFIED`；已封鎖新的舊版長訓練入口。完整分析參見 `docs/SHUNTVC_TRAINING_20260930_RECOVERY_20261022.md`，避免其他 Agent 再抄 9/14 舊模板。
+
+> **2026-10-22 最新（使用者校正）：優先 IoU、General CCD1 至少 300 epoch，而不是 Ng2 末端 Recipe 判定。** 已新增 `StageDiaCcd1LongTrain.ps1`、`EvaluateDiaCcd1Iou.py`、`AuditDiaCcd1Iou.ps1` 與固定資料雜湊／保留家族的長訓練模式。CCD1 原始配對資料 21 OK、32 NG（NG 實際只有 8 個原始家族）；保留 2 OK + 2 NG 家族，剩下 19 OK + 24 NG 共43配對做真實 **300 epoch** GPU 訓練，工作 `20261022T050341Z-33c441fa` **SUCCEEDED**、loss=4.406e-06。IoU 採 ProjectHub 已驗證的 220/255 閾值，原廠 NG 保留 IoU 0.9381，1 epoch 0.8526，300 epoch 0.3170；同一 300 模型訓練集 NG IoU 卻 0.9987，**疑似嚴重過擬合，品質 Gate BLOCKED，禁止正式部署**。IoU 前處理仍需與原版逐像素比對，保留樣本數尚少。詳細參考 `docs/DIA_CCD1_IOU_300_EPOCH_20261022.md`，不得只引用先前的 `Ng2` A/B PASS 判定。
+
+> **2026-10-22 最新：DIA 原廠與新候選模型真實離線 `InspectFile` A/B 完成，品質 Gate 已明確封鎖候選部署。** 以唯讀 `D:\delta\Welding\DIAChip8Side` 的 `3923-R002`、S1 原廠 OK/NG 圖各一張，在兩個獨立 Gate 上使用相同 Recipe、原版 C# Facade / DeltaAIProcess DLL 與不同 AI Enhance 模型：原廠 `R002-CCD1` 為 OK→Ok、NG→Ng2；候選 `20261022T033549Z-8e528262` 為 OK→Ng2、NG→Ng2。兩套均真正產生 R/G/B 增強圖片、完成原版定位及 InspectFile、退出碼 0、模型 SHA 不變，且兩張影像的增強 PNG SHA 均不同。NG2 來源是 `BinaryTools5 AC-壓傷` 後段規則；**候選跨 CCD4 NG-only 1 epoch 的工程驗證使 S1 OK 誤判，不可升級正式模型**。已新增 `TestDiaCandidateInspect.ps1`、`StageDiaVendorBaselineGate.ps1`、`CompareDiaCandidateAB.ps1`；`qualification_result.json` 固定 `DIA_PROMOTION_GATE=BLOCKED DIFFERING_BINS=1 OF=2`，未部署。完整交接見 `docs/DIA_CANDIDATE_INSPECT_AB_20261022.md`，下方單獨 ReadModel PASS 並不代表品質 Gate PASS。
+
+> **2026-10-22 最新：ProjectHub ModelConverter + 台達原版 ReadModel 端到端 PASS。** 從 ProjectHub.Native 的 AITraining playbooks 確認 General `.h5d → .pbd` 正式轉換契約；新增 `StageModelConverter.ps1` 將 SHA 固定的 PBD Worker、transformation helper、PyFrozenLib 分層複製到本案自有 AppBase（排除 1.3GB Locate TensorRT）。本地 `--train-general-convert 20261022T033549Z-8e528262` 使用原廠已包裝 HDF5 候選檔，真正轉換 `candidate.h5d` + `candidate.pbd`，Worker `SERVER_RESULT PASS PBD`，SHA 驗證 PASS，未部署。之後 `TestDiaCandidateReadModel.ps1` 在 `Gate-20261022-115857` 的 3923-R002 S1 Recipe 隔離副本以原版 C# / DeltaAIProcess `LoadConfiguredModel` 真正讀取新模型，`SUCCESS=True LOADED=True TENSOR_RT=False`，再次直接 CLI exit 0、stderr 空、兩份模型 SHA 未改。**僅 ReadModel Gate，不是 InspectFile / 準確率 / 量產部署驗收。** 詳 `docs/DIA_CANDIDATE_CONVERSION_READMODEL_20261022.md`；下方舊的「轉換尚未完成」為歷史記錄。
+
+> **2026-10-22 最新：原廠 DIA 真實 GPU 訓練已 PASS（取代下方舊的 NOT_RUN 紀錄）。** 已從唯讀 `D:\delta\Welding\DIAChip8Side` 匯入完整 `3923-R002` Recipe、7/8 站原廠模型（S5 原始 `06077-15.h5d` 缺失）、CCD4 20 組 X/Y 標註，以及原廠 `Training\Model\navs.h5`（31.55MB）與 `navs.ini`（256x256、UnetDiv4、Loss1）。本案 `StageDiaVendorSample.ps1` 已執行 SHA 驗證 PASS；原版 Recipe CLI 檢查 PASS；新增白名單 `--train-general-plan-profile`，維持 1 epoch/batch1/最多8筆/900秒/永不自動部署。實測候選 `20261022T033549Z-8e528262`：`--train-general-run` **PASS**，`epochs_completed=1`，TensorFlow 2.7.0 偵測 GPU:0，loss=0.078627，候選 H5 SHA 與原 seed 不同、成功標記及 JSON 已核對。**僅功能驗證，不代表模型準確率或 ReadModel/Inspect 已驗收，未部署至正式 Model。** 後續以 `docs/DIA_VENDOR_TRAIN_SUCCESS_20261022.md` 為準；下方先前未訓練／缺 seed 的記錄是歷史狀態。
 
 > **2026-10-22 上午 Train Executor Gate：** 新增 GeneralTrainerExecutor.cs、--train-general-run JOB_ID，僅在 PREPARED 候選工作執行 AppBase DAVS，支援 900 秒限時、stop.request、stdout/stderr、嚴格校驗 training_result.json、候選模型 SHA 與成功標記；不覆蓋 active 模型。已實測 Build Release、子程序逾時／停止／假結果拒絕、三條訓練資料契約、Twin 12/12、原版 GUI 啟閉皆 PASS。此機 AppBase TensorFlow 2.7.0/GPU=1 實測 PASS，但 TrainingSeed 缺失，**GPU 真正 Train NOT_RUN**。詳 docs/GENERAL_TRAIN_EXECUTOR_GATE_20261022.md。較早 StageGeneralTrainer.ps1 的大型 staging 未驗證變更仍保留。
 
