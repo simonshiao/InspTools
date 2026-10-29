@@ -35,6 +35,7 @@ namespace InspTools.Standalone
             // The caller must first succeed in NativeR3RecipeSession.Open(),
             // which verifies AppBase, recipe prefix and exact patched DLL SHA.
             var editor = new R3IsolatedEditor(main, recipe);
+            editor.RouteMainLocateButtonToIsolatedEditor();
             var menu = main.ContextMenu;
             if (menu == null) throw new InvalidOperationException("R3 ContextMenu 不存在");
             var edit = new MenuItem { Header = "R3｜原版定位工具編輯（隔離測試）" };
@@ -53,7 +54,99 @@ namespace InspTools.Standalone
             return editor;
         }
 
+        private void RouteMainLocateButtonToIsolatedEditor()
+        {
+            const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public |
+                BindingFlags.NonPublic;
+            FieldInfo buttonField = _main.GetType().GetField("btn_LocateTool", flags);
+            Button button = buttonField == null ? null : buttonField.GetValue(_main) as Button;
+            MethodInfo originalHandler = _main.GetType().GetMethod("Btn_LocateTool_Click", flags);
+            if (button == null || originalHandler == null)
+                throw new MissingMemberException("ToolsWindow.btn_LocateTool / Btn_LocateTool_Click");
+
+            var original = (RoutedEventHandler)Delegate.CreateDelegate(
+                typeof(RoutedEventHandler), _main, originalHandler);
+            button.Click -= original;
+            button.Click += delegate
+            {
+                SafeInvoke(delegate
+                {
+                    FieldInfo stationIndexField = _main.GetType().GetField("StationIndex", flags);
+                    if (stationIndexField == null)
+                        throw new MissingFieldException("ToolsWindow.StationIndex");
+                    int station = Convert.ToInt32(stationIndexField.GetValue(_main)) + 1;
+                    Edit(station);
+                });
+            };
+        }
+
         internal void OpenStation(int station) { SafeInvoke(() => Edit(station)); }
+        internal void OpenStation(int station, string[] imagePaths, int imageIndex)
+        {
+            SafeInvoke(() => Edit(station, imagePaths, imageIndex));
+        }
+        internal void OpenNativeTool(int station, string tool, string[] imagePaths, int imageIndex)
+        {
+            SafeInvoke(() => EditNativeTool(station, tool, imagePaths, imageIndex));
+        }
+
+        private void EditNativeTool(int station, string tool, string[] files, int index)
+        {
+            if (tool != "way" && tool != "face") throw new ArgumentException("Unknown tool");
+            if (files == null || files.Length == 0) throw new InvalidDataException("請先在 Luma 載入圖庫。");
+            files = files.Where(File.Exists).ToArray();
+            if (files.Length == 0) throw new FileNotFoundException("找不到 Luma 圖片。");
+            index = Math.Max(0, Math.Min(index, files.Length - 1));
+            Array stations = _main.GetType().GetField("Station").GetValue(_main) as Array;
+            object target = stations.GetValue(station - 1);
+            Type dialogType = _main.GetType().Assembly.GetType(
+                tool == "way" ? "InspTools.AOI.SelectWayWindow" : "InspTools.AOI.SelectFaceWindow", true);
+            Window dialog = Activator.CreateInstance(dialogType) as Window;
+            if (dialog == null) throw new InvalidOperationException("原廠工具視窗建立失敗。");
+            var cvAssembly = Assembly.LoadFrom(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "OpenCvSharp.dll"));
+            Type matType = cvAssembly.GetType("OpenCvSharp.Mat", true);
+            Type rectType = cvAssembly.GetType("OpenCvSharp.Rect", true);
+            Type cvType = cvAssembly.GetType("OpenCvSharp.Cv2", true);
+            Type modeType = cvAssembly.GetType("OpenCvSharp.ImreadModes", true);
+            var imread = cvType.GetMethod("ImRead", new[] { typeof(string), modeType });
+            var buffer = dialogType.GetMethod("SetBuffer", new[] { matType, rectType });
+            if (buffer == null) throw new MissingMethodException("Native SelectWay/Face.SetBuffer");
+            dialogType.GetMethod("LoadLanguage", new[] { typeof(int) })?.Invoke(dialog, new object[] { 1 });
+            Type stationType = target.GetType();
+            if (tool == "way")
+                dialogType.GetMethod("SetInspection", new[] { stationType, typeof(int) })
+                    .Invoke(dialog, new object[] { target, station - 1 });
+            else
+                dialogType.GetMethod("SetInspection", new[] { typeof(int), stationType })
+                    .Invoke(dialog, new object[] { 0, target });
+            Action showImage = () =>
+            {
+                object mat = imread.Invoke(null, new[] { (object)files[index], Enum.Parse(modeType, "Color") });
+                try
+                {
+                    int width = (int)matType.GetProperty("Width").GetValue(mat);
+                    int height = (int)matType.GetProperty("Height").GetValue(mat);
+                    if (width <= 0 || height <= 0) throw new InvalidDataException("圖片無效：" + files[index]);
+                    object rect = Activator.CreateInstance(rectType, new object[] { 0, 0, width, height });
+                    buffer.Invoke(dialog, new[] { mat, rect });
+                    dialog.Title = (tool == "way" ? "選向" : "選面") +
+                        " - " + (index + 1) + " / " + files.Length + "（PgUp／PgDn 切換）";
+                }
+                finally { (mat as IDisposable)?.Dispose(); }
+            };
+            dialog.PreviewKeyDown += (sender, e) =>
+            {
+                if (e.Key == System.Windows.Input.Key.PageDown || e.Key == System.Windows.Input.Key.PageUp)
+                {
+                    index = (index + (e.Key == System.Windows.Input.Key.PageDown ? 1 : -1) + files.Length) % files.Length;
+                    showImage();
+                    e.Handled = true;
+                }
+            };
+            showImage();
+            dialog.Owner = _main;
+            dialog.ShowDialog();
+        }
         internal void SaveChanges() { SafeInvoke(Save); }
         // Original dialogs commit their changes into ParamFile when closed.
         // Ctrl+S on the native host persists those edits without requiring
@@ -71,7 +164,9 @@ namespace InspTools.Standalone
             }
         }
 
-        private void Edit(int station)
+        private void Edit(int station) { Edit(station, null, 0); }
+
+        private void Edit(int station, string[] imagePaths, int imageIndex)
         {
             if (_dirty)
             {
@@ -82,13 +177,62 @@ namespace InspTools.Standalone
             if (stations == null || stations.Length != 8)
                 throw new InvalidDataException("真實八站檢測物件不完整");
             object target = stations.GetValue(station - 1);
+
+            // User-approved R3-only override: expose the original AI Locate
+            // controls in the isolated editor. Keep inference off on open so
+            // preview images cannot start model work implicitly. These are
+            // in-memory values on the copied test station, never saved here.
+            FieldInfo paramField = target.GetType().GetField("paramFile",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            object paramFile = paramField == null ? null : paramField.GetValue(target);
+            FieldInfo aiLocatePermission = paramFile == null ? null : paramFile.GetType().GetField(
+                "AllowEnableAILocate",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (aiLocatePermission == null || aiLocatePermission.FieldType != typeof(bool))
+                throw new MissingFieldException("ParamFile.AllowEnableAILocate");
+            aiLocatePermission.SetValue(paramFile, true);
+            FieldInfo locateField = paramFile.GetType().GetField("LocateParam",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            object locateParam = locateField == null ? null : locateField.GetValue(paramFile);
+            FieldInfo aiEnabled = locateParam == null ? null : locateParam.GetType().GetField(
+                "EnableAILocate", BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            if (aiEnabled == null || aiEnabled.FieldType != typeof(bool))
+                throw new MissingFieldException("LocateParam.EnableAILocate");
+            aiEnabled.SetValue(locateParam, false);
+            if (locateParam.GetType().IsValueType)
+                locateField.SetValue(paramFile, locateParam);
+
             Type dialogType = _main.GetType().Assembly.GetType("InspTools.AOI.LocateWindow", true);
             Window dialog = Activator.CreateInstance(dialogType) as Window;
             if (dialog == null) throw new InvalidOperationException("原版 LocateWindow 建構失敗");
             dialogType.GetMethod("SetInspection", new[] { target.GetType() })
                 .Invoke(dialog, new[] { target });
-            dialogType.GetMethod("SetPreviewMode", new[] { typeof(bool) })
-                .Invoke(dialog, new object[] { false });
+            if (imagePaths != null && imagePaths.Length > 0)
+            {
+                imagePaths = imagePaths.Where(File.Exists).ToArray();
+                if (imagePaths.Length > 0)
+                {
+                    imageIndex = Math.Max(0, Math.Min(imageIndex, imagePaths.Length - 1));
+                    // Use the original LocateWindow image-source navigation rather
+                    // than duplicating previous/next UI in the Luma host.
+                    dialogType.GetMethod("SetImageSource").Invoke(dialog,
+                        new object[] { 1, imagePaths, imageIndex, 0, 0, 0 });
+                    var cvAssembly = Assembly.LoadFrom(Path.Combine(
+                        AppDomain.CurrentDomain.BaseDirectory, "OpenCvSharp.dll"));
+                    Type matType = cvAssembly.GetType("OpenCvSharp.Mat", true);
+                    Type cvType = cvAssembly.GetType("OpenCvSharp.Cv2", true);
+                    Type modeType = cvAssembly.GetType("OpenCvSharp.ImreadModes", true);
+                    var imread = cvType.GetMethod("ImRead", new[] { typeof(string), modeType });
+                    object mat = imread.Invoke(null, new[] { (object)imagePaths[imageIndex],
+                        Enum.Parse(modeType, "Color") });
+                    try
+                    {
+                        dialogType.GetMethod("SetBuffer", new[] { matType })
+                            .Invoke(dialog, new[] { mat });
+                    }
+                    finally { (mat as IDisposable)?.Dispose(); }
+                }
+            }
             dialog.Owner = _main;
             dialog.ShowDialog();
             _dirty = true; // The vendor dialog writes to ParamFile, not disk.

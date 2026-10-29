@@ -193,3 +193,6 @@ ProjectHub 正式顯示名稱改為 `DIA 檢測執行環境`；內部 ID 暫保�
 
 新的 R1 route-reset evidence 保存在本專案 `output\ROUTE_RESET_R1_ACCEPTANCE_20260916.md`。後續新工作使用新的 `DIAIR-*` Task，不修改已 ACCEPTED 的 `IR2-*` 歷史卡。
 
+
+## 2026-10-29 AI 定位實圖突破
+見 docs/AI_LOCATE_PRECOMPILED_FIX_20261029.md：新增獨立 LocatePrecompiledExperiment 建置，解除已備模型推論對舊trainer的依賴；CCD1 OK/NG兩圖的GPU AI前定位與四邊定位實測成功。低階定位驗證，不是完整Inspect或GUI正式發布，尚未接Luma。

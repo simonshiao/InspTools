@@ -90,10 +90,50 @@ namespace InspTools.Standalone
                 bool editorEnabled = NativeR3RecipeSession.IsPortableReview() ||
                     Array.Exists(args ?? new string[0],
                     a => string.Equals(a, "--enable-r3-editor", StringComparison.OrdinalIgnoreCase));
+                R3IsolatedEditor editor = null;
                 if (editorEnabled)
                 {
-                    R3IsolatedEditor.Attach(toolsWindow, nativeR3Recipe);
+                    editor = R3IsolatedEditor.Attach(toolsWindow, nativeR3Recipe);
                     toolsWindow.Title += " / 定位可編輯";
+                }
+                bool openLocate = Array.Exists(args ?? new string[0],
+                    a => string.Equals(a, "--open-locate", StringComparison.OrdinalIgnoreCase));
+                bool openWay = Array.Exists(args ?? new string[0],
+                    a => string.Equals(a, "--open-select-way", StringComparison.OrdinalIgnoreCase));
+                bool openFace = Array.Exists(args ?? new string[0],
+                    a => string.Equals(a, "--open-select-face", StringComparison.OrdinalIgnoreCase));
+                if (openLocate || openWay || openFace)
+                {
+                    if (editor == null)
+                        throw new InvalidOperationException("定位編輯入口不可用，需 R3 隔離模式。");
+                    // ToolsWindow is only the native station/Recipe lifetime owner.
+                    // Do not expose its shell when Luma asks for LocateWindow directly.
+                    toolsWindow.ShowInTaskbar = false;
+                    toolsWindow.ShowActivated = false;
+                    toolsWindow.Opacity = 0;
+                    toolsWindow.Loaded += delegate
+                    {
+                        toolsWindow.Dispatcher.BeginInvoke(
+                            System.Windows.Threading.DispatcherPriority.ApplicationIdle,
+                            new Action(() =>
+                            {
+                                toolsWindow.Hide();
+                                try
+                                {
+                                    string listPath = GetArg(args, "--luma-images");
+                                    int imageIndex;
+                                    if (!int.TryParse(GetArg(args, "--luma-index"), out imageIndex))
+                                        imageIndex = 0;
+                                    string[] files = !string.IsNullOrWhiteSpace(listPath) && File.Exists(listPath)
+                                        ? File.ReadAllLines(listPath) : new string[0];
+                                    if (openWay || openFace)
+                                        editor.OpenNativeTool(station, openWay ? "way" : "face", files, imageIndex);
+                                    else
+                                        editor.OpenStation(station, files, imageIndex);
+                                }
+                                finally { toolsWindow.Close(); }
+                            }));
+                    };
                 }
                 if (editorSmokeRequested)
                 {
@@ -202,7 +242,8 @@ namespace InspTools.Standalone
             if (window == null)
                 throw new InvalidDataException("Decoded InspTools.ToolsWindow could not be constructed.");
 
-            InvokeIfPresent(toolsWindowType, window, "SetRemoteMode");
+            // Standalone R3 owns a real local Recipe/station session. Match
+            // Chao8Side formal mode and keep the original local ToolsWindow UI.
             InvokeIfPresent(toolsWindowType, window, "LoadLanguage", 1);
             return window;
         }
