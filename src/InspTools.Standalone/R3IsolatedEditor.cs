@@ -119,6 +119,32 @@ namespace InspTools.Standalone
             else
                 dialogType.GetMethod("SetInspection", new[] { typeof(int), stationType })
                     .Invoke(dialog, new object[] { 0, target });
+            object param = stationType.GetField("paramFile").GetValue(target);
+            FieldInfo enabledField = param.GetType().GetField(tool == "way" ? "SelectWayON" : "SelectFaceON");
+            if (enabledField == null || enabledField.FieldType != typeof(bool))
+                throw new MissingFieldException("SelectWayON / SelectFaceON");
+            var enabledCheck = new CheckBox
+            {
+                Content = tool == "way" ? "啟用選向" : "啟用選面",
+                IsChecked = (bool)enabledField.GetValue(param),
+                Margin = new Thickness(12, 7, 12, 7)
+            };
+            var saveButton = new Button { Content = "儲存 Recipe", Padding = new Thickness(12, 4, 12, 4), Margin = new Thickness(4) };
+            var header = new DockPanel();
+            DockPanel.SetDock(saveButton, Dock.Right);
+            header.Children.Add(saveButton);
+            header.Children.Add(enabledCheck);
+            UIElement originalContent = dialog.Content as UIElement;
+            if (originalContent == null) throw new InvalidOperationException("原版視窗內容遺失");
+            dialog.Content = null;
+            var wrapper = new DockPanel();
+            DockPanel.SetDock(header, Dock.Top);
+            wrapper.Children.Add(header);
+            wrapper.Children.Add(originalContent);
+            dialog.Content = wrapper;
+            enabledCheck.Checked += (sender, e) => enabledField.SetValue(param, true);
+            enabledCheck.Unchecked += (sender, e) => enabledField.SetValue(param, false);
+            saveButton.Click += (sender, e) => SaveNativeChanges();
             Action showImage = () =>
             {
                 object mat = imread.Invoke(null, new[] { (object)files[index], Enum.Parse(modeType, "Color") });
