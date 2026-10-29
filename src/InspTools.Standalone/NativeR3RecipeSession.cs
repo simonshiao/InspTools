@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -17,6 +17,13 @@ namespace InspTools.Standalone
     {
         private const string PinnedLazyDllSha =
             "ACD6DBCF266705108021126B9E91C605D87500F21608DA70946F5CE25789C34B";
+        // Rebuilt on CHAO3 from SHA-pinned archived LocateTool.cs and R1 DLL.
+        // The local compiler emitted a different binary SHA. This alternate
+        // candidate requires its own explicit marker; never silently accept
+        // an arbitrary rebuilt DLL as the audited CHAO2 R3 release.
+        private const string Chao3LocalDllSha =
+            "BC56633CD5DD37FAF4274181D9A0100B5A99EAB0D48BDBFDAFDABDFEE71C0223";
+        private const string Chao3LocalMarker = "INSPTOOLS_CHAO3_LOCAL_R3_SHA_V1";
         private const string PortableMarker = "INSPTOOLS_PORTABLE_REVIEW_R3_V1";
 
         internal static bool IsPortableReview()
@@ -28,10 +35,19 @@ namespace InspTools.Standalone
             {
                 string dll = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
                     "InspTools.dll");
-                return string.Equals(File.ReadAllText(marker).Trim(),
-                    PortableMarker, StringComparison.Ordinal) &&
-                    File.Exists(dll) && string.Equals(DllSha(dll),
-                    PinnedLazyDllSha, StringComparison.OrdinalIgnoreCase);
+                if (!string.Equals(File.ReadAllText(marker).Trim(),
+                    PortableMarker, StringComparison.Ordinal) || !File.Exists(dll))
+                    return false;
+                string sha = DllSha(dll);
+                if (string.Equals(sha, PinnedLazyDllSha,
+                    StringComparison.OrdinalIgnoreCase)) return true;
+                string localMarker = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    "portable-chao3-local-r3.marker");
+                return string.Equals(sha, Chao3LocalDllSha,
+                    StringComparison.OrdinalIgnoreCase) &&
+                    File.Exists(localMarker) &&
+                    string.Equals(File.ReadAllText(localMarker).Trim(),
+                        Chao3LocalMarker, StringComparison.Ordinal);
             }
             catch { return false; }
         }
@@ -251,7 +267,14 @@ namespace InspTools.Standalone
             string dll = Path.Combine(appBase, "InspTools.dll");
             if (!File.Exists(dll)) throw new FileNotFoundException("InspTools.dll", dll);
             string hash = DllSha(dll);
-            if (!string.Equals(hash, PinnedLazyDllSha, StringComparison.OrdinalIgnoreCase))
+            // CHAO3's separately marked candidate is pinned in IsPortableReview.
+            // The previous strict CHAO2-only check rejected its valid Recipe
+            // even after the marker was verified, leaving all tools disabled.
+            bool auditedChao2 = string.Equals(hash, PinnedLazyDllSha,
+                StringComparison.OrdinalIgnoreCase);
+            bool localChao3 = string.Equals(hash, Chao3LocalDllSha,
+                StringComparison.OrdinalIgnoreCase) && IsPortableReview();
+            if (!auditedChao2 && !localChao3)
                 throw new InvalidOperationException("R3 DLL Hash 不符，拒絕使用原版或未知 DLL");
         }
     }

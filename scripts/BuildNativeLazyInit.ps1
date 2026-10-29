@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$Phase1SourceRoot = '',
     [string]$Configuration = 'Release',
     [switch]$ModelPrecompiledExperiment
@@ -92,14 +92,30 @@ $stream = $assembly.GetManifestResourceStream('InspTools.g.resources')
 if ($null -eq $stream) { throw 'Pinned R1 DLL lacks InspTools.g.resources' }
 $resourceFile = Join-Path $Stage 'InspTools.g.resources'
 try {
-    $destination = [IO.File]::Open($resourceFile, [IO.FileMode]::CreateNew)
-    try { $stream.CopyTo($destination) } finally { $destination.Dispose() }
+    if (Test-Path -LiteralPath $resourceFile) {
+        # Some archived Phase-1 trees already include the original WPF
+        # resources. Never overwrite them silently; accept only byte-identical
+        # resources from the pinned R1 assembly.
+        $sha = [Security.Cryptography.SHA256]::Create()
+        try {
+            $embeddedHash = [BitConverter]::ToString(
+                $sha.ComputeHash($stream)).Replace('-', '')
+        } finally { $sha.Dispose() }
+        $existingHash = (Get-FileHash -LiteralPath $resourceFile -Algorithm SHA256).Hash
+        if ($existingHash -ne $embeddedHash) {
+            throw 'Archived WPF resources differ from pinned R1 DLL'
+        }
+    } else {
+        $destination = [IO.File]::Open($resourceFile, [IO.FileMode]::CreateNew)
+        try { $stream.CopyTo($destination) } finally { $destination.Dispose() }
+    }
 } finally { $stream.Dispose() }
 
 $project = Join-Path $Stage 'InspTools.unpacked.csproj'
 $arguments = @('build', $project, '-c', $Configuration, '--nologo',
     ('/p:TemplateRuntimeRoot=' + $Donor),
-    '/p:GenerateAssemblyInfo=false', '--ignore-failed-sources')
+    '/p:GenerateAssemblyInfo=false',
+    '/p:LangVersion=latest', '--ignore-failed-sources')
 & dotnet @arguments
 if ($LASTEXITCODE -ne 0) { throw 'Isolated R3 native source build failed; R1 DLL untouched' }
 

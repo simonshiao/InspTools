@@ -6,6 +6,11 @@
 
 ## 如何啟動
 
+新版打包採用簡短遞增目錄名稱：`output\InspToolsV1`、`output\InspToolsV2`、`output\InspToolsV3`……。
+打包腳本 `scripts\BuildStandaloneR3.ps1` 會自動產生下一個版號，也可加 `-Version 2` 指定；
+任何已存在版本都不會覆寫。日期、雜湊與建置資訊放在各版 `standalone-manifest.json`，
+原本 `output\standalone-r3` 的歷史候選不搬移、不刪除。
+
 在這個資料夾直接開啟 **InspToolsStandalone.exe**。不需要先啟動 ShuntVC、Chao8Side、DIA、ProjectHub、Replica 或本地測試程式；編譯 DLL、原生依賴與原版 ToolsWindow 已放在同一資料夾。
 
 ## Recipe 管理

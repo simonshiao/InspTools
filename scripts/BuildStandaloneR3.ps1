@@ -1,6 +1,8 @@
-﻿param(
+param(
     [switch]$Rebuild,
     [switch]$Zip,
+    [switch]$Chao3LocalR3,
+    [int]$Version = 0,
     [string]$Configuration = 'Release',
     [string]$LauncherDirectory = ''
 )
@@ -20,6 +22,8 @@ if (-not $App.StartsWith((Join-Path $Root 'output') + [IO.Path]::DirectorySepara
 $Native = Join-Path $Root ('output\native-lazy\generated-source\bin\' +
     $Configuration + '\net472\InspTools.dll')
 $NativeSha = 'ACD6DBCF266705108021126B9E91C605D87500F21608DA70946F5CE25789C34B'
+$LocalR3Sha = 'BC56633CD5DD37FAF4274181D9A0100B5A99EAB0D48BDBFDAFDABDFEE71C0223'
+$SelectedSha = if ($Chao3LocalR3) { $LocalR3Sha } else { $NativeSha }
 $OriginalSha = '85C4D87E59FB42520DE89B8C2AC04351E4701B809F21F8302F6266F4D96071D1'
 $Marker = 'INSPTOOLS_PORTABLE_REVIEW_R3_V1'
 
@@ -33,17 +37,25 @@ if (-not (Test-Path -LiteralPath (Join-Path $App 'InspToolsStandalone.exe')) -or
     -not (Test-Path -LiteralPath $Native)) {
     throw 'Run Build.ps1 and BuildNativeLazyInit.ps1 before packaging'
 }
-if ((Get-FileHash -LiteralPath $Native -Algorithm SHA256).Hash -ne $NativeSha) {
+if ((Get-FileHash -LiteralPath $Native -Algorithm SHA256).Hash -ne $SelectedSha) {
     throw 'R3 patched DLL checksum mismatch: refusing candidate'
 }
 if ((Get-FileHash -LiteralPath (Join-Path $App 'InspTools.dll') -Algorithm SHA256).Hash -ne $OriginalSha) {
     throw 'Launcher source donor must remain the pinned R1, no silent replacement'
 }
 
-$OutputRoot = Join-Path $Root 'output\standalone-r3'
+$OutputRoot = Join-Path $Root 'output'
 [IO.Directory]::CreateDirectory($OutputRoot) | Out-Null
-$stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
-$candidate = Join-Path $OutputRoot ('InspTools-Portable-R3-' + $stamp)
+if ($Version -lt 0) { throw 'Version must be >= 1 (or 0 for auto next)' }
+if ($Version -eq 0) {
+    $previous = @(Get-ChildItem -LiteralPath $OutputRoot -Directory |
+        Where-Object { $_.Name -match '^InspToolsV[1-9][0-9]*$' } |
+        ForEach-Object { [int]($_.Name.Substring('InspToolsV'.Length)) })
+    $Version = if ($previous.Count -gt 0) {
+        [int](($previous | Measure-Object -Maximum).Maximum) + 1
+    } else { 1 }
+}
+$candidate = Join-Path $OutputRoot ('InspToolsV' + $Version)
 if (Test-Path -LiteralPath $candidate) { throw 'Package folder already exists; refusing overwrite' }
 [IO.Directory]::CreateDirectory($candidate) | Out-Null
 
@@ -62,6 +74,12 @@ try {
     }
     [IO.File]::WriteAllText((Join-Path $candidate 'portable-review.marker'),
         $Marker + [Environment]::NewLine, [Text.Encoding]::ASCII)
+    if ($Chao3LocalR3) {
+        [IO.File]::WriteAllText(
+            (Join-Path $candidate 'portable-chao3-local-r3.marker'),
+            'INSPTOOLS_CHAO3_LOCAL_R3_SHA_V1' + [Environment]::NewLine,
+            [Text.Encoding]::ASCII)
+    }
     $instructions = Join-Path $Root 'docs\PORTABLE_R3_CURRENT.md'
     if (-not (Test-Path -LiteralPath $instructions)) {
         throw 'Portable R3 user-facing instructions are missing'
@@ -73,6 +91,10 @@ try {
     $manifest = [ordered]@{
         schema = 'InspTools.Standalone.R3.PortableCandidate.v1'
         status = 'CANDIDATE_NOT_PRODUCTION'
+        version = 'InspToolsV' + $Version
+        packaged_at = (Get-Date).ToString('yyyy-MM-ddTHH:mm:sszzz')
+        local_chao3_rebuild = [bool]$Chao3LocalR3
+        local_sha_not_chao2_audited = [bool]$Chao3LocalR3
         entry = 'InspToolsStandalone.exe'
         architecture = 'net472-x64-wpf'
         native_dll_sha256 = (Get-FileHash -LiteralPath (Join-Path $candidate 'InspTools.dll')).Hash
@@ -102,6 +124,7 @@ try {
     [pscustomobject]@{
         status='PASS'
         kind='portable-r3-candidate'
+        version='InspToolsV' + $Version
         path=$candidate
         native_sha256=$manifest.native_dll_sha256
         binary_mb=[math]::Round(($binFiles|Measure-Object Length -Sum).Sum/1MB,2)

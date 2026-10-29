@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$Configuration = 'Release',
     [string]$OutputSubdir = ''
 )
@@ -11,7 +11,7 @@ if ($OutputSubdir -and $OutputSubdir -notmatch '^[A-Za-z0-9_-]+$') {
 $Out = if ($OutputSubdir) { Join-Path $Root ("output\" + $OutputSubdir) } else {
     Join-Path $Root ("output\decoded-ui\" + $Configuration)
 }
-$Phase1Parent = Get-ChildItem -LiteralPath 'D:\delta' -Directory | Where-Object {
+$Phase1Parent = Get-ChildItem -LiteralPath 'D:\delta' -Directory -ErrorAction SilentlyContinue | Where-Object {
     Test-Path -LiteralPath (Join-Path $_.FullName 'Projects\InspToolsRebuild')
 } | Select-Object -First 1 -ExpandProperty FullName
 $Phase1Dll = $null
@@ -67,8 +67,18 @@ function Find-Net472Refs {
     throw 'No .NET Framework 4.7.2 reference assemblies found.'
 }
 
-$dotnet = (Get-Command dotnet -ErrorAction Stop).Source
-$sdkLine = dotnet --list-sdks | Select-Object -Last 1
+$dotnetCommand = Get-Command dotnet -ErrorAction SilentlyContinue
+$dotnet = if ($dotnetCommand) { $dotnetCommand.Source } else { $null }
+if (-not $dotnet) {
+    # CHAO3 has a shared portable SDK, not registered in machine PATH.
+    # Discover it without altering global PATH or installing any components.
+    $portable = @(Get-Item -Path 'D:\0_*\6.*\dotnet-sdk-8\dotnet.exe' -ErrorAction SilentlyContinue)
+    if ($portable.Count -eq 1) { $dotnet = $portable[0].FullName }
+}
+if (-not $dotnet -or -not (Test-Path -LiteralPath $dotnet)) {
+    throw 'No usable dotnet SDK executable (PATH or approved shared sdk-8)'
+}
+$sdkLine = & $dotnet --list-sdks | Select-Object -Last 1
 $sdkVersion = ($sdkLine -split ' ')[0]
 $csc = Join-Path (Split-Path -Parent $dotnet) ("sdk\" + $sdkVersion + "\Roslyn\bincore\csc.dll")
 $RefRoot = Find-Net472Refs

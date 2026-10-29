@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -594,11 +594,24 @@ namespace InspTools.Standalone
                 if (button == null || handler == null) continue;
                 FieldInfo innerField = _host.GetType().GetField(innerNames[i],
                     BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                // Copy* 是蓋在原版工具按鈕中央的裝飾層，沒有原版 Click 回呼。
-                // 讓滑鼠穿透裝飾層，由原版 Button 自己執行已綁定的 Click。
+                // Copy* is the vendor's visual overlay atop each native tool
+                // button. Mouse hit-testing can select this overlay instead
+                // of the tool beneath it. Forward the overlay click to the
+                // original routed Click (which already has its own handler),
+                // and mark the decoration event handled to prevent duplicate
+                // bubbling. Only attach after the R3 station session is valid.
                 var decoration = innerField == null ? null : innerField.GetValue(_host) as Button;
                 if (decoration != null && !ReferenceEquals(decoration, button))
-                    decoration.IsHitTestVisible = false;
+                {
+                    decoration.IsHitTestVisible = true;
+                    var nativeButton = button;
+                    decoration.Click += delegate(object sender, RoutedEventArgs e)
+                    {
+                        e.Handled = true;
+                        nativeButton.RaiseEvent(new RoutedEventArgs(
+                            ButtonBase.ClickEvent, nativeButton));
+                    };
+                }
                 if (!trace) continue;
                 string originalHandler = handler.Name;
                 button.PreviewMouseLeftButtonDown += delegate(object sender, System.Windows.Input.MouseButtonEventArgs e)
