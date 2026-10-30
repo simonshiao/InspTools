@@ -1,0 +1,11 @@
+namespace InspTools.AOI;
+
+public enum ScanDirection
+{
+	EM_LEFT_RIGHT,
+	EM_RIGHT_LEFT,
+	EM_TOP_BOTTOM,
+	EM_BOTTOM_TOP,
+	EM_LEFT_RIGHT_HOLE,
+	EM_RIGHT_LEFT_HOLE
+}

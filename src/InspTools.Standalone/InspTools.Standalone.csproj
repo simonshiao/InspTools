@@ -39,8 +39,12 @@
     <Compile Include="StandaloneRecipeCli.cs" />
     <Compile Include="StandaloneRecipeUi.cs" />
     <Compile Include="Chao8SideRecipePicker.cs" />
+    <Compile Include="Chao8SideAiProphetUiBridge.cs" />
+    <Compile Include="Chao8SideAiTrainingUiBridge.cs" />
+    <Compile Include="Chao8SideProductRuntimePaths.cs" />
+    <Compile Include="Chao8SideRebuiltTrainingWindow.cs" />
+    <Compile Include="Chao8SideRebuiltTrainingPreviewWindow.cs" />
     <Compile Include="ChaoSelfAiBridge.cs" />
-    <Compile Include="ChaoProphetOnnxPreview.cs" />
     <Compile Include="ChaoLocatePreviewUi.cs" />
     <Compile Include="BlankUiLifecycleGuard.cs" />
     <Compile Include="NativeRecipeProbe.cs" />

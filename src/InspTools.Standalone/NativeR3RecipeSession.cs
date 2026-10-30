@@ -25,6 +25,7 @@ namespace InspTools.Standalone
             "BC56633CD5DD37FAF4274181D9A0100B5A99EAB0D48BDBFDAFDABDFEE71C0223";
         private const string Chao3LocalMarker = "INSPTOOLS_CHAO3_LOCAL_R3_SHA_V1";
         private const string PortableMarker = "INSPTOOLS_PORTABLE_REVIEW_R3_V1";
+        internal static string CurrentRecipePath { get; private set; }
 
         internal static bool IsPortableReview()
         {
@@ -83,7 +84,7 @@ namespace InspTools.Standalone
             RequireIsolatedSandbox(recipeName);
             if (stationNumber < 1 || stationNumber > 8)
                 throw new ArgumentOutOfRangeException(nameof(stationNumber));
-            StandaloneRecipeStore.Validate(recipeName);
+            CurrentRecipePath = StandaloneRecipeStore.Validate(recipeName);
 
             Type windowType = window.GetType();
             Type stationType = windowType.Assembly.GetType(
@@ -178,6 +179,11 @@ namespace InspTools.Standalone
                     BindingFlags.NonPublic | BindingFlags.Instance);
                 if (auth == null) throw new MissingMethodException("ToolsWindow.CheckAuthNoDLG");
                 auth.Invoke(window, null);
+                // Report only feature availability, never authorization-file contents.
+                var authFlag = window.GetType().GetField("InspToolAuth", BindingFlags.NonPublic | BindingFlags.Instance);
+                var authFeature = window.GetType().GetField("AuthFunStr", BindingFlags.NonPublic | BindingFlags.Instance);
+                lines.AppendLine("Vendor authorization accepted=" + (authFlag == null ? "unknown" : Convert.ToString(authFlag.GetValue(window))));
+                lines.AppendLine("Vendor AI Locate feature tier=" + (authFeature == null ? "unknown" : Convert.ToString(authFeature.GetValue(window))));
 
                 object station = stations.GetValue(stationNumber - 1);
                 Type type = station.GetType();

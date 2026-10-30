@@ -1,0 +1,211 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <AssemblyName>InspTools</AssemblyName>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <UseWindowsForms>True</UseWindowsForms>
+    <UseWPF>True</UseWPF>
+    <TargetFramework>net472</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <TemplateRuntimeRoot Condition="'$(TemplateRuntimeRoot)' == ''">$(MSBuildThisFileDirectory)Runtime</TemplateRuntimeRoot>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>14.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace />
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="other\quicksetupwindow.baml" />
+    <None Remove="res\banner-wg.png" />
+    <None Remove="other\savefolderwindow.baml" />
+    <None Remove="other\saveparetochartwindow.baml" />
+    <None Remove="other\ngclonewindow.baml" />
+    <None Remove="stringresources.en-us.baml" />
+    <None Remove="aoi\enhancewindow.baml" />
+    <None Remove="throughputoutputwindow.baml" />
+    <None Remove="other\blobstatisticswindow.baml" />
+    <None Remove="stringresources.ja-jp.baml" />
+    <None Remove="other\edit2inputwindow.baml" />
+    <None Remove="res\chip.bmp" />
+    <None Remove="other\passwordwindow.baml" />
+    <None Remove="historyviewwindow.baml" />
+    <None Remove="aoi\locatewindow.baml" />
+    <None Remove="other\dnet3setupwindow.baml" />
+    <None Remove="other\onnxmodelswindow.baml" />
+    <None Remove="aoi\advlocatewindow.baml" />
+    <None Remove="other\recipelistwindow.baml" />
+    <None Remove="aoi\maskwindow.baml" />
+    <None Remove="aoi\matchtoolwindow.baml" />
+    <None Remove="aoi\lightmonitorwindow.baml" />
+    <None Remove="other\chartwindow.baml" />
+    <None Remove="aoi\smoothtoolwindow.baml" />
+    <None Remove="other\yieldretestwindow.baml" />
+    <None Remove="other\automatchwindow.baml" />
+    <None Remove="other\paretochartwindow.baml" />
+    <None Remove="aoi\measurewindow.baml" />
+    <None Remove="res\unlock.png" />
+    <None Remove="other\locatemodelswindow.baml" />
+    <None Remove="other\modelswindow.baml" />
+    <None Remove="other\selectimagewindow.baml" />
+    <None Remove="stringresources.zh-cn.baml" />
+    <None Remove="other\iteminputwindow.baml" />
+    <None Remove="res\obj3d.png" />
+    <None Remove="aoi\selectwaywindow.baml" />
+    <None Remove="aoi\differencetoolwindow.baml" />
+    <None Remove="stringresources.zh-tw.baml" />
+    <None Remove="other\aitrainingwindow.baml" />
+    <None Remove="other\traincsvwindow.baml" />
+    <None Remove="aoi\aitoolwindow.baml" />
+    <None Remove="aoi\newfonttoolwindow.baml" />
+    <None Remove="aoi\lineanalysiswindow.baml" />
+    <None Remove="other\modifylogfun.baml" />
+    <None Remove="other\paramcopywindow.baml" />
+    <None Remove="other\aiparamsetupwindow.baml" />
+    <None Remove="other\inspsurvwindow.baml" />
+    <None Remove="aoi\selectfacewindow.baml" />
+    <None Remove="other\dbsetupwindow.baml" />
+    <None Remove="toolswindow.baml" />
+    <None Remove="other\prophetonnxmodelswindow.baml" />
+    <None Remove="other\aipreviewwindow.baml" />
+    <None Remove="aoi\blockavgtoolwindow.baml" />
+    <None Remove="res\lock.png" />
+    <None Remove="other\hashtageditwindow.baml" />
+    <None Remove="aoi\irtoolwindow.baml" />
+    <None Remove="aoi\aiprophettoolwindow.baml" />
+    <None Remove="other\sizechartwindow.baml" />
+    <None Remove="aoi\fonttoolwindow.baml" />
+    <None Remove="aoi\binarywindow.baml" />
+    <None Remove="other\keyboard.baml" />
+    <None Remove="other\uisetupwindow.baml" />
+    <None Remove="other\aimarkwindow.baml" />
+    <EmbeddedResource Include="other\quicksetupwindow.baml" LogicalName="other/quicksetupwindow.baml" />
+    <EmbeddedResource Include="res\banner-wg.png" LogicalName="res/banner-wg.png" />
+    <EmbeddedResource Include="other\savefolderwindow.baml" LogicalName="other/savefolderwindow.baml" />
+    <EmbeddedResource Include="other\saveparetochartwindow.baml" LogicalName="other/saveparetochartwindow.baml" />
+    <EmbeddedResource Include="other\ngclonewindow.baml" LogicalName="other/ngclonewindow.baml" />
+    <EmbeddedResource Include="stringresources.en-us.baml" LogicalName="stringresources.en-us.baml" />
+    <EmbeddedResource Include="aoi\enhancewindow.baml" LogicalName="aoi/enhancewindow.baml" />
+    <EmbeddedResource Include="throughputoutputwindow.baml" LogicalName="throughputoutputwindow.baml" />
+    <EmbeddedResource Include="other\blobstatisticswindow.baml" LogicalName="other/blobstatisticswindow.baml" />
+    <EmbeddedResource Include="stringresources.ja-jp.baml" LogicalName="stringresources.ja-jp.baml" />
+    <EmbeddedResource Include="other\edit2inputwindow.baml" LogicalName="other/edit2inputwindow.baml" />
+    <EmbeddedResource Include="res\chip.bmp" LogicalName="res/chip.bmp" />
+    <EmbeddedResource Include="other\passwordwindow.baml" LogicalName="other/passwordwindow.baml" />
+    <EmbeddedResource Include="historyviewwindow.baml" LogicalName="historyviewwindow.baml" />
+    <EmbeddedResource Include="aoi\locatewindow.baml" LogicalName="aoi/locatewindow.baml" />
+    <EmbeddedResource Include="other\dnet3setupwindow.baml" LogicalName="other/dnet3setupwindow.baml" />
+    <EmbeddedResource Include="other\onnxmodelswindow.baml" LogicalName="other/onnxmodelswindow.baml" />
+    <EmbeddedResource Include="aoi\advlocatewindow.baml" LogicalName="aoi/advlocatewindow.baml" />
+    <EmbeddedResource Include="other\recipelistwindow.baml" LogicalName="other/recipelistwindow.baml" />
+    <EmbeddedResource Include="aoi\maskwindow.baml" LogicalName="aoi/maskwindow.baml" />
+    <EmbeddedResource Include="aoi\matchtoolwindow.baml" LogicalName="aoi/matchtoolwindow.baml" />
+    <EmbeddedResource Include="aoi\lightmonitorwindow.baml" LogicalName="aoi/lightmonitorwindow.baml" />
+    <EmbeddedResource Include="other\chartwindow.baml" LogicalName="other/chartwindow.baml" />
+    <EmbeddedResource Include="aoi\smoothtoolwindow.baml" LogicalName="aoi/smoothtoolwindow.baml" />
+    <EmbeddedResource Include="other\yieldretestwindow.baml" LogicalName="other/yieldretestwindow.baml" />
+    <EmbeddedResource Include="other\automatchwindow.baml" LogicalName="other/automatchwindow.baml" />
+    <EmbeddedResource Include="other\paretochartwindow.baml" LogicalName="other/paretochartwindow.baml" />
+    <EmbeddedResource Include="aoi\measurewindow.baml" LogicalName="aoi/measurewindow.baml" />
+    <EmbeddedResource Include="res\unlock.png" LogicalName="res/unlock.png" />
+    <EmbeddedResource Include="other\locatemodelswindow.baml" LogicalName="other/locatemodelswindow.baml" />
+    <EmbeddedResource Include="other\modelswindow.baml" LogicalName="other/modelswindow.baml" />
+    <EmbeddedResource Include="other\selectimagewindow.baml" LogicalName="other/selectimagewindow.baml" />
+    <EmbeddedResource Include="stringresources.zh-cn.baml" LogicalName="stringresources.zh-cn.baml" />
+    <EmbeddedResource Include="other\iteminputwindow.baml" LogicalName="other/iteminputwindow.baml" />
+    <EmbeddedResource Include="res\obj3d.png" LogicalName="res/obj3d.png" />
+    <EmbeddedResource Include="aoi\selectwaywindow.baml" LogicalName="aoi/selectwaywindow.baml" />
+    <EmbeddedResource Include="aoi\differencetoolwindow.baml" LogicalName="aoi/differencetoolwindow.baml" />
+    <EmbeddedResource Include="stringresources.zh-tw.baml" LogicalName="stringresources.zh-tw.baml" />
+    <EmbeddedResource Include="other\aitrainingwindow.baml" LogicalName="other/aitrainingwindow.baml" />
+    <EmbeddedResource Include="other\traincsvwindow.baml" LogicalName="other/traincsvwindow.baml" />
+    <EmbeddedResource Include="aoi\aitoolwindow.baml" LogicalName="aoi/aitoolwindow.baml" />
+    <EmbeddedResource Include="aoi\newfonttoolwindow.baml" LogicalName="aoi/newfonttoolwindow.baml" />
+    <EmbeddedResource Include="aoi\lineanalysiswindow.baml" LogicalName="aoi/lineanalysiswindow.baml" />
+    <EmbeddedResource Include="other\modifylogfun.baml" LogicalName="other/modifylogfun.baml" />
+    <EmbeddedResource Include="other\paramcopywindow.baml" LogicalName="other/paramcopywindow.baml" />
+    <EmbeddedResource Include="other\aiparamsetupwindow.baml" LogicalName="other/aiparamsetupwindow.baml" />
+    <EmbeddedResource Include="other\inspsurvwindow.baml" LogicalName="other/inspsurvwindow.baml" />
+    <EmbeddedResource Include="aoi\selectfacewindow.baml" LogicalName="aoi/selectfacewindow.baml" />
+    <EmbeddedResource Include="other\dbsetupwindow.baml" LogicalName="other/dbsetupwindow.baml" />
+    <EmbeddedResource Include="toolswindow.baml" LogicalName="toolswindow.baml" />
+    <EmbeddedResource Include="other\prophetonnxmodelswindow.baml" LogicalName="other/prophetonnxmodelswindow.baml" />
+    <EmbeddedResource Include="other\aipreviewwindow.baml" LogicalName="other/aipreviewwindow.baml" />
+    <EmbeddedResource Include="aoi\blockavgtoolwindow.baml" LogicalName="aoi/blockavgtoolwindow.baml" />
+    <EmbeddedResource Include="res\lock.png" LogicalName="res/lock.png" />
+    <EmbeddedResource Include="other\hashtageditwindow.baml" LogicalName="other/hashtageditwindow.baml" />
+    <EmbeddedResource Include="aoi\irtoolwindow.baml" LogicalName="aoi/irtoolwindow.baml" />
+    <EmbeddedResource Include="aoi\aiprophettoolwindow.baml" LogicalName="aoi/aiprophettoolwindow.baml" />
+    <EmbeddedResource Include="other\sizechartwindow.baml" LogicalName="other/sizechartwindow.baml" />
+    <EmbeddedResource Include="aoi\fonttoolwindow.baml" LogicalName="aoi/fonttoolwindow.baml" />
+    <EmbeddedResource Include="aoi\binarywindow.baml" LogicalName="aoi/binarywindow.baml" />
+    <EmbeddedResource Include="other\keyboard.baml" LogicalName="other/keyboard.baml" />
+    <EmbeddedResource Include="other\uisetupwindow.baml" LogicalName="other/uisetupwindow.baml" />
+    <EmbeddedResource Include="other\aimarkwindow.baml" LogicalName="other/aimarkwindow.baml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="OpenCvSharp">
+      <HintPath>$(TemplateRuntimeRoot)\OpenCvSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ML.OnnxRuntime">
+      <HintPath>$(TemplateRuntimeRoot)\Microsoft.ML.OnnxRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Core" />
+    <Reference Include="INIFileParser">
+      <HintPath>$(TemplateRuntimeRoot)\INIFileParser.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro">
+      <HintPath>$(TemplateRuntimeRoot)\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro.IconPacks">
+      <HintPath>$(TemplateRuntimeRoot)\MahApps.Metro.IconPacks.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro.IconPacks.Material">
+      <HintPath>$(TemplateRuntimeRoot)\MahApps.Metro.IconPacks.Material.dll</HintPath>
+    </Reference>
+    <Reference Include="UICommon">
+      <HintPath>$(TemplateRuntimeRoot)\UICommon.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts">
+      <HintPath>$(TemplateRuntimeRoot)\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf">
+      <HintPath>$(TemplateRuntimeRoot)\LiveCharts.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="HiroPChart">
+      <HintPath>$(TemplateRuntimeRoot)\HiroPChart.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Memory">
+      <HintPath>$(TemplateRuntimeRoot)\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>$(TemplateRuntimeRoot)\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="OnnxRuntimeEnv">
+      <HintPath>$(TemplateRuntimeRoot)\OnnxRuntimeEnv.dll</HintPath>
+    </Reference>
+    <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="OpenCvSharp.Extensions">
+      <HintPath>$(TemplateRuntimeRoot)\OpenCvSharp.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Management" />
+  </ItemGroup>
+  <ItemGroup>
+    <!--
+      Preserve the original WPF pack-resource layout. The exported individual
+      BAML/image files are useful for inspection, but the rebuilt assembly
+      embeds the original InspTools.g.resources container so that
+      Application.LoadComponent pack URIs resolve exactly as in the vendor DLL.
+    -->
+    <EmbeddedResource Remove="**\*.baml" />
+    <EmbeddedResource Remove="res\*.png" />
+    <EmbeddedResource Remove="res\*.bmp" />
+    <EmbeddedResource Include="InspTools.g.resources" LogicalName="InspTools.g.resources">
+      <WithCulture>false</WithCulture>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

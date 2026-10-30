@@ -115,7 +115,7 @@ foreach($m in $onnx){CopyVerified $m.FullName (Join-Path $Candidate ('PModel\'+$
 
 $manifest=[ordered]@{
     schema='InspTools.Chao8SideAiParity.v1'
-    source='D:\delta\Chao8Side'
+    source=$Donor
     recipe=$RecipeName
     source_dll_sha256='85C4D87E59FB42520DE89B8C2AC04351E4701B809F21F8302F6266F4D96071D1'
     status='ASSETS_STAGED_NOT_INFERENCE_VERIFIED'

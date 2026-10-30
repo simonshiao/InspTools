@@ -1,0 +1,2376 @@
+{
+  "schema": "InspToolsRebuild.DEV01.EditableSource.v1",
+  "source_root": "D:/delta/專案進度/Other/InspTools-1.3.16.28-Decompiled/src-rawbaml/InspTools",
+  "output_root": "D:/delta/專案進度/Projects/InspToolsRebuild/Source/InspTools-1.3.16.28-Editable",
+  "decoded_map": "D:/delta/專案進度/Projects/InspToolsRebuild/Output/DEV-01_DecodedConstants.json",
+  "decoded_map_entries": 12265,
+  "source_file_count": 233,
+  "source_cs_files": 167,
+  "copied_non_cs_files": 66,
+  "source_decoder_invocations": 22816,
+  "materialized_replacements": 22816,
+  "unresolved_replacements": 0,
+  "remaining_decoder_invocations": 0,
+  "remaining_decoder_files": [],
+  "unicode_non_ascii_char_count": 58784,
+  "project_patch": {
+    "hint_path_replacements": 14,
+    "template_runtime_root_default": "D:\\delta\\DIAChip8Side-Template",
+    "parameterized": true
+  },
+  "resource_inventory": {
+    "baml": 58,
+    "png": 4,
+    "bmp": 1,
+    "resources": 1,
+    "resx": 1
+  },
+  "frozen_manifest": {
+    "file_count": 233,
+    "tree_sha256": "2E38AE10709080EDBB2615317B89061522ADA5A24DF0A6ADD372C517856C31B1",
+    "files": [
+      {
+        "path": "-Module-.cs",
+        "bytes": 453879,
+        "sha256": "C15BCDB7339D680094A37773AB4D4376210A7C1B682D952BFA33AB103802EF09"
+      },
+      {
+        "path": "-PrivateImplementationDetails-.cs",
+        "bytes": 853,
+        "sha256": "BBDFEFCAFFF8A41AA31A735946D5D1ABD5B70FE0A8D69AB858E6B5A7FAFB54D1"
+      },
+      {
+        "path": "aoi/advlocatewindow.baml",
+        "bytes": 65035,
+        "sha256": "0E7D4E5243D072EFD1F049C96B1CB78AC1C229D5E49DA39879E2791E3E717FBB"
+      },
+      {
+        "path": "aoi/aiprophettoolwindow.baml",
+        "bytes": 18360,
+        "sha256": "4E8300FE65A018B8FCB636DE92EB11CEC1E2A5D5E46186A1F0174DAA3D1EAEE6"
+      },
+      {
+        "path": "aoi/aitoolwindow.baml",
+        "bytes": 15565,
+        "sha256": "DA4A911194A0BBC5E176AEB23F662E86D5FAA1247241F6F4474438A0680816A0"
+      },
+      {
+        "path": "aoi/binarywindow.baml",
+        "bytes": 81620,
+        "sha256": "DAD30424ABF396BB2B671ADFE83C33C90E6088021BEF3DBE6C4F931E194F805D"
+      },
+      {
+        "path": "aoi/blockavgtoolwindow.baml",
+        "bytes": 57455,
+        "sha256": "30D421B874D0B4B4B1E8D77DC74B61F09C97473BC0D5C04FE81A2F1A2C016612"
+      },
+      {
+        "path": "aoi/differencetoolwindow.baml",
+        "bytes": 55773,
+        "sha256": "95E4DA02DD063657969B5D82EF6A677D448A83888C6A117894A19D1FDF5B1373"
+      },
+      {
+        "path": "aoi/enhancewindow.baml",
+        "bytes": 23660,
+        "sha256": "AEBCE9EC9C7E9EE41CC0D7E017D2587315F64F9802B76706B3586609E8BB6729"
+      },
+      {
+        "path": "aoi/fonttoolwindow.baml",
+        "bytes": 130494,
+        "sha256": "95AFDD30C6D5561D13244CE092E1894F995975F628EC03502BEB904C44CF9174"
+      },
+      {
+        "path": "aoi/irtoolwindow.baml",
+        "bytes": 53144,
+        "sha256": "A832C3FC90C59FCEB9E6CD0B280EBD91B1B1569C553F9E716594D3E354CF09C2"
+      },
+      {
+        "path": "aoi/lightmonitorwindow.baml",
+        "bytes": 19360,
+        "sha256": "68ADF027FC69755AB177E267ABCA6F3021FBBC063863C8E13FDAA58A4E71A2F7"
+      },
+      {
+        "path": "aoi/lineanalysiswindow.baml",
+        "bytes": 43343,
+        "sha256": "8CEA3F7A63BA685DCCF36F35770622466E1FE78A4E048C9D4319299246202A69"
+      },
+      {
+        "path": "aoi/locatewindow.baml",
+        "bytes": 67834,
+        "sha256": "0FFDE7C6D53DBB60F89901D5DBF4AFB350268ACA8AF29EB73A2A54BF20AA1838"
+      },
+      {
+        "path": "aoi/maskwindow.baml",
+        "bytes": 67049,
+        "sha256": "2BEC5990E50E7ABEEAA8F760414B31DDEDD3C2489851D385672B08C7E5712135"
+      },
+      {
+        "path": "aoi/matchtoolwindow.baml",
+        "bytes": 100490,
+        "sha256": "E9240230199BBF497138D3B50118298ADD8719A987F23C739B52FCA300B9D80A"
+      },
+      {
+        "path": "aoi/measurewindow.baml",
+        "bytes": 59058,
+        "sha256": "4708EF229573D0007E1E4A0A594B5B7CE5F687D588978A35D0ADEB6924402AEB"
+      },
+      {
+        "path": "aoi/newfonttoolwindow.baml",
+        "bytes": 126727,
+        "sha256": "882E98FD8484785EC48B8B22CCD2E4AD1648478E165A2E7BF8467EB385FCA976"
+      },
+      {
+        "path": "aoi/selectfacewindow.baml",
+        "bytes": 28862,
+        "sha256": "BE0D547F8871E21892CC03957EBB7A4BA1A96B8FF54B4AE5DF69EC28C91A0371"
+      },
+      {
+        "path": "aoi/selectwaywindow.baml",
+        "bytes": 56263,
+        "sha256": "F86C6EC9313DB6FF84FEFED875508549806D5342F5AEBA387F574567C292F807"
+      },
+      {
+        "path": "aoi/smoothtoolwindow.baml",
+        "bytes": 55245,
+        "sha256": "78E614A28DA58733D5956AE9CA88D5E0371E00D4211462D88D0AEB385A295563"
+      },
+      {
+        "path": "ConfusedByAttribute.cs",
+        "bytes": 120,
+        "sha256": "3F02B36C16F8DD90D9D0B38AD0BCBB8094E035B08C88450DA89BA2DA996D45EE"
+      },
+      {
+        "path": "FolderSelectDialog.cs",
+        "bytes": 5740,
+        "sha256": "852D412278EDF0EC8D7B5CD3D031A641EE0BAD6B55DE8040D81DF2FB32A6E248"
+      },
+      {
+        "path": "historyviewwindow.baml",
+        "bytes": 10256,
+        "sha256": "169A9DF237CD7E20797E0D739CD9F54C3AC9DF5BAC3942F7190F45620FB188CB"
+      },
+      {
+        "path": "InspTools.g.resources",
+        "bytes": 2521236,
+        "sha256": "049C82240FFB8256147DABF1D2708D93CBBD51BF43EE288CEF6DF345C3E29DFD"
+      },
+      {
+        "path": "InspTools.Resources.Lang.resx",
+        "bytes": 70677,
+        "sha256": "C6BA08F4E9D23306DEE8A7A932F1F468D7769B5067FDD7DCD012C471B3C384DE"
+      },
+      {
+        "path": "InspTools.unpacked.csproj",
+        "bytes": 13066,
+        "sha256": "25E80A4CA1DFDBDD8157D2B1D2F1E88521EF7830F92755726AEBA1466A3620A6"
+      },
+      {
+        "path": "InspTools/AOI/AdvLocateTool.cs",
+        "bytes": 103687,
+        "sha256": "ABE3BADB46D9D81015CE3E018AE4BEA6E962EBFB5B1282095CC5934C26E93F5F"
+      },
+      {
+        "path": "InspTools/AOI/AdvLocateWindow.cs",
+        "bytes": 394046,
+        "sha256": "8BB0D5B7CDE194C6CA3C168E416DBBCE0F67DC646E1E2311F49B09AF67407D6C"
+      },
+      {
+        "path": "InspTools/AOI/AdvMeasureCondition.cs",
+        "bytes": 101,
+        "sha256": "396983F6609E4BFDA190D3C1D0AA10D395D8DB3BFA85B362161C9704132328F2"
+      },
+      {
+        "path": "InspTools/AOI/AI_MODE.cs",
+        "bytes": 94,
+        "sha256": "9D10E1042A545943DBC8085A2A016C2E7CF70671A475B990F2192B0386AF05BF"
+      },
+      {
+        "path": "InspTools/AOI/AIEnhanceCenter.cs",
+        "bytes": 78614,
+        "sha256": "ECB50678169A660C8401CCA59247127ABBBFD169E8C599BF0C305BF88F64FFF7"
+      },
+      {
+        "path": "InspTools/AOI/AIEnhanceTool.cs",
+        "bytes": 121117,
+        "sha256": "A73A15385459070B0AC894BCD77FAA9E3E4C33F3774D80919BB0E5AECF20E6BC"
+      },
+      {
+        "path": "InspTools/AOI/AIEnhanceToolThread.cs",
+        "bytes": 73613,
+        "sha256": "D4DFAFE5BC1205582A2D8A8961DADC1F3516B048DF8A44BEFCDA6F554559CD14"
+      },
+      {
+        "path": "InspTools/AOI/AIPredictTool.cs",
+        "bytes": 74223,
+        "sha256": "930719B960365BC0C5C197DED5FD269DC4017E7301A77D57C7DF13A4A4BEDE71"
+      },
+      {
+        "path": "InspTools/AOI/AIProphetTool.cs",
+        "bytes": 57434,
+        "sha256": "8E6212B701DF6409A1316BDC980EC4D824E0D6A0794A005B232B5B948D82BD04"
+      },
+      {
+        "path": "InspTools/AOI/AIProphetToolWindow.cs",
+        "bytes": 115191,
+        "sha256": "A852D8F0E7F5C737D066F5AD9F05F4EBA02850CD732F6029B2185E8783B5FB90"
+      },
+      {
+        "path": "InspTools/AOI/AIToolWindow.cs",
+        "bytes": 126971,
+        "sha256": "43FB17A3EBDDCFDCF494E6BCC664E3CBC05E390EFCFFB562289618742596B64A"
+      },
+      {
+        "path": "InspTools/AOI/AllInspTools.cs",
+        "bytes": 339,
+        "sha256": "E69563009D13EBB63C4A46AEEA3B25522FE976E08F8807C661712AC2184395EB"
+      },
+      {
+        "path": "InspTools/AOI/BIN_COUNT.cs",
+        "bytes": 273,
+        "sha256": "E4A7E8C70ACFEEE16EDEA589CD7EDD8F9D2C2CA0147A704BD67839255C7837B9"
+      },
+      {
+        "path": "InspTools/AOI/BinaryTool.cs",
+        "bytes": 197859,
+        "sha256": "33162CFECA2BC29438CBED2F37A06D6876AF2FADF3655546D7398D2E9DE70FEE"
+      },
+      {
+        "path": "InspTools/AOI/BinaryWindow.cs",
+        "bytes": 495089,
+        "sha256": "2622AA20B0122A492F0DC6089D656009595E59734E95503CBB07520618432902"
+      },
+      {
+        "path": "InspTools/AOI/BlobCondition.cs",
+        "bytes": 286,
+        "sha256": "193C98B9F66269A4CFDC19E4F652AA35D575D111A0361FA5DF138B8F1ADBAA2B"
+      },
+      {
+        "path": "InspTools/AOI/BlobStruct.cs",
+        "bytes": 620,
+        "sha256": "AE1B1A83D38AD67A822C480C481064A295AA2DF34445CF8EFB77863A4754CF5B"
+      },
+      {
+        "path": "InspTools/AOI/BlockAvgTool.cs",
+        "bytes": 141304,
+        "sha256": "D4A68F22DD14367DBA017D5DCF156A44C82C48E1CD22C3D6DD7ABDB74955765E"
+      },
+      {
+        "path": "InspTools/AOI/BlockAvgToolWindow.cs",
+        "bytes": 352606,
+        "sha256": "4F9A58DE9D3D17A0D1D0E0B8AF816EF9C77A7D3B680594A8C87F1347652C8ABF"
+      },
+      {
+        "path": "InspTools/AOI/BUFFERID.cs",
+        "bytes": 87,
+        "sha256": "A654E39AB3AC523ABBC9EB8E707D1121B7E9E915F52E4978D641BE36EBF3B107"
+      },
+      {
+        "path": "InspTools/AOI/BufferKind.cs",
+        "bytes": 246,
+        "sha256": "53D1F7E2AE1BEA262FBAA2DB6B2B73279E33D946B004DDE022C55634F7F5BD04"
+      },
+      {
+        "path": "InspTools/AOI/COLOR_CHANNEL.cs",
+        "bytes": 213,
+        "sha256": "27F269D681D4D2CACC0C932CD2A70AE7D0079AA90641B5EED513193320EDA798"
+      },
+      {
+        "path": "InspTools/AOI/CVBuffer.cs",
+        "bytes": 51349,
+        "sha256": "DA2D1077C10631A32F3CC6FB7A651B0165737CA8E07A4258612E692BFC16B628"
+      },
+      {
+        "path": "InspTools/AOI/CVImageBase.cs",
+        "bytes": 6506,
+        "sha256": "4EE789CE473D483CAAE0BEA20EF7A60EFF82B85207E15F74E2BBF4132EC793A3"
+      },
+      {
+        "path": "InspTools/AOI/DifferenceTool.cs",
+        "bytes": 107639,
+        "sha256": "18C6A9B21215FA00FF85FB09AA7051856C7A4AC2478D2896F8788A742C2FAEEF"
+      },
+      {
+        "path": "InspTools/AOI/DifferenceWindow.cs",
+        "bytes": 344767,
+        "sha256": "D059115FB53FD43ABD2837F20BDEE44E31AD1A80D60C1F58EEB2CEC77C83F8B5"
+      },
+      {
+        "path": "InspTools/AOI/EnhanceTool.cs",
+        "bytes": 20097,
+        "sha256": "9B3BE1217503794041871094F92D0A98F907E85D040CC11CFF93AE5B35900457"
+      },
+      {
+        "path": "InspTools/AOI/EnhanceWindow.cs",
+        "bytes": 45871,
+        "sha256": "EC27288AC51922A72957796DAA7E2056C721C7CC9071546575A5E7D8BE19EB58"
+      },
+      {
+        "path": "InspTools/AOI/File_Action.cs",
+        "bytes": 93,
+        "sha256": "CF15CA87554C2597955C197D0DEA80EF948FBC612E2FD77FE1E0940CCA943630"
+      },
+      {
+        "path": "InspTools/AOI/FLOW_BIN.cs",
+        "bytes": 148,
+        "sha256": "565120184E82C31655196066B6F2BF3A0FB9DD4211EB314B61A60791458007FC"
+      },
+      {
+        "path": "InspTools/AOI/FontTool.cs",
+        "bytes": 599975,
+        "sha256": "B48D00BAA63FB5658CE4079E1A292B728CDB97779275ABD755C3213976A73CB8"
+      },
+      {
+        "path": "InspTools/AOI/FontToolWindow.cs",
+        "bytes": 656754,
+        "sha256": "DD544D6B4852B5054D977D6C8B553EC4BE98378F32921B42B0393E81C3BBD9E0"
+      },
+      {
+        "path": "InspTools/AOI/INSP_ADVLOCATETOOL_PARAM.cs",
+        "bytes": 2155,
+        "sha256": "60F20EAB1C348F7848521EEE94D9A6982A9F1A42EFFC140B430C1E06676E5E36"
+      },
+      {
+        "path": "InspTools/AOI/INSP_ADVMEASURETOOL_PARAM.cs",
+        "bytes": 790,
+        "sha256": "FE4E7BE5B7D1D4052A46986C7503628F9621F0DA221B12BF9A466B24E2A1570F"
+      },
+      {
+        "path": "InspTools/AOI/INSP_AIPROPHET_PARAM.cs",
+        "bytes": 992,
+        "sha256": "E6FABEBE3EA0A8A9A46AA695197EB7DB05064A6546C346BD44E2FC6A82007012"
+      },
+      {
+        "path": "InspTools/AOI/INSP_AITOOL_PARAM.cs",
+        "bytes": 2707,
+        "sha256": "DD1ECF6B9758ABC8A8ED0ED1AB62D21CA753DC1251180AA59B097FD27B0EA3FA"
+      },
+      {
+        "path": "InspTools/AOI/INSP_BINARYTOOL_PARAM.cs",
+        "bytes": 5017,
+        "sha256": "863455E7912B3E0026079F323D951153D7B7EB6FF7BBA72E5B5F240447B2CB46"
+      },
+      {
+        "path": "InspTools/AOI/INSP_COLORREFERENCE_PARAM.cs",
+        "bytes": 1409,
+        "sha256": "C04BA67FB41842FF8592F11836CD7744D918F63796786AE05E292A6DE25F3E7E"
+      },
+      {
+        "path": "InspTools/AOI/INSP_DIFFERENCETOOL_PARAM.cs",
+        "bytes": 3990,
+        "sha256": "CA54ED3A5DAAAFD00DE316DE3C556345777C7CC33391B0BFE776386E6A85E316"
+      },
+      {
+        "path": "InspTools/AOI/INSP_ENHANCE_PARAM.cs",
+        "bytes": 981,
+        "sha256": "FFAA72C5FA54552C6BCE4FFBE624B6D41D0F2B6A2A66525141355BFBA78CB509"
+      },
+      {
+        "path": "InspTools/AOI/INSP_FONTTOOL_OTHERFONT_PARAM.cs",
+        "bytes": 583,
+        "sha256": "BE047DCE9B0AB8DB4B68D0BE16D87F49A9D724718B4248C8FC7BC73E9169BD55"
+      },
+      {
+        "path": "InspTools/AOI/INSP_FONTTOOL_PARAM.cs",
+        "bytes": 14063,
+        "sha256": "95A5BFD94C67CBF846095A6A2C78808B8B8C91EFF50007A69EFF2367D947BB8E"
+      },
+      {
+        "path": "InspTools/AOI/INSP_IRTOOL_PARAM.cs",
+        "bytes": 341,
+        "sha256": "16C8FC223DA7F8FD3999DD324AA43C9953E28A899FEAA9FA67469E88C8BCF2F4"
+      },
+      {
+        "path": "InspTools/AOI/INSP_LIGHTMONITOR_PARAM.cs",
+        "bytes": 1081,
+        "sha256": "C47BDE1430E1E546FC747025A16C01F91F929FE57C0CDE505D62BCFB27826067"
+      },
+      {
+        "path": "InspTools/AOI/INSP_LINEANALYSISTOOL_PARAM.cs",
+        "bytes": 2086,
+        "sha256": "72276336856A58AC9A224887B33AD25DD7893B406495F64DC3D98870B57B1F34"
+      },
+      {
+        "path": "InspTools/AOI/INSP_LOCATE_PARAM.cs",
+        "bytes": 5823,
+        "sha256": "41186BC3E53181B84FBB35177584937507E8854A7C8D3854D75658A3F52014A8"
+      },
+      {
+        "path": "InspTools/AOI/INSP_MASKTOOL_PARAM.cs",
+        "bytes": 4451,
+        "sha256": "12AF3B06EF13CCE3095C9B9F33E42B36759D17E6BF6181DCFF38EDA83C9E1C4B"
+      },
+      {
+        "path": "InspTools/AOI/INSP_MATCHTOOL_PARAM.cs",
+        "bytes": 2263,
+        "sha256": "3CB20BBB38616FD26B587DE89FDF596EB6356EC06321AF2C54BC6F75DBD161B6"
+      },
+      {
+        "path": "InspTools/AOI/INSP_MEASURETOOL_PARAM.cs",
+        "bytes": 2272,
+        "sha256": "FD55384C0C34CC3E7256685CC675B80426D0770500C61B31FBF3BE25A4AF669B"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SCANLINETOOL_PARAM.cs",
+        "bytes": 1549,
+        "sha256": "A67D75F7C69A7AD96041CC3BC87C30C18BF324294AA2C7FFB37FA07BFCE2CBE7"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SELECTFACETOOL_PARAM.cs",
+        "bytes": 1843,
+        "sha256": "35C3068FA555EE9FE65AE7342DC0C63D6655C124EF7682127595A5C8C7C0C356"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SELECTWAYTOOL_PARAM.cs",
+        "bytes": 2217,
+        "sha256": "FD5229E1BDB031321EB3D579625C8100520D7CDBED78B69F7A2618D0E92F6D12"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SMOOTHTOOL_PARAM.cs",
+        "bytes": 3810,
+        "sha256": "AAC86EB12E4A383D58F9772386CEACA0683D65F8071CA7DB6708BEFB5C55F7D3"
+      },
+      {
+        "path": "InspTools/AOI/INSP_THROUGHPUT_PARAM.cs",
+        "bytes": 8802,
+        "sha256": "4E6F6F2AFEAD31E540B10A0BDDC81F551BDBF444097A8B7E3C8BA9F6EB168646"
+      },
+      {
+        "path": "InspTools/AOI/INSPRESULT.cs",
+        "bytes": 111,
+        "sha256": "4A725FE51E3DB86D402DD53ACD0CB1CD3BD3AF2805F0AC2D40602376DC330E55"
+      },
+      {
+        "path": "InspTools/AOI/INSPSURVITEM.cs",
+        "bytes": 457,
+        "sha256": "288F49D803F32F00B128D5BFF9DB61628BF3DA8B6D3DD18D81EAE7B83E0B6DBB"
+      },
+      {
+        "path": "InspTools/AOI/InspToolsFunciton.cs",
+        "bytes": 428,
+        "sha256": "331FC17AEAD96EA4C35F5159EF541B4FBBB147C10116651D69F300A474A2FC55"
+      },
+      {
+        "path": "InspTools/AOI/IRTool.cs",
+        "bytes": 71191,
+        "sha256": "077629B621A6EB4DF361909ED6D323EC55DEACA9055E35E5C32235441EFDF1DB"
+      },
+      {
+        "path": "InspTools/AOI/IRToolWindow.cs",
+        "bytes": 243744,
+        "sha256": "FB734A13125745F7350DAD0AC0C28533CE2406B2E2212A6835485A8218788CDD"
+      },
+      {
+        "path": "InspTools/AOI/LightCorrectonDiffValue.cs",
+        "bytes": 287,
+        "sha256": "EFEE7A430B1F12BF966D8C9A4667819334C0F0D3AAD394121100EEF67F94BC97"
+      },
+      {
+        "path": "InspTools/AOI/LightMonitorTool.cs",
+        "bytes": 71315,
+        "sha256": "C765A94ECCFCFA4BE44996E48EE0248DC884BD8BCC925847A2C44436893975F1"
+      },
+      {
+        "path": "InspTools/AOI/LightMonitorWindow.cs",
+        "bytes": 48530,
+        "sha256": "47A7ECE0F311AE8419A6FBAC6C02AA4A2A4CEE717C2486909986F5F69CECBA63"
+      },
+      {
+        "path": "InspTools/AOI/LineAnalysisTool.cs",
+        "bytes": 57670,
+        "sha256": "5EAF28BF3F0A5C844670AB8723A784EC7C83EB76850E4307BB55DCBF4994BC6C"
+      },
+      {
+        "path": "InspTools/AOI/LineAnalysisWindow.cs",
+        "bytes": 179234,
+        "sha256": "12D5895B4D5DB4A557BA290A3E698542EE23FFF34958C3F8D8FA2F62D79D85CD"
+      },
+      {
+        "path": "InspTools/AOI/LocateAIEnhanceTool.cs",
+        "bytes": 109326,
+        "sha256": "4371BE67924F66ACED40EF6523019CC2234809FCFE4B34FB878FE96630161D71"
+      },
+      {
+        "path": "InspTools/AOI/LocateTool.cs",
+        "bytes": 135266,
+        "sha256": "D5285891F449F8C2839FB18F7A5B421216CF396012F3C3A4271E53FB56A65E33"
+      },
+      {
+        "path": "InspTools/AOI/LocateWindow.cs",
+        "bytes": 442510,
+        "sha256": "0AE32D39FF98DC758F5080A5734E79299D4F7E9213DDB5175C639BB7771C1A4C"
+      },
+      {
+        "path": "InspTools/AOI/MaskTool.cs",
+        "bytes": 36224,
+        "sha256": "FFE1AE7B0BE957EAF5C74C4DE7C7A1C071D25C8F41E345317447F8ACBAA12D8C"
+      },
+      {
+        "path": "InspTools/AOI/MaskWindow.cs",
+        "bytes": 204375,
+        "sha256": "68B1E969F913615AEB608035449DE493C0DD6C54AE9FA34009D691941A544F5C"
+      },
+      {
+        "path": "InspTools/AOI/MatchPattern.cs",
+        "bytes": 543,
+        "sha256": "93B9F75FC342020E8CCC32232AD49189A73986DC4EBA164B4D32531E93BC43DF"
+      },
+      {
+        "path": "InspTools/AOI/MatchTool.cs",
+        "bytes": 83729,
+        "sha256": "80E66A8180BD96BE2897A85C149AE95CC20EB60F68E111EDD272657BD97362B9"
+      },
+      {
+        "path": "InspTools/AOI/MatchToolWindow.cs",
+        "bytes": 322417,
+        "sha256": "F42CE1825477E80CF2CAFB74EF8A2B24028BB3E029F535A832036DFB5B26DD3E"
+      },
+      {
+        "path": "InspTools/AOI/MeasureCondition.cs",
+        "bytes": 114,
+        "sha256": "477E300AE04B01D2FADD4A45828711E0BAA86FDB4659F1F6EE53837A713473EE"
+      },
+      {
+        "path": "InspTools/AOI/MeasureTool.cs",
+        "bytes": 67002,
+        "sha256": "86031BA4C397547C6AE7E26BA99909592C22BB4E9EB53D3767AD31BECB885EB0"
+      },
+      {
+        "path": "InspTools/AOI/MeasureWindow.cs",
+        "bytes": 264158,
+        "sha256": "BB70E5466E9F315954CE24E885B3531ADF0F61E8EE3D7A00317AE13C7FDC21C6"
+      },
+      {
+        "path": "InspTools/AOI/NewFontToolWindow.cs",
+        "bytes": 660807,
+        "sha256": "57804AB37B5791910E88E529CADEA7F5EEDC17E136C4100FF7E9C535BD7FC32A"
+      },
+      {
+        "path": "InspTools/AOI/OBJSIZE.cs",
+        "bytes": 543,
+        "sha256": "856283F696101DB832D97BF80C949F36EC1D949E9DDD5D1F211F76A29C31C8D9"
+      },
+      {
+        "path": "InspTools/AOI/ParamFile.cs",
+        "bytes": 1433361,
+        "sha256": "2066236D9A218B6504394BFE286771A3CFD95F39DDA583B86B184273CF6507A5"
+      },
+      {
+        "path": "InspTools/AOI/PARETODATA.cs",
+        "bytes": 102,
+        "sha256": "88D296C336C465EAE58D17AC62093ADACC802D6CF208198F8F88D367068E1470"
+      },
+      {
+        "path": "InspTools/AOI/ScanDirection.cs",
+        "bytes": 172,
+        "sha256": "F913E4DB360739465385A3596595897B26B92B58AA45BA2A2275F61A16CB295C"
+      },
+      {
+        "path": "InspTools/AOI/SelectFaceTool.cs",
+        "bytes": 31782,
+        "sha256": "5705DAB36F155AEE09C87D8AA2B267B44A1142FD7B882830FAF899D86511ECB2"
+      },
+      {
+        "path": "InspTools/AOI/SelectFaceWindow.cs",
+        "bytes": 79544,
+        "sha256": "C1CA1FFD3E0DD0C0358FF59EE7934F50ECC39C859E96D97A0FC17B2C90B3ACB7"
+      },
+      {
+        "path": "InspTools/AOI/SelectWayTool.cs",
+        "bytes": 51132,
+        "sha256": "DB86C92EE66E178D6491999FCEAEEBBB4D40950CCC64707705B64606FE560A80"
+      },
+      {
+        "path": "InspTools/AOI/SelectWayWindow.cs",
+        "bytes": 143995,
+        "sha256": "805790460B38173E5B7D1D6617EA03FC343440A3EBF563B3D393B79DA592AE0B"
+      },
+      {
+        "path": "InspTools/AOI/SimpleBlobStruct.cs",
+        "bytes": 262,
+        "sha256": "A7A780BFF8422A46F445DE06C7D68AE6C1466573C7EACB79505CC109388D0686"
+      },
+      {
+        "path": "InspTools/AOI/SIZESTATIC.cs",
+        "bytes": 831,
+        "sha256": "E5B5149B43FBE26EBD88E49C6A41A1DE6A4302047F140C4B66093885CBB6AED1"
+      },
+      {
+        "path": "InspTools/AOI/SmoothTool.cs",
+        "bytes": 129520,
+        "sha256": "0E33009ED394159FAB4A12ADC739D8AAD0D6C0D9DE5FE7CE6480F454C6527E3F"
+      },
+      {
+        "path": "InspTools/AOI/SmoothWindow.cs",
+        "bytes": 342609,
+        "sha256": "3539DC9EF4E351D4BDDB2A9CB0FDFE251CBF8DE03F44373C1249C9F80A0C8020"
+      },
+      {
+        "path": "InspTools/AOI/TOOL_RESULT.cs",
+        "bytes": 103,
+        "sha256": "2823D568BD06BA56EC3AC7FAC04751CBFC1F343419E7D89C9D596256ECDF34E5"
+      },
+      {
+        "path": "InspTools/AOI/TOOLSENABLEITEM.cs",
+        "bytes": 112,
+        "sha256": "4F938EA2B34FC10A53507F9672651DAA8DA90078E5585954BA17639175B43203"
+      },
+      {
+        "path": "InspTools/AOI/TOOLSIZERECORDSETUP.cs",
+        "bytes": 173,
+        "sha256": "CF62AD408535A544ACEF1EBA0FDF280AF4DAD431DF78DADAA8674DCE8BEBF7DF"
+      },
+      {
+        "path": "InspTools/AOI/USE_DILATE_ERODE.cs",
+        "bytes": 226,
+        "sha256": "21813F37A8AC41C833CEB65C4CF0219FBD4C68608C97F2EFD597FC37F62B4CA8"
+      },
+      {
+        "path": "InspTools/AOI/User_Permissions.cs",
+        "bytes": 131,
+        "sha256": "B5F86EBF2AA4E10DA9551A075F1B8C846471D99DA392354C8346B8D11215A274"
+      },
+      {
+        "path": "InspTools/HINI.cs",
+        "bytes": 7721,
+        "sha256": "24E92658F868AE62984B6B0A30090BF0086543C9184BA497864787B4EE483A3D"
+      },
+      {
+        "path": "InspTools/HiniFile.cs",
+        "bytes": 15820,
+        "sha256": "5A6FC5630F19CD34F7E5B1E280C9B1BFED279FF93E651025FA80455A8B30E2ED"
+      },
+      {
+        "path": "InspTools/HistoryViewWindow.cs",
+        "bytes": 18803,
+        "sha256": "78BE00A35DC2F392DD6863FB7EAF087BB58079572D52600E5D9C2750A95CD62B"
+      },
+      {
+        "path": "InspTools/MM.cs",
+        "bytes": 2822,
+        "sha256": "08091AA20E5EFC5E7E9158B63D1949B86DCF6D2D102237FDB40CD4E74ECCA7DB"
+      },
+      {
+        "path": "InspTools/MyMat.cs",
+        "bytes": 324,
+        "sha256": "7BCDBEBF553A1134C3733E939EFC3580CACA32AF0C2D5C83EE5FD5ED1C80A238"
+      },
+      {
+        "path": "InspTools/Other/AIMarkWindow.cs",
+        "bytes": 135191,
+        "sha256": "CAD9FA0399F31270EA377E269DD9E19227716E127976C31DE830E6BFACC27EC1"
+      },
+      {
+        "path": "InspTools/Other/AIParamSetupWindow.cs",
+        "bytes": 8384,
+        "sha256": "8B1D9481A528B147CF880DA082A34D12C61AEA44176496A3FE08DA1171CBAEE1"
+      },
+      {
+        "path": "InspTools/Other/AIPreviewWindow.cs",
+        "bytes": 151966,
+        "sha256": "329905012D5E35A8F350DF87B74D3A8B27DAAB6A6EED43DCC1D46D4CE1702CB3"
+      },
+      {
+        "path": "InspTools/Other/AITrainingWIndow.cs",
+        "bytes": 371637,
+        "sha256": "DFB369A880F7F08C72262F137EC60C0041536314003D8980B7DCDF355F600B9E"
+      },
+      {
+        "path": "InspTools/Other/AutoMatchWindow.cs",
+        "bytes": 51078,
+        "sha256": "652EE74DBF85D23D3D55E340CE3AC2DB4EFBDABBEA9A72CF2DF993FE298D1461"
+      },
+      {
+        "path": "InspTools/Other/BlobStatisticsWindow.cs",
+        "bytes": 36591,
+        "sha256": "3CFC3F7B57EFE9EE6F8C67BA5E2CF6F1D37CB12DF101FFDC268526F20F011FB7"
+      },
+      {
+        "path": "InspTools/Other/ChartWindow.cs",
+        "bytes": 18204,
+        "sha256": "EC63FF505B4292C60E44AFC88DD936E0B018BDB2EDE4A7B191512407118787EF"
+      },
+      {
+        "path": "InspTools/Other/DBSetupWindow.cs",
+        "bytes": 28520,
+        "sha256": "65CE33155C0D0B85236B81DD0B76CFD5543D183FA4087B528F817682937AA047"
+      },
+      {
+        "path": "InspTools/Other/DNet3SetupWindow.cs",
+        "bytes": 15459,
+        "sha256": "B053FCE7D5D41475008E0162434E0A92238F825131B4712D27AD2E28664E2AEA"
+      },
+      {
+        "path": "InspTools/Other/Edit2InputWindow.cs",
+        "bytes": 6798,
+        "sha256": "DF8A7A4C513F83E7700D2E208961144EF1E35141F86C8161A2E573B6FBA7B24B"
+      },
+      {
+        "path": "InspTools/Other/HashTagEditWindow.cs",
+        "bytes": 2817,
+        "sha256": "F7E1ACA23F051314BEDFCE3AA6DF0550E93B4602A7F24D54BEB2C5CEB6C27F01"
+      },
+      {
+        "path": "InspTools/Other/HKeyboard.cs",
+        "bytes": 18670,
+        "sha256": "18E1EC70D887573C27199EE23050AF349180D9DF1F56446615561C26E8D4EBB8"
+      },
+      {
+        "path": "InspTools/Other/InspSurvWindow.cs",
+        "bytes": 30362,
+        "sha256": "1D784B66907B590E71ADF2333F61286B932C50612404B903F0F440F6CC0295F3"
+      },
+      {
+        "path": "InspTools/Other/ItemInputWindow.cs",
+        "bytes": 3595,
+        "sha256": "EDA3F8575D9DFE5421DDC8BABA4996715216664768A7326297CE92BBEDE9C903"
+      },
+      {
+        "path": "InspTools/Other/LocateModelsWindow.cs",
+        "bytes": 54580,
+        "sha256": "34ACFB3E9BACBEBDE39E10039C73981DA83D7B9D7E1D55531D57C96AA43A99E8"
+      },
+      {
+        "path": "InspTools/Other/ModelsWindow.cs",
+        "bytes": 87789,
+        "sha256": "B54F857A98C3094E169CD5F47C7F12DEC6FE737B279E9A44FFBD9856150B8432"
+      },
+      {
+        "path": "InspTools/Other/ModifyLogFun.cs",
+        "bytes": 34771,
+        "sha256": "1E46850303A4783FD73894CE620C8E9DA6D7F4C69B3B91FB2FCDF12B5EBE422A"
+      },
+      {
+        "path": "InspTools/Other/NGCloneWindow.cs",
+        "bytes": 50924,
+        "sha256": "4470A5E97C7837C6F0A7669F927FBC463F6C002B6DF5F9E27CB5F4F0F5972ED9"
+      },
+      {
+        "path": "InspTools/Other/OnnxModelsWindow.cs",
+        "bytes": 28843,
+        "sha256": "2D21FB5CBE0B7CFFD93285136AF8FAC89529396F7D6C86BB5ACFA76BA1BBE205"
+      },
+      {
+        "path": "InspTools/Other/Operation.cs",
+        "bytes": 122,
+        "sha256": "837E47C3BCB8ACD63A5B9738A1B4381B47BEFDFE703500488799BE6131EA1C81"
+      },
+      {
+        "path": "InspTools/Other/ParamCopyWindow.cs",
+        "bytes": 190998,
+        "sha256": "7A3DD44B22324A47266958B912129EDB8645CDA7BB6C468D3B4DD6B0D902A967"
+      },
+      {
+        "path": "InspTools/Other/ParetoChartData.cs",
+        "bytes": 229,
+        "sha256": "F4D472A5F2C525888460C66A129FA03EB131104DB54039A8DE8197E458E088A0"
+      },
+      {
+        "path": "InspTools/Other/ParetoChartWindow.cs",
+        "bytes": 57798,
+        "sha256": "D1444AC4ADC9537CE91F494F34A7FD55D062237FE7A8E4DF8B12500119167CAD"
+      },
+      {
+        "path": "InspTools/Other/ParetoItem.cs",
+        "bytes": 134,
+        "sha256": "70391B4A1541B0780FCD0AD6931DD71A838112A01901E5FE7B667B81CED29639"
+      },
+      {
+        "path": "InspTools/Other/ParetoItemPreview.cs",
+        "bytes": 313,
+        "sha256": "39A00DE9C307DBF9F8506125C82F5100FA20F25FA542916D1E85201E0F1F820D"
+      },
+      {
+        "path": "InspTools/Other/ParetoSatisicsItem.cs",
+        "bytes": 841,
+        "sha256": "D624228F8FD20C2ECE6DFDF526DE58100DDAFFD4DA849CF7C8B7D088217E09DB"
+      },
+      {
+        "path": "InspTools/Other/PasswordWindow.cs",
+        "bytes": 4143,
+        "sha256": "911E92C127C4EB91A8098D90AE7435268F5CCEF32EA6FE7E0B83CC902CCD0BA2"
+      },
+      {
+        "path": "InspTools/Other/ProphetOnnxModelsWindow.cs",
+        "bytes": 54293,
+        "sha256": "2314FB7AB178466B6135ADC39F3101914833B6C90F192A5BD91DB0CF59FF58AE"
+      },
+      {
+        "path": "InspTools/Other/QuickSetupWindow.cs",
+        "bytes": 51419,
+        "sha256": "E1B593C4DC0D02CD15BED84FF05439CDFB15DDAFC2E921C0868A08CAF0F36283"
+      },
+      {
+        "path": "InspTools/Other/RecipeListWindow.cs",
+        "bytes": 4151,
+        "sha256": "E8D5666787F37E56F2E75FB60EDF3CE0946DE067F5A5ED9FC4951974BB8BFEFD"
+      },
+      {
+        "path": "InspTools/Other/SaveFolderWindow.cs",
+        "bytes": 22905,
+        "sha256": "68D9D294ACC74621B9945019749E34E0852721E5C01F24DF1A65FCB7207042FC"
+      },
+      {
+        "path": "InspTools/Other/SaveParetoChartWindow.cs",
+        "bytes": 6733,
+        "sha256": "E6496A46BAEED320A36B1FFC2397A5E5C620AE42D525AC47D2AE6DF1EE8151BE"
+      },
+      {
+        "path": "InspTools/Other/SelectImageWindow.cs",
+        "bytes": 9441,
+        "sha256": "DBD384F2F7453B4978A1504C7E9BFE68806BF4BF4094B9BB70DEA0DAD09347BA"
+      },
+      {
+        "path": "InspTools/Other/SizeChartWindow.cs",
+        "bytes": 195460,
+        "sha256": "C8D97C86485590F76A4299F700C6FDB4B7AF541D3571896D53B25742BE2DFD29"
+      },
+      {
+        "path": "InspTools/Other/SizeStatistics.cs",
+        "bytes": 25636,
+        "sha256": "AE95D1AFC8841A06C2E1D863F8FDD908C77AD6E8DE9C3A87997233B961753E2C"
+      },
+      {
+        "path": "InspTools/Other/ThroughputOutputWindow.cs",
+        "bytes": 26917,
+        "sha256": "0C138D0495CE0F1B1366FC08F8DCC5212E444644E7B933AEFA1B13DB4E119ED1"
+      },
+      {
+        "path": "InspTools/Other/ThroughputParamFile.cs",
+        "bytes": 269167,
+        "sha256": "5E244414769C50CDCA8FF8B675A92094D06C0E4952A3A4B773E2CB7E65B16D28"
+      },
+      {
+        "path": "InspTools/Other/TrainCSVWindow.cs",
+        "bytes": 263977,
+        "sha256": "59C3A656A67CEDABDD9F8A02D5F25A2BC0AC284AFDF7290DE083A8C58A357434"
+      },
+      {
+        "path": "InspTools/Other/UISetupWindow.cs",
+        "bytes": 6248,
+        "sha256": "D779F1312ECB0833B692A17FF1BCA95C8597A76E218CA4B0EFBFE6C5963DB69F"
+      },
+      {
+        "path": "InspTools/Other/YieldRetestWindow.cs",
+        "bytes": 90333,
+        "sha256": "5445D0B27054C67835CBF68B9AAE67CA378FF0CDF291414CB39CA6CD9766AC4E"
+      },
+      {
+        "path": "InspTools/Properties/Settings.cs",
+        "bytes": 483,
+        "sha256": "F7CB002EEBD7CAF5CDA8A13417A1FCEB9A96B76B958FDA8234BC940EC58AF59E"
+      },
+      {
+        "path": "InspTools/Resources/Lang.cs",
+        "bytes": 333293,
+        "sha256": "DE63D39DFD54B9E80B546A269A6B070FBB0AFB0EC8D2F67FCA1FEB0204014FCE"
+      },
+      {
+        "path": "InspTools/Resources/LanguageManager.cs",
+        "bytes": 1930,
+        "sha256": "6BC601ABB1C7A4AB65B9D9541B4E72331C9B35742421668E2B9DC032A3D13EE9"
+      },
+      {
+        "path": "InspTools/Station/CVInspection.cs",
+        "bytes": 197535,
+        "sha256": "BDB408A0B7BE7E5513DEC0842E27E55A581A1C19BF9AE7D3BF600731CB09CEC2"
+      },
+      {
+        "path": "InspTools/Station/CVInspResult.cs",
+        "bytes": 8053,
+        "sha256": "334824CFDC1712D7236D1376C2A4BAE2D4D65740E91A58A10D9006C5C4D7F0EC"
+      },
+      {
+        "path": "InspTools/ToolsWindow.cs",
+        "bytes": 521999,
+        "sha256": "DEC8E2925A7D144D49D2B058046182CCD2252519CC2635B4938DCC9F6642E52A"
+      },
+      {
+        "path": "Org/Mentalis/Files/IniReader.cs",
+        "bytes": 5812,
+        "sha256": "10107D29677DA0109DFEB0C10E5FA6B4A194F8EB9ADE428F1B2D0372C2071FB4"
+      },
+      {
+        "path": "other/aimarkwindow.baml",
+        "bytes": 20097,
+        "sha256": "E75362C1CDE647FCAC07403CFAA8D8CE0F2D43DA16BBE96DF879ABDD6396F4F5"
+      },
+      {
+        "path": "other/aiparamsetupwindow.baml",
+        "bytes": 8444,
+        "sha256": "F852EECEA60448C63E742C497725C8C80CE496536DB53B18A38F9CD37549693F"
+      },
+      {
+        "path": "other/aipreviewwindow.baml",
+        "bytes": 18476,
+        "sha256": "928D49E68C36E2B67A277EA067CB7C171F45566012A37D2C05D2A9180D0327AF"
+      },
+      {
+        "path": "other/aitrainingwindow.baml",
+        "bytes": 53127,
+        "sha256": "76E90F157FCBD4D48BC7DF3EA433424A7726146B108BD5DB4AFEFEC4568CD224"
+      },
+      {
+        "path": "other/automatchwindow.baml",
+        "bytes": 20176,
+        "sha256": "0B872EF0142E74F59470F737820C179BCB8C2F4759ED766E81978EF093009BAA"
+      },
+      {
+        "path": "other/blobstatisticswindow.baml",
+        "bytes": 9321,
+        "sha256": "7AEAEA14FA5F8DE559310252B23E29B76004CF2C539CFA44EA17289BB79874F9"
+      },
+      {
+        "path": "other/chartwindow.baml",
+        "bytes": 6371,
+        "sha256": "058EA5803C05C3920C71374C930D23857D28716BFC0F9AA7610B7268399D9CDF"
+      },
+      {
+        "path": "other/dbsetupwindow.baml",
+        "bytes": 17297,
+        "sha256": "966A415289092B04A559BBDBD65E1BC77617BD24790CE094E8CA76F31660B772"
+      },
+      {
+        "path": "other/dnet3setupwindow.baml",
+        "bytes": 4080,
+        "sha256": "84300DC73D1EC155730F5957AD0F25FA6E804DFC3C63584BDB43A8A22FCED7BC"
+      },
+      {
+        "path": "other/edit2inputwindow.baml",
+        "bytes": 2564,
+        "sha256": "1C3AB94F41E853E542B293E51F4A80EE839522BC3F27CD67E8F9142D5A359B2E"
+      },
+      {
+        "path": "other/hashtageditwindow.baml",
+        "bytes": 3545,
+        "sha256": "0E1A492DF04562A207318454598953D4FCCEDA9FFB4D15A8F6806050BF04DF10"
+      },
+      {
+        "path": "other/inspsurvwindow.baml",
+        "bytes": 5563,
+        "sha256": "8D9695E7987C60A0E283F0B5F172FAE9D9779C2A6D415F58F2E9B8521C02F7CD"
+      },
+      {
+        "path": "other/iteminputwindow.baml",
+        "bytes": 2185,
+        "sha256": "2273532D3E77E051F7FBD00833582A87743EA5B0576206897F0F57C18152453D"
+      },
+      {
+        "path": "other/keyboard.baml",
+        "bytes": 4773,
+        "sha256": "7E565617FF3AE1310E9BAEDD6D229565ACC8B8A025B070615FA527AF442F8149"
+      },
+      {
+        "path": "other/locatemodelswindow.baml",
+        "bytes": 5820,
+        "sha256": "1D02B7459441538A2196EA90326E64D8ABF5E719E5F81EE327A1E896B7462DDC"
+      },
+      {
+        "path": "other/modelswindow.baml",
+        "bytes": 7567,
+        "sha256": "4E48208ACCF39979477C5E2DDB7264278A552A204D52A151B09F31A0C5D12ABD"
+      },
+      {
+        "path": "other/modifylogfun.baml",
+        "bytes": 1090,
+        "sha256": "A3413FC0DCAEF6D362DB3C8D67C5DAE7B19751814F779D78D647C066DBFD5D6B"
+      },
+      {
+        "path": "other/ngclonewindow.baml",
+        "bytes": 8586,
+        "sha256": "4112768F28DAFB33EB6283A1EFF2A0DB4776A376C39FCFBB800672A08DBB98FE"
+      },
+      {
+        "path": "other/onnxmodelswindow.baml",
+        "bytes": 4787,
+        "sha256": "73E21CB0FFC77587A8F10BF6B5C2162E1D4F9FAA1BB9EFCA058729D0DADFC28C"
+      },
+      {
+        "path": "other/paramcopywindow.baml",
+        "bytes": 25351,
+        "sha256": "D661D9FC1256AF39DFAB868FC01098FAFF464B1137B469BD3CF24317AE6CF74A"
+      },
+      {
+        "path": "other/paretochartwindow.baml",
+        "bytes": 9827,
+        "sha256": "FBD4BC7BE4F6A490883CE0E670E16E7860F7BAA7B1188BD17BD005D09FC86981"
+      },
+      {
+        "path": "other/passwordwindow.baml",
+        "bytes": 2881,
+        "sha256": "7EAC3E6A127C5D2D8573E07D26144C7AACAA58F273CFDE7592C5909C98E23062"
+      },
+      {
+        "path": "other/prophetonnxmodelswindow.baml",
+        "bytes": 5795,
+        "sha256": "34CEB595002C7DBCFEA4E709A44FD9A0D7A6F49F48D8CD53FA3C8D30BE0777D8"
+      },
+      {
+        "path": "other/quicksetupwindow.baml",
+        "bytes": 42571,
+        "sha256": "62DFD9AAD86DB37FAD8AB420CCF524FD4987B592E497588C33DD6646453D3E8D"
+      },
+      {
+        "path": "other/recipelistwindow.baml",
+        "bytes": 2904,
+        "sha256": "99EC31787449C7A73BF6CFAA8058E51DED6F0A7637891A99D7EAC4D5CC4C1552"
+      },
+      {
+        "path": "other/savefolderwindow.baml",
+        "bytes": 9419,
+        "sha256": "14CA900AED056D6B1BC5E68A8790108E2A51A6358428BCD0CAC5A27F4D872E4C"
+      },
+      {
+        "path": "other/saveparetochartwindow.baml",
+        "bytes": 1377,
+        "sha256": "A0214905876046848B0225316E3368911A298F072EF07B6665810C7C305C07D4"
+      },
+      {
+        "path": "other/selectimagewindow.baml",
+        "bytes": 5092,
+        "sha256": "3EC414960D75D5BB58A494AB5048B9E099DD064F2A35A088252FA3446A1B0BE7"
+      },
+      {
+        "path": "other/sizechartwindow.baml",
+        "bytes": 67736,
+        "sha256": "23A0B706D86BB72D6A5A8083E9EF86636B3EC5F4E5E967E6DC8217FB5D98C497"
+      },
+      {
+        "path": "other/traincsvwindow.baml",
+        "bytes": 24808,
+        "sha256": "19F2AD592F9F7E7851F2B5D6CC43C78ACB568B17A26E2C4D43D9D68F65707FA5"
+      },
+      {
+        "path": "other/uisetupwindow.baml",
+        "bytes": 4332,
+        "sha256": "F3F0ADEDF94913BB1285AD334EE13C94C0E954127766B2EB1E263D2786C6B50E"
+      },
+      {
+        "path": "other/yieldretestwindow.baml",
+        "bytes": 39713,
+        "sha256": "1B5CF1CBB3DEDBC2A5646561332E18276D5D7968D776E2D30FD0BC96E59926F7"
+      },
+      {
+        "path": "Properties/AssemblyInfo.cs",
+        "bytes": 848,
+        "sha256": "B95BA6F7F288B53A9B78B4F33427B63CA1B20ED39CD684BCE11D6A3A24361C2B"
+      },
+      {
+        "path": "Reflector.cs",
+        "bytes": 2565,
+        "sha256": "2753994B19449851EC2BCDA09CB116B19979B1C253306BE00D82184FCA4C68A1"
+      },
+      {
+        "path": "res/banner-wg.png",
+        "bytes": 156,
+        "sha256": "59FDB6F5CBB905EBA8CF369930944E8D75DE866ACFC9119E201027D72D69F015"
+      },
+      {
+        "path": "res/chip.bmp",
+        "bytes": 691254,
+        "sha256": "978844F1086C30E4CB3EBFFB197F80A2EEB4D88F77983AC6D9AACA7B23D6E397"
+      },
+      {
+        "path": "res/lock.png",
+        "bytes": 681,
+        "sha256": "701B746406F817DE57F0907DC944CA9F7E3480CC3D5A718D5F971C3A5A8980E9"
+      },
+      {
+        "path": "res/obj3d.png",
+        "bytes": 21499,
+        "sha256": "110F517BD9D053061F3FBFC9090EDB657CFB892E43FB85A24634C2D5CFB119BA"
+      },
+      {
+        "path": "res/unlock.png",
+        "bytes": 688,
+        "sha256": "4A2EFDCA73EBAA6A1F86410331D12E6028B5E4F42558CD0EB4D6AB86367FE408"
+      },
+      {
+        "path": "SAMViewer/BoxPromotion.cs",
+        "bytes": 539,
+        "sha256": "F8EE307B67745B98496EBBF1009234AA1168A18F66B256D4D73453B076B82B9F"
+      },
+      {
+        "path": "SAMViewer/CLIP.cs",
+        "bytes": 4163,
+        "sha256": "481C524844E5E0D5FFDA5530ED9FA370B9203738E439DE604FEC2524866ABE1B"
+      },
+      {
+        "path": "SAMViewer/MaskData.cs",
+        "bytes": 3217,
+        "sha256": "9BBF9E3F58282980E81B9C502D8C877ADFDE7DC2F62D690FDAF54FE2617C7A33"
+      },
+      {
+        "path": "SAMViewer/MaskPromotion.cs",
+        "bytes": 297,
+        "sha256": "C82D6836FD4ECE05BF574555E57A10155DCC6E7A956DF9A3A8D6B1B9C25B1CDC"
+      },
+      {
+        "path": "SAMViewer/OpType.cs",
+        "bytes": 66,
+        "sha256": "0D57C7F157E2497A12ACA8955DA500868B6F34CE5ED72B872E38921A11805894"
+      },
+      {
+        "path": "SAMViewer/PointAnnotation.cs",
+        "bytes": 1609,
+        "sha256": "1EF68F2A0AD90FDE076B43A4550E1311367A56952713B974C3DB9980834376A6"
+      },
+      {
+        "path": "SAMViewer/PointPromotion.cs",
+        "bytes": 486,
+        "sha256": "CC3864DA3C35C90D76F0A1AECCDD2C5B5E6BD685F06ADA9A1A88DC0663A9519B"
+      },
+      {
+        "path": "SAMViewer/Promotion.cs",
+        "bytes": 240,
+        "sha256": "9E3E0FBDE34B053E1103364A453A277765EB9600E74C896635E9F9AD7A92ADDF"
+      },
+      {
+        "path": "SAMViewer/PromotionType.cs",
+        "bytes": 72,
+        "sha256": "DC974375CA58D24EC8794704A9F66F19C11AE2B6411EE1E8B6D6E7650B5AA279"
+      },
+      {
+        "path": "SAMViewer/RectAnnotation.cs",
+        "bytes": 2078,
+        "sha256": "337564DBDF52709B9E0277EA1667163051D665093012498EB3B5DA51691FE280"
+      },
+      {
+        "path": "SAMViewer/SAM.cs",
+        "bytes": 10709,
+        "sha256": "178D23F8F38D2352BEEC962DCC90A076362C586B7871D288CF59E5C672171872"
+      },
+      {
+        "path": "SAMViewer/SAMAutoMask.cs",
+        "bytes": 8297,
+        "sha256": "E02810CD60F81D25A2DCA8F644B2F33E50C157F32DDC37AB85C0EF95042C7826"
+      },
+      {
+        "path": "SAMViewer/SimpleTokenizer.cs",
+        "bytes": 11844,
+        "sha256": "2A16BA8291F7A65C75565B4ABC694CF5D5D4CB35034E8B6566650E746D501CEB"
+      },
+      {
+        "path": "SAMViewer/TextPromotion.cs",
+        "bytes": 96,
+        "sha256": "AF7B47741AF38900BB2CA25AB89F0D5F8B2E76F3BA904503059B5870EC87C7C9"
+      },
+      {
+        "path": "SAMViewer/Transforms.cs",
+        "bytes": 2356,
+        "sha256": "D0CCA01E8170F65E313DD5E3B4DEBC6D658B4A65E664198A4AA85B9983B666E7"
+      },
+      {
+        "path": "stringresources.en-us.baml",
+        "bytes": 39033,
+        "sha256": "6C0693AFB05643B2CF23305C373855EF45523E44A638C80ECE78C1980178DCC2"
+      },
+      {
+        "path": "stringresources.ja-jp.baml",
+        "bytes": 45058,
+        "sha256": "6A90C0ADFC4E0634ABE8F606B1B4750343401C28784E996FC9DA4048539AAC1A"
+      },
+      {
+        "path": "stringresources.zh-cn.baml",
+        "bytes": 40588,
+        "sha256": "0FA45FC90C9FC125677E4C96387D749E16349C99891DD9C6873B7B2D4A28F063"
+      },
+      {
+        "path": "stringresources.zh-tw.baml",
+        "bytes": 40933,
+        "sha256": "F7357C8A2165D10C9332F3DBE5B5B87B6D8A77F06B9C5C91ABC482E54EB4056E"
+      },
+      {
+        "path": "throughputoutputwindow.baml",
+        "bytes": 7263,
+        "sha256": "D041E0E15C215EC89C60ECF101A93A3943A90C1B7CBC2267714C506CA26C42D2"
+      },
+      {
+        "path": "toolswindow.baml",
+        "bytes": 48429,
+        "sha256": "E8A2A0ECA898D957328FED99487E86D7FA7685E7ED96A023CF05D0DA0AC12813"
+      },
+      {
+        "path": "WindowWrapper.cs",
+        "bytes": 221,
+        "sha256": "09AE09651BC97EF5D07347A7932DBAA3497E2C3F049FF1A24B9EFEE011E9BF13"
+      }
+    ]
+  },
+  "editable_manifest": {
+    "file_count": 234,
+    "tree_sha256": "931A7B1B44B7B1D964CDF96C0EF5A6E9DE89829DE93EC926C4816D58E3D3FB98",
+    "files": [
+      {
+        "path": "-Module-.cs",
+        "bytes": 451545,
+        "sha256": "2DD7727ABA40DB209B62AF864BF6DA365B00582E23F6404926D001B15BF44FDB"
+      },
+      {
+        "path": "-PrivateImplementationDetails-.cs",
+        "bytes": 853,
+        "sha256": "BBDFEFCAFFF8A41AA31A735946D5D1ABD5B70FE0A8D69AB858E6B5A7FAFB54D1"
+      },
+      {
+        "path": "aoi/advlocatewindow.baml",
+        "bytes": 65035,
+        "sha256": "0E7D4E5243D072EFD1F049C96B1CB78AC1C229D5E49DA39879E2791E3E717FBB"
+      },
+      {
+        "path": "aoi/aiprophettoolwindow.baml",
+        "bytes": 18360,
+        "sha256": "4E8300FE65A018B8FCB636DE92EB11CEC1E2A5D5E46186A1F0174DAA3D1EAEE6"
+      },
+      {
+        "path": "aoi/aitoolwindow.baml",
+        "bytes": 15565,
+        "sha256": "DA4A911194A0BBC5E176AEB23F662E86D5FAA1247241F6F4474438A0680816A0"
+      },
+      {
+        "path": "aoi/binarywindow.baml",
+        "bytes": 81620,
+        "sha256": "DAD30424ABF396BB2B671ADFE83C33C90E6088021BEF3DBE6C4F931E194F805D"
+      },
+      {
+        "path": "aoi/blockavgtoolwindow.baml",
+        "bytes": 57455,
+        "sha256": "30D421B874D0B4B4B1E8D77DC74B61F09C97473BC0D5C04FE81A2F1A2C016612"
+      },
+      {
+        "path": "aoi/differencetoolwindow.baml",
+        "bytes": 55773,
+        "sha256": "95E4DA02DD063657969B5D82EF6A677D448A83888C6A117894A19D1FDF5B1373"
+      },
+      {
+        "path": "aoi/enhancewindow.baml",
+        "bytes": 23660,
+        "sha256": "AEBCE9EC9C7E9EE41CC0D7E017D2587315F64F9802B76706B3586609E8BB6729"
+      },
+      {
+        "path": "aoi/fonttoolwindow.baml",
+        "bytes": 130494,
+        "sha256": "95AFDD30C6D5561D13244CE092E1894F995975F628EC03502BEB904C44CF9174"
+      },
+      {
+        "path": "aoi/irtoolwindow.baml",
+        "bytes": 53144,
+        "sha256": "A832C3FC90C59FCEB9E6CD0B280EBD91B1B1569C553F9E716594D3E354CF09C2"
+      },
+      {
+        "path": "aoi/lightmonitorwindow.baml",
+        "bytes": 19360,
+        "sha256": "68ADF027FC69755AB177E267ABCA6F3021FBBC063863C8E13FDAA58A4E71A2F7"
+      },
+      {
+        "path": "aoi/lineanalysiswindow.baml",
+        "bytes": 43343,
+        "sha256": "8CEA3F7A63BA685DCCF36F35770622466E1FE78A4E048C9D4319299246202A69"
+      },
+      {
+        "path": "aoi/locatewindow.baml",
+        "bytes": 67834,
+        "sha256": "0FFDE7C6D53DBB60F89901D5DBF4AFB350268ACA8AF29EB73A2A54BF20AA1838"
+      },
+      {
+        "path": "aoi/maskwindow.baml",
+        "bytes": 67049,
+        "sha256": "2BEC5990E50E7ABEEAA8F760414B31DDEDD3C2489851D385672B08C7E5712135"
+      },
+      {
+        "path": "aoi/matchtoolwindow.baml",
+        "bytes": 100490,
+        "sha256": "E9240230199BBF497138D3B50118298ADD8719A987F23C739B52FCA300B9D80A"
+      },
+      {
+        "path": "aoi/measurewindow.baml",
+        "bytes": 59058,
+        "sha256": "4708EF229573D0007E1E4A0A594B5B7CE5F687D588978A35D0ADEB6924402AEB"
+      },
+      {
+        "path": "aoi/newfonttoolwindow.baml",
+        "bytes": 126727,
+        "sha256": "882E98FD8484785EC48B8B22CCD2E4AD1648478E165A2E7BF8467EB385FCA976"
+      },
+      {
+        "path": "aoi/selectfacewindow.baml",
+        "bytes": 28862,
+        "sha256": "BE0D547F8871E21892CC03957EBB7A4BA1A96B8FF54B4AE5DF69EC28C91A0371"
+      },
+      {
+        "path": "aoi/selectwaywindow.baml",
+        "bytes": 56263,
+        "sha256": "F86C6EC9313DB6FF84FEFED875508549806D5342F5AEBA387F574567C292F807"
+      },
+      {
+        "path": "aoi/smoothtoolwindow.baml",
+        "bytes": 55245,
+        "sha256": "78E614A28DA58733D5956AE9CA88D5E0371E00D4211462D88D0AEB385A295563"
+      },
+      {
+        "path": "ConfusedByAttribute.cs",
+        "bytes": 112,
+        "sha256": "43CFCB0E92A621A6B5C4C6B092A653C90633819E1E463EBD52EF9187F3170F0F"
+      },
+      {
+        "path": "FolderSelectDialog.cs",
+        "bytes": 2378,
+        "sha256": "971215D3D3C5D8DCE407482798D100A30C519A1F8486D3FE4E1DB705AE01ED7E"
+      },
+      {
+        "path": "historyviewwindow.baml",
+        "bytes": 10256,
+        "sha256": "169A9DF237CD7E20797E0D739CD9F54C3AC9DF5BAC3942F7190F45620FB188CB"
+      },
+      {
+        "path": "InspTools.g.resources",
+        "bytes": 2521236,
+        "sha256": "049C82240FFB8256147DABF1D2708D93CBBD51BF43EE288CEF6DF345C3E29DFD"
+      },
+      {
+        "path": "InspTools.Resources.Lang.resx",
+        "bytes": 70677,
+        "sha256": "C6BA08F4E9D23306DEE8A7A932F1F468D7769B5067FDD7DCD012C471B3C384DE"
+      },
+      {
+        "path": "InspTools.unpacked.csproj",
+        "bytes": 12824,
+        "sha256": "D538DA7EEFF3D71AFCF31A0E142C3633C642C25A1010CEFA529A133108D75BF2"
+      },
+      {
+        "path": "InspTools/AOI/AdvLocateTool.cs",
+        "bytes": 76524,
+        "sha256": "9AB240A10495D26BC6E2CBB7D630C48791DEA9AD19F111F39ACCB1FA9F5C309D"
+      },
+      {
+        "path": "InspTools/AOI/AdvLocateWindow.cs",
+        "bytes": 257528,
+        "sha256": "2D5AAE194CB6AE839DFBD6702E19EAEB7DE53D04B10CE90DB565335C010217AF"
+      },
+      {
+        "path": "InspTools/AOI/AdvMeasureCondition.cs",
+        "bytes": 93,
+        "sha256": "CE55142A087DD9AC08D21C94EE8FBBEE85AA17821AF72C678DA5030E2D45D6E8"
+      },
+      {
+        "path": "InspTools/AOI/AI_MODE.cs",
+        "bytes": 86,
+        "sha256": "3F89BECDF259994ADE81426454406AF9FEBB24B38A430E508A90D26967DCDB7B"
+      },
+      {
+        "path": "InspTools/AOI/AIEnhanceCenter.cs",
+        "bytes": 52705,
+        "sha256": "C509F7FB51CF6D7882C20070F0D8F8E6C08E1A10D5CB2EAD246FD5D35A0F8867"
+      },
+      {
+        "path": "InspTools/AOI/AIEnhanceTool.cs",
+        "bytes": 61132,
+        "sha256": "7C4E5FD2224DF3703829D1565CEED12D2AACC2F0BAABF0A57B3DF70CA7FB8741"
+      },
+      {
+        "path": "InspTools/AOI/AIEnhanceToolThread.cs",
+        "bytes": 38747,
+        "sha256": "F5D75389230576EF4EA94823F119BCF910E7E2A46EAA5E222A24B53AC3E1BA78"
+      },
+      {
+        "path": "InspTools/AOI/AIPredictTool.cs",
+        "bytes": 40054,
+        "sha256": "2F8F0CFB83BFE3D16CC75EA08B4ED39779B1BFF998628EF902CA1D389E1A7578"
+      },
+      {
+        "path": "InspTools/AOI/AIProphetTool.cs",
+        "bytes": 32506,
+        "sha256": "74B5C8A616B52956EEB46EC344537C9F24220A41B8AEABCAE996AE415C6666BD"
+      },
+      {
+        "path": "InspTools/AOI/AIProphetToolWindow.cs",
+        "bytes": 69901,
+        "sha256": "AAD5F077EE4BCDF0D3DE569A9518D9E9928E77B62620F6A7477396C6C1E560BA"
+      },
+      {
+        "path": "InspTools/AOI/AIToolWindow.cs",
+        "bytes": 63102,
+        "sha256": "98AECB403A1A123CFF9E7D6651E9102CD745E6716847353ABDE93FE04BE39641"
+      },
+      {
+        "path": "InspTools/AOI/AllInspTools.cs",
+        "bytes": 316,
+        "sha256": "7D722A3773FFAD57D56543AB53564D7C2C9CDADA069A7892555D6293D3E658F2"
+      },
+      {
+        "path": "InspTools/AOI/BIN_COUNT.cs",
+        "bytes": 251,
+        "sha256": "E692CD38FE7FCA8E42D02A5D4D96D7EDAD4DC36AC3EEBA4C496B8A86BF9E7B97"
+      },
+      {
+        "path": "InspTools/AOI/BinaryTool.cs",
+        "bytes": 124239,
+        "sha256": "F1EED829FC68EBCCAA0E6897238530F752706F8E4A5A649F09BBBB507A7BCD49"
+      },
+      {
+        "path": "InspTools/AOI/BinaryWindow.cs",
+        "bytes": 325715,
+        "sha256": "24BA87E279661675F63ABAE954D6D283CA53D6A01DC4C1064AA8BF300BEB7CD8"
+      },
+      {
+        "path": "InspTools/AOI/BlobCondition.cs",
+        "bytes": 268,
+        "sha256": "AB5F52A182AB05F57C6DC3A8EF59CCDC25F34DDA5426A3139AEC9CFD86678237"
+      },
+      {
+        "path": "InspTools/AOI/BlobStruct.cs",
+        "bytes": 576,
+        "sha256": "29A567A38AF176FD005316C1976AFE3D53BDB5F0B52A3DA28AC3FC6104E0F178"
+      },
+      {
+        "path": "InspTools/AOI/BlockAvgTool.cs",
+        "bytes": 98020,
+        "sha256": "38C7BBB44434D1AF4519962DCCBE46624F725200F54EADCAA724F3B50C6619A9"
+      },
+      {
+        "path": "InspTools/AOI/BlockAvgToolWindow.cs",
+        "bytes": 221660,
+        "sha256": "48A589EDF67DC9C9016CDAF392DE19FD663C5E28494416A8D30B4E9255346926"
+      },
+      {
+        "path": "InspTools/AOI/BUFFERID.cs",
+        "bytes": 78,
+        "sha256": "D8670ACFDFED1374423F3181A6991E10F634C906AE7342FFCBE7D91A8C39EF12"
+      },
+      {
+        "path": "InspTools/AOI/BufferKind.cs",
+        "bytes": 231,
+        "sha256": "D4FFE3D731FE30CD103CB3613E96F995AFD3BF849DBF3004E18FD9F7696B9A3B"
+      },
+      {
+        "path": "InspTools/AOI/COLOR_CHANNEL.cs",
+        "bytes": 198,
+        "sha256": "BAF5B76DB776F3F36E6818763B61DFAAE5B2E7B4A10942007F51E6411BB7EE4D"
+      },
+      {
+        "path": "InspTools/AOI/CVBuffer.cs",
+        "bytes": 37420,
+        "sha256": "2FB1FE3978E349338325E150E06F121172B8A3BFE72CC6A1010F511B3F3D888E"
+      },
+      {
+        "path": "InspTools/AOI/CVImageBase.cs",
+        "bytes": 5744,
+        "sha256": "22A4AA9BE9419C8347161594539B8FE52FECEF3F61D52E7D4F28503540B6F7CC"
+      },
+      {
+        "path": "InspTools/AOI/DifferenceTool.cs",
+        "bytes": 74453,
+        "sha256": "A70D0817A77E680C5F2E28F882A5F2FFB26C406B332CD57C627D2D7E508861AF"
+      },
+      {
+        "path": "InspTools/AOI/DifferenceWindow.cs",
+        "bytes": 215323,
+        "sha256": "314EB08A03323B5DE2942239A8EBFC799AA7350C5A4443E48BAF5B36C7AEAC7A"
+      },
+      {
+        "path": "InspTools/AOI/EnhanceTool.cs",
+        "bytes": 15352,
+        "sha256": "3AE2C92F4468163F5C6FA1C00772579DA654917EA7CED7727A0E35C1EAFE73E5"
+      },
+      {
+        "path": "InspTools/AOI/EnhanceWindow.cs",
+        "bytes": 37860,
+        "sha256": "70A2117CC519597536552EF54C05C25234B63843DE93232F3C2D214FC03199C9"
+      },
+      {
+        "path": "InspTools/AOI/File_Action.cs",
+        "bytes": 85,
+        "sha256": "F2D82121854941B4C68C41BC8DA90F20AF6A72909ED415CD7036828A6F5CA54D"
+      },
+      {
+        "path": "InspTools/AOI/FLOW_BIN.cs",
+        "bytes": 137,
+        "sha256": "3661E3E8360BFD9F3DD5732FD6ECF9C075798F3230B83DE67316272130E078F4"
+      },
+      {
+        "path": "InspTools/AOI/FontTool.cs",
+        "bytes": 389803,
+        "sha256": "9EAF1EA0E59A6270AF6D828A961BBB70BF2F3678A701694ECBC0FFB60DFEA893"
+      },
+      {
+        "path": "InspTools/AOI/FontToolWindow.cs",
+        "bytes": 413306,
+        "sha256": "549628E5B73FAEEC7168E004A16866B43E6EF28B18BD0039667A6246FD64E83C"
+      },
+      {
+        "path": "InspTools/AOI/INSP_ADVLOCATETOOL_PARAM.cs",
+        "bytes": 2015,
+        "sha256": "B01F8F8D71E3A944314D746D6BCE166471A00D7220FE4C9AF8543AA1AAB7961D"
+      },
+      {
+        "path": "InspTools/AOI/INSP_ADVMEASURETOOL_PARAM.cs",
+        "bytes": 736,
+        "sha256": "7AE823CC7E36D5CE50C345E75F6ACE881FC811D25089EE85F0FC8612A02A119B"
+      },
+      {
+        "path": "InspTools/AOI/INSP_AIPROPHET_PARAM.cs",
+        "bytes": 918,
+        "sha256": "6A5895AC203FBDE97B2B7C7EAD8659F4882C34FD9F99AE93B3928286D1A59F18"
+      },
+      {
+        "path": "InspTools/AOI/INSP_AITOOL_PARAM.cs",
+        "bytes": 2537,
+        "sha256": "D911FF65D6C3DF30475AD8A3AB57C070AB49A0E91DBD1E1C15ECE2C83A1E1CF2"
+      },
+      {
+        "path": "InspTools/AOI/INSP_BINARYTOOL_PARAM.cs",
+        "bytes": 4723,
+        "sha256": "BE610C1E60367801C2B10A3E42936A4BA0F6359E100A7D97FE458DA086ECDC7D"
+      },
+      {
+        "path": "InspTools/AOI/INSP_COLORREFERENCE_PARAM.cs",
+        "bytes": 1329,
+        "sha256": "5968AEED6B15F59A15CB2E7E1B03AA4F55DEAAFED041A5DB177442C7F7CF2B68"
+      },
+      {
+        "path": "InspTools/AOI/INSP_DIFFERENCETOOL_PARAM.cs",
+        "bytes": 3752,
+        "sha256": "1DBC8FF2F4CFB97D684E44C500F794FB59A478B57B94B294B0CD9BDD30B33EE9"
+      },
+      {
+        "path": "InspTools/AOI/INSP_ENHANCE_PARAM.cs",
+        "bytes": 911,
+        "sha256": "C9AF472B3F02745C4CDBACFF19E888790AFD89BEFE4DAD4D05E94A120D73386F"
+      },
+      {
+        "path": "InspTools/AOI/INSP_FONTTOOL_OTHERFONT_PARAM.cs",
+        "bytes": 541,
+        "sha256": "6A8B99FAC097B7721AD015D22F713A447B00109FF1ABF8820F9EA7388DEEED84"
+      },
+      {
+        "path": "InspTools/AOI/INSP_FONTTOOL_PARAM.cs",
+        "bytes": 13085,
+        "sha256": "18745DB5EC4B2F92C64E952463E609417F9A063330B938759B14ACA9AEBE014B"
+      },
+      {
+        "path": "InspTools/AOI/INSP_IRTOOL_PARAM.cs",
+        "bytes": 319,
+        "sha256": "01EAFAAF205615174661F1C97E2771990A78EE5EB7702778BDEE8D01DB44FC65"
+      },
+      {
+        "path": "InspTools/AOI/INSP_LIGHTMONITOR_PARAM.cs",
+        "bytes": 1015,
+        "sha256": "D39DC13CD54FF6CE97523FA5A6D73F46F8E7A4BDDA6B38B79BD434CE3DC6DF7B"
+      },
+      {
+        "path": "InspTools/AOI/INSP_LINEANALYSISTOOL_PARAM.cs",
+        "bytes": 1954,
+        "sha256": "485BC40C3538C8028982CF7347013C84B1D7F042847CAE4DA81BE73D32AC4B60"
+      },
+      {
+        "path": "InspTools/AOI/INSP_LOCATE_PARAM.cs",
+        "bytes": 5489,
+        "sha256": "C4A15F24BEF43682E26161690508C68D6037EFE3B7439499064D19BE440E126A"
+      },
+      {
+        "path": "InspTools/AOI/INSP_MASKTOOL_PARAM.cs",
+        "bytes": 4185,
+        "sha256": "4EC09E7749546FA88378633640475F617C63ACB3E526512B447273D3C482970B"
+      },
+      {
+        "path": "InspTools/AOI/INSP_MATCHTOOL_PARAM.cs",
+        "bytes": 2117,
+        "sha256": "653E272A34EADEE3EB9C0FB3FAAF987286CB5CB4AAFC1AC62A8B8048E9C43B40"
+      },
+      {
+        "path": "InspTools/AOI/INSP_MEASURETOOL_PARAM.cs",
+        "bytes": 2128,
+        "sha256": "CE8F37473B0C01650F7B016692F829F250F652C7EC1CD8B0AF5A878A20C5DA1D"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SCANLINETOOL_PARAM.cs",
+        "bytes": 1453,
+        "sha256": "74B743BB49136683D6A06EFEB72360B728F7DB6B00E24A2B5CFF3ECEB94F77C2"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SELECTFACETOOL_PARAM.cs",
+        "bytes": 1733,
+        "sha256": "52647DD446D8A07502ADD3BC14A6DEC6B4D02CC4CEE224280B4BC4DFF72873C3"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SELECTWAYTOOL_PARAM.cs",
+        "bytes": 2083,
+        "sha256": "7D538100E98DC0AF399D2DA5B33641FE24E330B7D63C23E2AD52DA1A87F2E11F"
+      },
+      {
+        "path": "InspTools/AOI/INSP_SMOOTHTOOL_PARAM.cs",
+        "bytes": 3584,
+        "sha256": "7DD42E43F8EC0EBDF8B0C245E8313B8CBF77F88B6E31C8444FD098E94935BE80"
+      },
+      {
+        "path": "InspTools/AOI/INSP_THROUGHPUT_PARAM.cs",
+        "bytes": 8073,
+        "sha256": "CCCCE63D2F7BE2B6AC6554D2A9D99B25B8D388A22B17DBC7FFCE160523C9F3FE"
+      },
+      {
+        "path": "InspTools/AOI/INSPRESULT.cs",
+        "bytes": 103,
+        "sha256": "BDAAFE5F34F5FA6206C88D6824656C47F29118E87856769A0C29054B7C363718"
+      },
+      {
+        "path": "InspTools/AOI/INSPSURVITEM.cs",
+        "bytes": 433,
+        "sha256": "4EA05A767375B565D3907C64577EF5BA84E1CF939BB8007B0B8376CEC965B240"
+      },
+      {
+        "path": "InspTools/AOI/InspToolsFunciton.cs",
+        "bytes": 405,
+        "sha256": "7943DBB94208E6DDE7FCEE1B9FDCE900DA0B37B5039BA7B7DC0A61CF90782E34"
+      },
+      {
+        "path": "InspTools/AOI/IRTool.cs",
+        "bytes": 42030,
+        "sha256": "06DD7365B12D4878E190CBEE5D57A8742397884DAA0BB906C94B6D6129FA1722"
+      },
+      {
+        "path": "InspTools/AOI/IRToolWindow.cs",
+        "bytes": 166833,
+        "sha256": "1F2A7644A76433EC98F308B1A43C9D394B74B38DE6356820A6F459333EBF7F88"
+      },
+      {
+        "path": "InspTools/AOI/LightCorrectonDiffValue.cs",
+        "bytes": 265,
+        "sha256": "E913847A3D61E4473E0BE1D0D8C3A63A76D1F88FB43DB180DE1FA3BC86D5E35A"
+      },
+      {
+        "path": "InspTools/AOI/LightMonitorTool.cs",
+        "bytes": 48475,
+        "sha256": "3E7BEDDD0DA4B4F8B752E6697D02DF4E654FEBAC829592F2A37FA143B4C8A449"
+      },
+      {
+        "path": "InspTools/AOI/LightMonitorWindow.cs",
+        "bytes": 39458,
+        "sha256": "90A0E47B4FD5821B0C250EF73697CDD1C45CDF9E1526A93AA38F9837E5F469A9"
+      },
+      {
+        "path": "InspTools/AOI/LineAnalysisTool.cs",
+        "bytes": 40925,
+        "sha256": "D228675F9838917E2DF1F577BE3DC23EF8C045706FC5545B85C847D50DD19C60"
+      },
+      {
+        "path": "InspTools/AOI/LineAnalysisWindow.cs",
+        "bytes": 131638,
+        "sha256": "11CCD5343E921BF0D5EF334F7823939772CE641B6AF7E01F29827EE7A19C7C4A"
+      },
+      {
+        "path": "InspTools/AOI/LocateAIEnhanceTool.cs",
+        "bytes": 53865,
+        "sha256": "987DE2CC9DF9A6538AB0051AF22C33B7150425C36E4B891398754AB1E7F2EFE2"
+      },
+      {
+        "path": "InspTools/AOI/LocateTool.cs",
+        "bytes": 96495,
+        "sha256": "64D52BC4F04340C67D6CC74F239A6BC781AA47A57261E974913614F8FE623322"
+      },
+      {
+        "path": "InspTools/AOI/LocateWindow.cs",
+        "bytes": 252720,
+        "sha256": "B3C094C64DEBE00F9FD14386653AA24E4207F4AC09DD32F6F4710AB52A3A1A62"
+      },
+      {
+        "path": "InspTools/AOI/MaskTool.cs",
+        "bytes": 31918,
+        "sha256": "C5769C96FB44FB083D3F0BA11463B96F06766175978BA9C7C5204B743A31EC58"
+      },
+      {
+        "path": "InspTools/AOI/MaskWindow.cs",
+        "bytes": 160398,
+        "sha256": "F54FC089B13A467065F0209EC1CFB2A7605D89BE77F632AA352FB9E7B3B5417D"
+      },
+      {
+        "path": "InspTools/AOI/MatchPattern.cs",
+        "bytes": 510,
+        "sha256": "ACBA3542A3D1F0EB3AE34DFD21475C47CC0502288F6DC9EE854B2B0A2AA8CD41"
+      },
+      {
+        "path": "InspTools/AOI/MatchTool.cs",
+        "bytes": 59679,
+        "sha256": "63D96DE0908B16873215D10A4F02D730217F6A7CF9257118BE34BA41E230FDAD"
+      },
+      {
+        "path": "InspTools/AOI/MatchToolWindow.cs",
+        "bytes": 241015,
+        "sha256": "8DE8B416947ACDEE75A72E540FA67EFB3878954593BAE94A63A6E784F4F1211E"
+      },
+      {
+        "path": "InspTools/AOI/MeasureCondition.cs",
+        "bytes": 106,
+        "sha256": "4E5A000C82A82E9DB4D1A9FB0239EB0D4E3F602AB9308520F761B6A0A9EEA831"
+      },
+      {
+        "path": "InspTools/AOI/MeasureTool.cs",
+        "bytes": 46967,
+        "sha256": "E77CB5D53B1D037BA9AB51F1DC55E0A2F58ADCA71A171AF984A2CAE6F127A694"
+      },
+      {
+        "path": "InspTools/AOI/MeasureWindow.cs",
+        "bytes": 173796,
+        "sha256": "BC98AE7D657F4153909FAF8762498E460B2B67652B89A4F28CBCC1BBB9569C4A"
+      },
+      {
+        "path": "InspTools/AOI/NewFontToolWindow.cs",
+        "bytes": 417493,
+        "sha256": "77BB1B4CCF25BC9AF0795C7D6D66E8C06DAC7FFC3914DA9B881ECD0822BDD973"
+      },
+      {
+        "path": "InspTools/AOI/OBJSIZE.cs",
+        "bytes": 497,
+        "sha256": "1B9C3499566BDDD6034E3A217978C137C261D8BD6EF4C33A1EE79C902E48165B"
+      },
+      {
+        "path": "InspTools/AOI/ParamFile.cs",
+        "bytes": 347019,
+        "sha256": "EE1E7A8BB11B5B9F18FC43F907027D572C51AD9BE116EB7738AF68E427ECF8D9"
+      },
+      {
+        "path": "InspTools/AOI/PARETODATA.cs",
+        "bytes": 94,
+        "sha256": "B38259021EDB9BBF58109BBF73DF78D6FE13E44D86283F0EEC5F2DD0594C186F"
+      },
+      {
+        "path": "InspTools/AOI/ScanDirection.cs",
+        "bytes": 161,
+        "sha256": "48E2C0D036078CC8BBFFD08FC3F5A45980FBAC9ACB2BB3340701A909DD437597"
+      },
+      {
+        "path": "InspTools/AOI/SelectFaceTool.cs",
+        "bytes": 24472,
+        "sha256": "257736EE45266F26DC321F21B8A08208F8F6B54593A7A7E1F18668AFEAB59B68"
+      },
+      {
+        "path": "InspTools/AOI/SelectFaceWindow.cs",
+        "bytes": 65776,
+        "sha256": "F323AC9CBDA68D853095E9CA4AAC464D755DDA919965543B6819DC51CC9B796C"
+      },
+      {
+        "path": "InspTools/AOI/SelectWayTool.cs",
+        "bytes": 38823,
+        "sha256": "4452F6CEA2D55E251AEAB305EC4A6E9E4D33C6A441C8F883283C08355CC3D743"
+      },
+      {
+        "path": "InspTools/AOI/SelectWayWindow.cs",
+        "bytes": 114450,
+        "sha256": "66C6782651D2D3C502911F9A81FC1D91C1693D31E32F195AD0FCF35C3B587B29"
+      },
+      {
+        "path": "InspTools/AOI/SimpleBlobStruct.cs",
+        "bytes": 242,
+        "sha256": "AD6666268C6D8B2C5C4BD437D6F370F4D0FCA4DCEAA599BEB823AD2212C79860"
+      },
+      {
+        "path": "InspTools/AOI/SIZESTATIC.cs",
+        "bytes": 783,
+        "sha256": "4680BB746E1F5E684E7C91AA6A5C4DAEDB9BC0FCBA83F195D33F739D170C317C"
+      },
+      {
+        "path": "InspTools/AOI/SmoothTool.cs",
+        "bytes": 83921,
+        "sha256": "E8FED372712B48F81FA0B36495E43634CBF9D3D07A3A0A6A9A562A5A239F308D"
+      },
+      {
+        "path": "InspTools/AOI/SmoothWindow.cs",
+        "bytes": 214035,
+        "sha256": "3BEF784D655A4BFA506723F24B8DE575FF15365A72C6B23EF05D758E96071ECC"
+      },
+      {
+        "path": "InspTools/AOI/TOOL_RESULT.cs",
+        "bytes": 94,
+        "sha256": "93221D3CA3622858C28C508DD90B4D37725724B2CD9B771313D7D9DA45C8E9BE"
+      },
+      {
+        "path": "InspTools/AOI/TOOLSENABLEITEM.cs",
+        "bytes": 104,
+        "sha256": "259C299E49123A646DA45ADAC70B03C586D83AB3B20A619D9DE33CBF72423785"
+      },
+      {
+        "path": "InspTools/AOI/TOOLSIZERECORDSETUP.cs",
+        "bytes": 161,
+        "sha256": "8A2F4EBE4D9738D5C92CCBC27790719E0DCDAC6FDA7570AE0C270D84C35DBF28"
+      },
+      {
+        "path": "InspTools/AOI/USE_DILATE_ERODE.cs",
+        "bytes": 211,
+        "sha256": "37B55D2C6EB0C4C9AD6F1C1FB8C92B782E268FD6F31B580BEEE73385B2376DDB"
+      },
+      {
+        "path": "InspTools/AOI/User_Permissions.cs",
+        "bytes": 122,
+        "sha256": "A37C10171C6319A2D33C5BCF99849B59E3734A70AC6D3FA9D4DB090A841C9859"
+      },
+      {
+        "path": "InspTools/HINI.cs",
+        "bytes": 5096,
+        "sha256": "416DE07DC3B7B74C0AA0D212CBD61DD417F9CF6FCB2026CA8FDE9E750F9A9921"
+      },
+      {
+        "path": "InspTools/HiniFile.cs",
+        "bytes": 8346,
+        "sha256": "84B4ACDE411D4E353C63EBAFF86DDC92EBD736B09DCF63D710D0751D07C32615"
+      },
+      {
+        "path": "InspTools/HistoryViewWindow.cs",
+        "bytes": 14886,
+        "sha256": "85495BD636A534F1FBEF9A6D2953378137E79DD4AD91D60434E15F4D31F28AA7"
+      },
+      {
+        "path": "InspTools/MM.cs",
+        "bytes": 2238,
+        "sha256": "4479A4C7F253D4659D2B1B9E0E4A1488776F963C04F66587B036FD6884E26CA6"
+      },
+      {
+        "path": "InspTools/MyMat.cs",
+        "bytes": 302,
+        "sha256": "8C37936CA83D46356A4F3CB4D98218DAE613E5784B0228EB2556A6432B92BC59"
+      },
+      {
+        "path": "InspTools/Other/AIMarkWindow.cs",
+        "bytes": 106806,
+        "sha256": "71D5716860DDAC8CCACB1C84EACEF878AF204B27ECC3E40940E760A27CF69486"
+      },
+      {
+        "path": "InspTools/Other/AIParamSetupWindow.cs",
+        "bytes": 6963,
+        "sha256": "BE71966B291160BC6471804F1E58CB8D72C654115272D2453E9A38B4AD7D032B"
+      },
+      {
+        "path": "InspTools/Other/AIPreviewWindow.cs",
+        "bytes": 94815,
+        "sha256": "39CC48691ADF4E2554A6A2FFC60F7B9C71F356EE9047241527395943EF4E08D5"
+      },
+      {
+        "path": "InspTools/Other/AITrainingWIndow.cs",
+        "bytes": 176891,
+        "sha256": "BB03C316DF483EB64C71DF365BD4F7B80327D02958F009FA6AC6D31C53D2B139"
+      },
+      {
+        "path": "InspTools/Other/AutoMatchWindow.cs",
+        "bytes": 32212,
+        "sha256": "A7A545195CA23380F3412CFCB8AEC931701D0DF673C104455F0951276134B7AA"
+      },
+      {
+        "path": "InspTools/Other/BlobStatisticsWindow.cs",
+        "bytes": 25361,
+        "sha256": "C7CCFFB07C0AD51C2C4B0B89A38B8651E2F51B0F362B5B5788BAA44CE9919A8D"
+      },
+      {
+        "path": "InspTools/Other/ChartWindow.cs",
+        "bytes": 10311,
+        "sha256": "86E0CA586F91AF6EB269F67AF49F30829D9B99D775C31DBF7DA933C6691AAD6F"
+      },
+      {
+        "path": "InspTools/Other/DBSetupWindow.cs",
+        "bytes": 20450,
+        "sha256": "A4C30E0172C17AD56B40128864CF4AEEC0815B411B2F48C9B2EF6031F4EB75CC"
+      },
+      {
+        "path": "InspTools/Other/DNet3SetupWindow.cs",
+        "bytes": 13097,
+        "sha256": "4A34F3A7F73DA9DC9E2C0C6DA83184681A0F64F1B94CB20EDC54866AA69037CA"
+      },
+      {
+        "path": "InspTools/Other/Edit2InputWindow.cs",
+        "bytes": 3660,
+        "sha256": "3775AAAD6BB1F537A2637D6AEAD03D2916C9E4A47602140AD98BACAFA377EF87"
+      },
+      {
+        "path": "InspTools/Other/HashTagEditWindow.cs",
+        "bytes": 2499,
+        "sha256": "27B6924A84C42046106B49536A9218FE422B339B7425F853DC7E7E27B834EE2D"
+      },
+      {
+        "path": "InspTools/Other/HKeyboard.cs",
+        "bytes": 13944,
+        "sha256": "53CF4CC065B83F3C0B46B7E9E698DAE7FF52A0CE9FBCEA23798BCEFD51CE1933"
+      },
+      {
+        "path": "InspTools/Other/InspSurvWindow.cs",
+        "bytes": 16326,
+        "sha256": "38C0063D92D03CE2474693A8C0E358234A7D498F10B2E54B59C6AC98D8E63730"
+      },
+      {
+        "path": "InspTools/Other/ItemInputWindow.cs",
+        "bytes": 2386,
+        "sha256": "212E6DBF3567719D8DBADD7F639E84E5EBF4D7B8F23F9823DC9125DDEC0AB8AB"
+      },
+      {
+        "path": "InspTools/Other/LocateModelsWindow.cs",
+        "bytes": 22109,
+        "sha256": "9000C07E3553C8B0ACB1960E17F473C43821D1601A780F93326330F547BE314A"
+      },
+      {
+        "path": "InspTools/Other/ModelsWindow.cs",
+        "bytes": 35674,
+        "sha256": "4B8814C6DC1CB6BB2121411E0C6B3FE57BA9D135B4D00E607A64153448886E06"
+      },
+      {
+        "path": "InspTools/Other/ModifyLogFun.cs",
+        "bytes": 7472,
+        "sha256": "71EA8D05ADAC9094362D98AF67E2B804DFB1CAD602465A67512B4F2565EA41B4"
+      },
+      {
+        "path": "InspTools/Other/NGCloneWindow.cs",
+        "bytes": 39250,
+        "sha256": "EA65E68493191683288644190471FD330B04BE6726F519EF6E1529C4ABE6ACBC"
+      },
+      {
+        "path": "InspTools/Other/OnnxModelsWindow.cs",
+        "bytes": 15620,
+        "sha256": "EFE98DF5EF94E33B7F94F60E27EBDB3977B5A14DCE04504F8847CA66241FE5D4"
+      },
+      {
+        "path": "InspTools/Other/Operation.cs",
+        "bytes": 110,
+        "sha256": "DBCBF5B30C3CDF41C2BF29D48950F6C4E4B29845A9A9B54774858C0920128955"
+      },
+      {
+        "path": "InspTools/Other/ParamCopyWindow.cs",
+        "bytes": 93061,
+        "sha256": "2D7A5F7CF06619B6AAF18B4E6307E7F3C314A6507D5B5BFA1800535C55A8DB6D"
+      },
+      {
+        "path": "InspTools/Other/ParetoChartData.cs",
+        "bytes": 215,
+        "sha256": "05FA9314ECBF4D39A1C0BF6FFAAF5A91715C398ACD1F85672CAE73F815EFBD9C"
+      },
+      {
+        "path": "InspTools/Other/ParetoChartWindow.cs",
+        "bytes": 39206,
+        "sha256": "E17E3230F00277CD02AEEC44B6D5E8A8C69140A0C5BF8418C6A335E0222B9F8B"
+      },
+      {
+        "path": "InspTools/Other/ParetoItem.cs",
+        "bytes": 126,
+        "sha256": "E1B2AA1B0CE075FDDDCF6A09926330A9749AC2EA92AA4105E8E38E0417199D82"
+      },
+      {
+        "path": "InspTools/Other/ParetoItemPreview.cs",
+        "bytes": 296,
+        "sha256": "C3677A8ECCD68DAE827F27F6BABE6B514D40C40C52622C405CA2E7ABA68D577C"
+      },
+      {
+        "path": "InspTools/Other/ParetoSatisicsItem.cs",
+        "bytes": 800,
+        "sha256": "C167BC699E667B8215F5ED20CCAC8D11B90E2C0016B344561C81644E2EFB9C01"
+      },
+      {
+        "path": "InspTools/Other/PasswordWindow.cs",
+        "bytes": 3109,
+        "sha256": "E53E3E782AE1B23A880423D164E6E8D41A1BE2DD017476D82F6EE04E92987CD2"
+      },
+      {
+        "path": "InspTools/Other/ProphetOnnxModelsWindow.cs",
+        "bytes": 22916,
+        "sha256": "08F1453E61271858CF41215960EAA5F2361E4473F41C6E19C30FDC73DFB01737"
+      },
+      {
+        "path": "InspTools/Other/QuickSetupWindow.cs",
+        "bytes": 44418,
+        "sha256": "281F7868C91250CB860A4BF7C124A92547598F25F06CFE914403E4273A42DABB"
+      },
+      {
+        "path": "InspTools/Other/RecipeListWindow.cs",
+        "bytes": 2894,
+        "sha256": "74F6788894B9751F4C52F6FB058F8C7B5E5CA190FE4B3C756D9D8F06B9638249"
+      },
+      {
+        "path": "InspTools/Other/SaveFolderWindow.cs",
+        "bytes": 12480,
+        "sha256": "ECC07FFC4876B67148EFD99B4BB916CED28EA777B9E29FD965EAD3DA5FAB1B85"
+      },
+      {
+        "path": "InspTools/Other/SaveParetoChartWindow.cs",
+        "bytes": 3786,
+        "sha256": "67C8078044BFC6816239A0CFD63FFB959C692A4D6BC7E221C9257522F83D299C"
+      },
+      {
+        "path": "InspTools/Other/SelectImageWindow.cs",
+        "bytes": 7940,
+        "sha256": "74D9E4B42B141A60FEAE4D7980D7C561B76F00CBF33FF6F1447861129DC90C24"
+      },
+      {
+        "path": "InspTools/Other/SizeChartWindow.cs",
+        "bytes": 139961,
+        "sha256": "2B43094665D968FA52E496EFA56A15384CE35CCDE132164437FCA8A8AC59E205"
+      },
+      {
+        "path": "InspTools/Other/SizeStatistics.cs",
+        "bytes": 24350,
+        "sha256": "96D5B0D04B7D66174B80B3BC89521483E2A416D4024C9860BA8CF2B06AB13060"
+      },
+      {
+        "path": "InspTools/Other/ThroughputOutputWindow.cs",
+        "bytes": 16701,
+        "sha256": "15032C79E6D0A2BEB0D77ACB68C0B5E033B5A2507FE093EF1ABAE29665E3CEFE"
+      },
+      {
+        "path": "InspTools/Other/ThroughputParamFile.cs",
+        "bytes": 47950,
+        "sha256": "A4719EF15DE416B678B798DE47A24F7CD23A824C7A764F543EB0526F78AD7581"
+      },
+      {
+        "path": "InspTools/Other/TrainCSVWindow.cs",
+        "bytes": 157658,
+        "sha256": "7A02CC23C18B62C78D2ED30DA99777A02159947FF1F2F3C6E13E6DA876C8BB19"
+      },
+      {
+        "path": "InspTools/Other/UISetupWindow.cs",
+        "bytes": 5816,
+        "sha256": "2B1DFEC304A3A4070F640D8C36A2F6D4A7728963540A521F0FA440DB8E25425C"
+      },
+      {
+        "path": "InspTools/Other/YieldRetestWindow.cs",
+        "bytes": 52117,
+        "sha256": "1391BD9D8F0182DACBE3B39657039C86D9531CF4CC5FC8961759855881D0F3A8"
+      },
+      {
+        "path": "InspTools/Properties/Settings.cs",
+        "bytes": 469,
+        "sha256": "3B500906925741770361E6BA37781938ECBD7134576A7F7B07F054CE1C9D5AB2"
+      },
+      {
+        "path": "InspTools/Resources/Lang.cs",
+        "bytes": 136296,
+        "sha256": "67998702D4B299A4304CBCA4387DD808D2B852B5927DA6259D6E348E8ED9FC65"
+      },
+      {
+        "path": "InspTools/Resources/LanguageManager.cs",
+        "bytes": 1173,
+        "sha256": "E9802B805738244B8933D7A2F68100D73CBB105CEB9B0C2333B0366A03AD8B3F"
+      },
+      {
+        "path": "InspTools/Station/CVInspection.cs",
+        "bytes": 130296,
+        "sha256": "4728526B1CCCA676B56121BB72AB5390C10D5E699B0D47830F12ABFB55186125"
+      },
+      {
+        "path": "InspTools/Station/CVInspResult.cs",
+        "bytes": 7750,
+        "sha256": "EFDEDE3E2F604263F1B45C1B7EFB00F6128B8338FC0EDF96701A970BE2A14757"
+      },
+      {
+        "path": "InspTools/ToolsWindow.cs",
+        "bytes": 330891,
+        "sha256": "6F52384CB6F868999BE034CE295DC59CC0373A7619A1AD1190F9FF9D99CB23D6"
+      },
+      {
+        "path": "Org/Mentalis/Files/IniReader.cs",
+        "bytes": 5567,
+        "sha256": "E24D0B49455BDF17F4F0D55BCDF63249825C24BD9EB3E4110486C18E1334765A"
+      },
+      {
+        "path": "other/aimarkwindow.baml",
+        "bytes": 20097,
+        "sha256": "E75362C1CDE647FCAC07403CFAA8D8CE0F2D43DA16BBE96DF879ABDD6396F4F5"
+      },
+      {
+        "path": "other/aiparamsetupwindow.baml",
+        "bytes": 8444,
+        "sha256": "F852EECEA60448C63E742C497725C8C80CE496536DB53B18A38F9CD37549693F"
+      },
+      {
+        "path": "other/aipreviewwindow.baml",
+        "bytes": 18476,
+        "sha256": "928D49E68C36E2B67A277EA067CB7C171F45566012A37D2C05D2A9180D0327AF"
+      },
+      {
+        "path": "other/aitrainingwindow.baml",
+        "bytes": 53127,
+        "sha256": "76E90F157FCBD4D48BC7DF3EA433424A7726146B108BD5DB4AFEFEC4568CD224"
+      },
+      {
+        "path": "other/automatchwindow.baml",
+        "bytes": 20176,
+        "sha256": "0B872EF0142E74F59470F737820C179BCB8C2F4759ED766E81978EF093009BAA"
+      },
+      {
+        "path": "other/blobstatisticswindow.baml",
+        "bytes": 9321,
+        "sha256": "7AEAEA14FA5F8DE559310252B23E29B76004CF2C539CFA44EA17289BB79874F9"
+      },
+      {
+        "path": "other/chartwindow.baml",
+        "bytes": 6371,
+        "sha256": "058EA5803C05C3920C71374C930D23857D28716BFC0F9AA7610B7268399D9CDF"
+      },
+      {
+        "path": "other/dbsetupwindow.baml",
+        "bytes": 17297,
+        "sha256": "966A415289092B04A559BBDBD65E1BC77617BD24790CE094E8CA76F31660B772"
+      },
+      {
+        "path": "other/dnet3setupwindow.baml",
+        "bytes": 4080,
+        "sha256": "84300DC73D1EC155730F5957AD0F25FA6E804DFC3C63584BDB43A8A22FCED7BC"
+      },
+      {
+        "path": "other/edit2inputwindow.baml",
+        "bytes": 2564,
+        "sha256": "1C3AB94F41E853E542B293E51F4A80EE839522BC3F27CD67E8F9142D5A359B2E"
+      },
+      {
+        "path": "other/hashtageditwindow.baml",
+        "bytes": 3545,
+        "sha256": "0E1A492DF04562A207318454598953D4FCCEDA9FFB4D15A8F6806050BF04DF10"
+      },
+      {
+        "path": "other/inspsurvwindow.baml",
+        "bytes": 5563,
+        "sha256": "8D9695E7987C60A0E283F0B5F172FAE9D9779C2A6D415F58F2E9B8521C02F7CD"
+      },
+      {
+        "path": "other/iteminputwindow.baml",
+        "bytes": 2185,
+        "sha256": "2273532D3E77E051F7FBD00833582A87743EA5B0576206897F0F57C18152453D"
+      },
+      {
+        "path": "other/keyboard.baml",
+        "bytes": 4773,
+        "sha256": "7E565617FF3AE1310E9BAEDD6D229565ACC8B8A025B070615FA527AF442F8149"
+      },
+      {
+        "path": "other/locatemodelswindow.baml",
+        "bytes": 5820,
+        "sha256": "1D02B7459441538A2196EA90326E64D8ABF5E719E5F81EE327A1E896B7462DDC"
+      },
+      {
+        "path": "other/modelswindow.baml",
+        "bytes": 7567,
+        "sha256": "4E48208ACCF39979477C5E2DDB7264278A552A204D52A151B09F31A0C5D12ABD"
+      },
+      {
+        "path": "other/modifylogfun.baml",
+        "bytes": 1090,
+        "sha256": "A3413FC0DCAEF6D362DB3C8D67C5DAE7B19751814F779D78D647C066DBFD5D6B"
+      },
+      {
+        "path": "other/ngclonewindow.baml",
+        "bytes": 8586,
+        "sha256": "4112768F28DAFB33EB6283A1EFF2A0DB4776A376C39FCFBB800672A08DBB98FE"
+      },
+      {
+        "path": "other/onnxmodelswindow.baml",
+        "bytes": 4787,
+        "sha256": "73E21CB0FFC77587A8F10BF6B5C2162E1D4F9FAA1BB9EFCA058729D0DADFC28C"
+      },
+      {
+        "path": "other/paramcopywindow.baml",
+        "bytes": 25351,
+        "sha256": "D661D9FC1256AF39DFAB868FC01098FAFF464B1137B469BD3CF24317AE6CF74A"
+      },
+      {
+        "path": "other/paretochartwindow.baml",
+        "bytes": 9827,
+        "sha256": "FBD4BC7BE4F6A490883CE0E670E16E7860F7BAA7B1188BD17BD005D09FC86981"
+      },
+      {
+        "path": "other/passwordwindow.baml",
+        "bytes": 2881,
+        "sha256": "7EAC3E6A127C5D2D8573E07D26144C7AACAA58F273CFDE7592C5909C98E23062"
+      },
+      {
+        "path": "other/prophetonnxmodelswindow.baml",
+        "bytes": 5795,
+        "sha256": "34CEB595002C7DBCFEA4E709A44FD9A0D7A6F49F48D8CD53FA3C8D30BE0777D8"
+      },
+      {
+        "path": "other/quicksetupwindow.baml",
+        "bytes": 42571,
+        "sha256": "62DFD9AAD86DB37FAD8AB420CCF524FD4987B592E497588C33DD6646453D3E8D"
+      },
+      {
+        "path": "other/recipelistwindow.baml",
+        "bytes": 2904,
+        "sha256": "99EC31787449C7A73BF6CFAA8058E51DED6F0A7637891A99D7EAC4D5CC4C1552"
+      },
+      {
+        "path": "other/savefolderwindow.baml",
+        "bytes": 9419,
+        "sha256": "14CA900AED056D6B1BC5E68A8790108E2A51A6358428BCD0CAC5A27F4D872E4C"
+      },
+      {
+        "path": "other/saveparetochartwindow.baml",
+        "bytes": 1377,
+        "sha256": "A0214905876046848B0225316E3368911A298F072EF07B6665810C7C305C07D4"
+      },
+      {
+        "path": "other/selectimagewindow.baml",
+        "bytes": 5092,
+        "sha256": "3EC414960D75D5BB58A494AB5048B9E099DD064F2A35A088252FA3446A1B0BE7"
+      },
+      {
+        "path": "other/sizechartwindow.baml",
+        "bytes": 67736,
+        "sha256": "23A0B706D86BB72D6A5A8083E9EF86636B3EC5F4E5E967E6DC8217FB5D98C497"
+      },
+      {
+        "path": "other/traincsvwindow.baml",
+        "bytes": 24808,
+        "sha256": "19F2AD592F9F7E7851F2B5D6CC43C78ACB568B17A26E2C4D43D9D68F65707FA5"
+      },
+      {
+        "path": "other/uisetupwindow.baml",
+        "bytes": 4332,
+        "sha256": "F3F0ADEDF94913BB1285AD334EE13C94C0E954127766B2EB1E263D2786C6B50E"
+      },
+      {
+        "path": "other/yieldretestwindow.baml",
+        "bytes": 39713,
+        "sha256": "1B5CF1CBB3DEDBC2A5646561332E18276D5D7968D776E2D30FD0BC96E59926F7"
+      },
+      {
+        "path": "Properties/AssemblyInfo.cs",
+        "bytes": 826,
+        "sha256": "C21C6F7422C90E9C7ED56E3567011E1EC2BF34F433725FA65CA4D9F18DB1A7BF"
+      },
+      {
+        "path": "README-EDITABLE.md",
+        "bytes": 662,
+        "sha256": "B5BB84AA48BB8A05EEC1D6415224FBE124C03BA281F6370999F10D25824D4887"
+      },
+      {
+        "path": "Reflector.cs",
+        "bytes": 2221,
+        "sha256": "3DE622F40E10110BDFB8E7BBAED30F75F2CD5057044C4D1B4FCC243AFC44ACDD"
+      },
+      {
+        "path": "res/banner-wg.png",
+        "bytes": 156,
+        "sha256": "59FDB6F5CBB905EBA8CF369930944E8D75DE866ACFC9119E201027D72D69F015"
+      },
+      {
+        "path": "res/chip.bmp",
+        "bytes": 691254,
+        "sha256": "978844F1086C30E4CB3EBFFB197F80A2EEB4D88F77983AC6D9AACA7B23D6E397"
+      },
+      {
+        "path": "res/lock.png",
+        "bytes": 681,
+        "sha256": "701B746406F817DE57F0907DC944CA9F7E3480CC3D5A718D5F971C3A5A8980E9"
+      },
+      {
+        "path": "res/obj3d.png",
+        "bytes": 21499,
+        "sha256": "110F517BD9D053061F3FBFC9090EDB657CFB892E43FB85A24634C2D5CFB119BA"
+      },
+      {
+        "path": "res/unlock.png",
+        "bytes": 688,
+        "sha256": "4A2EFDCA73EBAA6A1F86410331D12E6028B5E4F42558CD0EB4D6AB86367FE408"
+      },
+      {
+        "path": "SAMViewer/BoxPromotion.cs",
+        "bytes": 514,
+        "sha256": "105208210C4C48AD8AFB9F746628685B053679DD771C7685E969C66CBF2CBF2A"
+      },
+      {
+        "path": "SAMViewer/CLIP.cs",
+        "bytes": 2421,
+        "sha256": "E76C2400B1CCEE365C3112A571E215E98A6C215FF81C54359EE9EEA131E98D1F"
+      },
+      {
+        "path": "SAMViewer/MaskData.cs",
+        "bytes": 3068,
+        "sha256": "71432095680127169EAA7C33130A101C6DF7EF3140B18F513AFBB8E065FC8B26"
+      },
+      {
+        "path": "SAMViewer/MaskPromotion.cs",
+        "bytes": 280,
+        "sha256": "E96532D868599E725B1FCD19A0C71FF9AE59B6BF7F9EC3457B1BA1F69975D27F"
+      },
+      {
+        "path": "SAMViewer/OpType.cs",
+        "bytes": 59,
+        "sha256": "597150BC32A8C276A29DD56C51305DF9F122B16528FC23E5BBF1F463280CF5F1"
+      },
+      {
+        "path": "SAMViewer/PointAnnotation.cs",
+        "bytes": 1296,
+        "sha256": "05D45B96DA1D6AA7E984DD79236D5FBB4CC54CBFFF353F1B029329D94AF1ECA3"
+      },
+      {
+        "path": "SAMViewer/PointPromotion.cs",
+        "bytes": 456,
+        "sha256": "CD42AAB758F221866871828548C8845827E2EB2995ED4ECA35FDA0B6F5EEA2DA"
+      },
+      {
+        "path": "SAMViewer/Promotion.cs",
+        "bytes": 226,
+        "sha256": "B9C7A70F3C5890CAA322481C0B61270374C2892CA00467DA4A29C41A4063AA34"
+      },
+      {
+        "path": "SAMViewer/PromotionType.cs",
+        "bytes": 65,
+        "sha256": "5E9CA2702E1B2397722052A3D8B104DF204A42D744975AC92A0609D1A8CF6E67"
+      },
+      {
+        "path": "SAMViewer/RectAnnotation.cs",
+        "bytes": 1730,
+        "sha256": "005E2BC3F3078CD5F96729D145CDD8F720B7E9CEBA10E3B4CA80872A068B2CD9"
+      },
+      {
+        "path": "SAMViewer/SAM.cs",
+        "bytes": 6116,
+        "sha256": "82C3EEA36FCC252561D3FC4F9ECE683A576569609046A27918679DB784B258E1"
+      },
+      {
+        "path": "SAMViewer/SAMAutoMask.cs",
+        "bytes": 7638,
+        "sha256": "13640B7E8AACBF799563B172405C874B706BEFE4A73B30D6B8BDBE2FE13EA935"
+      },
+      {
+        "path": "SAMViewer/SimpleTokenizer.cs",
+        "bytes": 7349,
+        "sha256": "22AA2DD3930FB9BBB27A5797987A67009DF901318EA35F7CE39B96002FAAAB09"
+      },
+      {
+        "path": "SAMViewer/TextPromotion.cs",
+        "bytes": 90,
+        "sha256": "8615228D2E391285611A97BE2514BC8E83093792899F76166F6A9E710546C505"
+      },
+      {
+        "path": "SAMViewer/Transforms.cs",
+        "bytes": 2280,
+        "sha256": "39BBDD966A6D79D2B8C29C5EB45740822C6408A3371BB95729DF9CC400AB41BD"
+      },
+      {
+        "path": "stringresources.en-us.baml",
+        "bytes": 39033,
+        "sha256": "6C0693AFB05643B2CF23305C373855EF45523E44A638C80ECE78C1980178DCC2"
+      },
+      {
+        "path": "stringresources.ja-jp.baml",
+        "bytes": 45058,
+        "sha256": "6A90C0ADFC4E0634ABE8F606B1B4750343401C28784E996FC9DA4048539AAC1A"
+      },
+      {
+        "path": "stringresources.zh-cn.baml",
+        "bytes": 40588,
+        "sha256": "0FA45FC90C9FC125677E4C96387D749E16349C99891DD9C6873B7B2D4A28F063"
+      },
+      {
+        "path": "stringresources.zh-tw.baml",
+        "bytes": 40933,
+        "sha256": "F7357C8A2165D10C9332F3DBE5B5B87B6D8A77F06B9C5C91ABC482E54EB4056E"
+      },
+      {
+        "path": "throughputoutputwindow.baml",
+        "bytes": 7263,
+        "sha256": "D041E0E15C215EC89C60ECF101A93A3943A90C1B7CBC2267714C506CA26C42D2"
+      },
+      {
+        "path": "toolswindow.baml",
+        "bytes": 48429,
+        "sha256": "E8A2A0ECA898D957328FED99487E86D7FA7685E7ED96A023CF05D0DA0AC12813"
+      },
+      {
+        "path": "WindowWrapper.cs",
+        "bytes": 207,
+        "sha256": "6C1BE027DCF752B02352FB9D4B45D0A0A55AAC61422127EDCB88702D82DDB0EC"
+      }
+    ]
+  },
+  "pass": true
+}

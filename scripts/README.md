@@ -32,6 +32,8 @@ R3 打包使用 scripts/BuildStandaloneR3.ps1；先查看其固定 DLL、輸入�
 - `StageDiaVendorBaselineGate.ps1`：準備原廠基準隔離檢測 Gate。
 - `StageDiaVendorSample.ps1`：從原廠唯讀來源準備 Recipe、模型和樣本副本。
 - `StageGeneralTrainer.ps1`：準備 General Trainer 依賴。
+- `PackageTrainingReviewCandidate.ps1`：以已驗證 R3 DLL 封裝新的 AI 訓練隔離候選。
+- `StageChao8SideTrainingRuntime.ps1`：由 Chao8Side Runtime 封裝 DIA_COMPAT 訓練執行環境；只接受隔離候選。
 - `StageModelConverter.ps1`：準備模型轉換 Runtime。
 - `StageShuntFixtures.ps1`：準備 Shunt 隔離測試資料。
 - `StageShuntTrainer20260930.ps1`：準備固定版本的 Shunt 訓練器。

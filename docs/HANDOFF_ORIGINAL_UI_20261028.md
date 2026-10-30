@@ -56,7 +56,7 @@
 2. 在新建的隔離候選查清二值化圖示的實際 WPF 命中元素與事件路由；校對 R3 DLL 的方法 metadata，避免猜名稱。確認是原版 callback 真正開窗，而不只檢查 UIA enabled 或呼叫替代 dialog。
 3. 在隔離 Recipe 與實際影像副本上，按原廠流程完成工具參數修改 → 原版保存 → 關閉重啟 → 讀回，記錄相關 Recipe、PublicDB/PrivateDB 與 Throughput 寫入範圍。繼續逐項驗其他工具、原版站別和圖片載入。
 4. 釐清同一工作階段 Recipe 切換時資源釋放，現行限制是載入一次後須重啟。
-5. AI 先知：一期原版 UI 與 `AIProphetToolWindow` 已存在。原始碼會檢查 `PModel/Train/dist/AIProphet/AIProphet.exe`，且依原版權限狀態顯示；目前乾淨版可攜候選缺此路徑。唯讀參考 `E:\0_軟體開發區\3.開發中專案區\1.進行中\ShuntVC_Chao\Runtime` 的對應 PModel 與 `Runtime/AIProphet`，先盤點完整依賴／模型並驗原有流程；不可僅複製一個 EXE 就宣稱完成，也不可繞過原版權限。
+5. AI 先知最新狀態見 `docs/CHAO8SIDE_ORIGINAL_AI_PROPHET_BRIDGE_20261030.md`。已從成品 Chao8Side Runtime 複製自家 trainer、AIRuntime、GUI shim、訓練腳本與 backbone，並依 Chao8Side Host 的 marker-gated capability bridge 只在隔離候選的記憶體內接回原版控制項；原版按鈕 GUI 可見且 enabled。Recipe 仍 OFF、PModel 沒有 ONNX、尚未載入影像／定位結果，模型視窗和推論未驗。未改授權檔、正式 DLL、成品 Recipe 或 release；不要把這個隔離開發 bridge 當正式授權或部署完成。
 
 ## 工作樹與資料
 

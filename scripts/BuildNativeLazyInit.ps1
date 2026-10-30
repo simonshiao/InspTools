@@ -1,7 +1,8 @@
 param(
     [string]$Phase1SourceRoot = '',
     [string]$Configuration = 'Release',
-    [switch]$ModelPrecompiledExperiment
+    [switch]$ModelPrecompiledExperiment,
+    [switch]$LocatePrecompiledExperiment
 )
 
 # Isolated build from read-only archived Phase-1 source. No production writes.
@@ -15,7 +16,9 @@ if ([string]::IsNullOrWhiteSpace($Phase1SourceRoot)) {
     }
     $Phase1SourceRoot = $candidate[0].FullName
 }
-$Root = Join-Path $ProjectRoot $(if ($ModelPrecompiledExperiment) {
+$Root = Join-Path $ProjectRoot $(if ($LocatePrecompiledExperiment) {
+    'output\locate-model-experiment'
+} elseif ($ModelPrecompiledExperiment) {
     'output\delta-model-experiment'
 } else {
     'output\native-lazy'
@@ -44,7 +47,13 @@ if ((Get-FileHash -LiteralPath $OriginalDll -Algorithm SHA256).Hash -ne $PinnedB
 }
 
 # This folder contains generated source only; it must never contain Recipe/Model.
-if (Test-Path -LiteralPath $Stage) { Remove-Item -LiteralPath $Stage -Recurse -Force }
+$resolvedStage = [IO.Path]::GetFullPath($Stage)
+if (-not $resolvedStage.StartsWith((Join-Path $ProjectRoot 'output') + '\', [StringComparison]::OrdinalIgnoreCase) -or
+    [IO.Path]::GetFileName($resolvedStage) -ne 'generated-source' -or
+    (Test-Path (Join-Path $resolvedStage 'Recipe')) -or (Test-Path (Join-Path $resolvedStage 'Model'))) {
+    throw 'Unsafe generated-source staging path'
+}
+if (Test-Path -LiteralPath $resolvedStage) { Remove-Item -LiteralPath $resolvedStage -Recurse -Force }
 [IO.Directory]::CreateDirectory($Stage) | Out-Null
 & robocopy $Phase1SourceRoot $Stage /E /XD bin obj /R:1 /W:1 /NFL /NDL /NJH /NJS | Out-Null
 if ($LASTEXITCODE -gt 7) { throw ('Source staging failed: robocopy=' + $LASTEXITCODE) }
@@ -59,6 +68,24 @@ if ($matchCount -ne 1) {
 $patched = [regex]::Replace($source, $regex,
     '        // R3: native AI instance is created on demand by ReadModel().')
 [IO.File]::WriteAllText($PatchedLocate, $patched, (New-Object Text.UTF8Encoding($false)))
+
+if ($LocatePrecompiledExperiment) {
+    $locateFile = Join-Path $Stage 'InspTools\AOI\LocateAIEnhanceTool.cs'
+    $locateSource = [IO.File]::ReadAllText($locateFile, [Text.Encoding]::UTF8)
+    $oldCondition = 'if (!File.Exists(text) || !File.Exists(text2))'
+    if ([regex]::Matches($locateSource, [regex]::Escape($oldCondition)).Count -ne 1) {
+        throw 'Unexpected AI Locate trainer prerequisite; refusing broad source replacement'
+    }
+    $replacement = @'
+string preparedStem = Path.GetFileNameWithoutExtension(param.LocateParam.AILocateModelName);
+            string preparedSource = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model", preparedStem + ".lh5d");
+            string preparedDerivative = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Model", preparedStem + (param.LocateParam.EnableTensorRT ? ".ltrt" : ".lpbd"));
+            bool preparedLocate = !ReCreatePB && File.Exists(preparedSource) && new FileInfo(preparedSource).Length >= 4096
+                && File.Exists(preparedDerivative) && new FileInfo(preparedDerivative).Length >= 4096;
+            if ((!File.Exists(text) || !File.Exists(text2)) && !preparedLocate)
+'@
+    [IO.File]::WriteAllText($locateFile, $locateSource.Replace($oldCondition, $replacement), (New-Object Text.UTF8Encoding($false)))
+}
 
 if ($ModelPrecompiledExperiment) {
     # Narrow *experimental* change to the vendor C# class only. The original
@@ -123,7 +150,8 @@ $compiledDll = Join-Path $Stage ('bin\' + $Configuration + '\net472\InspTools.dl
 if (-not (Test-Path -LiteralPath $compiledDll)) { throw 'Compiled InspTools.dll missing' }
 [pscustomobject]@{
     status = 'PASS'
-    kind = $(if ($ModelPrecompiledExperiment) { 'isolated-delta-precompiled-model-experiment' }
+    kind = $(if ($LocatePrecompiledExperiment) { 'isolated-locate-precompiled-model-experiment' }
+             elseif ($ModelPrecompiledExperiment) { 'isolated-delta-precompiled-model-experiment' }
              else { 'isolated-R3-lazy-init' })
     donor_read_only = $Phase1SourceRoot
     generated_dll = $compiledDll

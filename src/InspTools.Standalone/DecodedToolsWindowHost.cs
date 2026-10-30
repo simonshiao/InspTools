@@ -36,6 +36,7 @@ namespace InspTools.Standalone
             Window toolsWindow = CreateToolsWindow();
             InitializeBlankStations(toolsWindow);
             var closeGuard = BlankUiLifecycleGuard.Attach(toolsWindow);
+            Chao8SideAiTrainingUiBridge.Attach(toolsWindow);
             AttachOptionalRecipeMenu(toolsWindow, closeGuard.Restore);
             if (NativeR3RecipeSession.IsPortableReview())
                 AttachPortableReviewRecipeMenu(toolsWindow);

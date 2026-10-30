@@ -1,3 +1,9 @@
+## 2026-10-30 Codex 進度：Chao8Side 原版 AI 先知已接入隔離候選
+
+最新候選：`output/standalone-r3/InspTools-Portable-R3-20261030-AIProphet-OriginalRuntime`。依使用者指示，改採成品 Chao8Side 自家 `Runtime\AIProphet` + `AIRuntime`；從 ProjectHub 找到並複刻 Chao8Side Host bridge：Runtime 齊備且專用 marker 存在時，只在候選程序記憶體中啟用八站 `AllowEnableAIProphet`、隱藏解鎖遮罩並呼叫原版 `SetAIProphetON(true)`。Recipe `AIProphetToolON` 保持 OFF，授權檔／正式 InspTools.dll／成品 Runtime 未修改。
+
+最終 Launcher Build PASS，SHA256 `0FC40AD4746E191A099189D6B8A17EEB4870C28BD14768C052B1735C129C361A`；原 Runtime status PASS（CUDA12/cuDNN9），GUI 載入隔離 Recipe 後原版 `btn_AIProphet` 可見且 enabled。仍缺可用 ONNX 模型與載入影像／定位狀態；未執行訓練、Inspect、模型推論或 Recipe 保存，不能宣稱先知推論通過。詳細 evidence：`docs/CHAO8SIDE_ORIGINAL_AI_PROPHET_BRIDGE_20261030.md`。
+
 ## 2026-10-29 Codex 進度：P0 修正待完整 GUI 驗證
 
 新的隔離測試候選：`output/standalone-r3/InspTools-Portable-R3-20261028-233327`；承接 `215835`，不代表正式 release。Build.ps1 與 BuildStandaloneR3.ps1 編譯成功，已分別 staging 300E／先知 e1，並只在隔離候選匯入 3923-R002。

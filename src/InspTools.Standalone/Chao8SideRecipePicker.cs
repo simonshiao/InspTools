@@ -547,9 +547,12 @@ namespace InspTools.Standalone
             }
             _loaded = true;
             _activeRecipe = recipe;
+            bool prophetBridge = _portable && Chao8SideAiProphetUiBridge.Attach(_host);
             _station.IsEnabled = true;
             _status.Text = recipe + (_portable ?
-                "｜八站離線設定已載入；AI／Inspect 尚未驗收" :
+                (prophetBridge
+                    ? "｜八站離線設定已載入；Chao8Side 原版 AI 先知控制已接入隔離版"
+                    : "｜八站離線設定已載入；AI／Inspect 尚未驗收") :
                 "｜唯讀預覽；請使用 R3 攜帶版編輯");
         }
 

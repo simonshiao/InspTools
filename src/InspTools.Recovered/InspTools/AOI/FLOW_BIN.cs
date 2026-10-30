@@ -1,0 +1,11 @@
+namespace InspTools.AOI;
+
+public enum FLOW_BIN
+{
+	EM_FLOW_RETESET,
+	EM_FLOW_OK,
+	EM_FLOW_NG1,
+	EM_FLOW_NG2,
+	EM_FLOW_NG3,
+	EM_FLOW_NG4
+}
